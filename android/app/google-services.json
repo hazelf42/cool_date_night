@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "636976919744",
+    "firebase_url": "https://cool-date-night.firebaseio.com",
+    "project_id": "cool-date-night",
+    "storage_bucket": "cool-date-night.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636976919744:android:f646a55d8be394c0",
+        "android_client_info": {
+          "package_name": "com.cool.date.night"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636976919744-7lugdharddv1dl7sh19bonbbdd5qj036.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAzCQ6095-g64H8Gdxr02TGz3nCluOQX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636976919744-7lugdharddv1dl7sh19bonbbdd5qj036.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "636976919744-3rk7b07o1q2hnffe4fn7sij9e7k602oh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cool.date.night"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
