@@ -33,7 +33,7 @@ class DateList extends StatelessWidget {
             return _dateList(context, snapshot.data.documents);
           },
         ),
-        drawer: Drawer(child: DrawerScreen(null)));
+        drawer: Drawer(child: DrawerScreen()));
     ;
   }
 }

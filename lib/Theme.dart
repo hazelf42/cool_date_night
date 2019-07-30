@@ -31,7 +31,7 @@ class TextStyles {
     color: prefix0.Colors.white,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w300,
-    fontSize: 12.0,
+    fontSize: 14.0,
   );
 
   static const TextStyle subheadingDark = const TextStyle(

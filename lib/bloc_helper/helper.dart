@@ -8,6 +8,12 @@ import 'package:image_picker/image_picker.dart';
 
 import 'validators.dart';
 
+class UserData {
+  final FirebaseUser firebaseUser;
+  final DocumentSnapshot data;
+
+  const UserData({this.firebaseUser, this.data});
+}
 
 class MainBloc extends Object with Validators {
   MainBloc();
@@ -16,11 +22,11 @@ class MainBloc extends Object with Validators {
     return await _firebaseAuth.currentUser();
   }
   
-  Future<DocumentSnapshot> getCurrentFirebaseUserData() async {
+  Future<UserData> getCurrentFirebaseUserData() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     return await _firebaseAuth.currentUser().then((user) async {
         return await (Firestore.instance.collection("users").document(user.uid).get()).then((userData) {
-          return userData;
+          return UserData(data: userData, firebaseUser: user);
         });
     });
   }

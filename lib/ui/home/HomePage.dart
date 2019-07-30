@@ -12,12 +12,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: MainBloc().getCurrentFirebaseUserData(),
-        builder: (BuildContext context, user) {
-          if (user.hasData) {
+        builder: (BuildContext context, AsyncSnapshot<UserData>userData) {
+          if (userData.hasData) {
             return Scaffold(
                 appBar: getAppBar("Categories"),
-                body: HomePageBody(userData: user),
-                drawer: Drawer(child: DrawerScreen(user.data)));
+                body: HomePageBody(userData: userData.data),
+                drawer: Drawer(child: DrawerScreen()));
           } else {
             return Scaffold(
                 appBar: getAppBar("Categories"),
@@ -27,34 +27,33 @@ class HomePage extends StatelessWidget {
                   child: CircularProgressIndicator(),
                   alignment: Alignment.center,
                 ),
-                drawer: Drawer(child: DrawerScreen(null)));
+                drawer: Drawer(child: DrawerScreen()));
           }
         });
   }
 }
 
 class HomePageBody extends StatefulWidget {
-  final userData;
-
+  final UserData userData;
   const HomePageBody({Key key, this.userData}) : super(key: key);
 
   @override
   _HomePageBodyState createState() =>
-      _HomePageBodyState(userData: userData.data.data);
+      _HomePageBodyState(userData: userData);
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
-  Map userData;
+  UserData userData;
   _HomePageBodyState({this.userData});
 
   @override
   Widget build(BuildContext context) {
     if (userData != null) {
-      if (userData['date_mate_requests'] != null) {
+      if (userData.data.data['date_mate_requests'] != null) {
         return MainBloc().showPartnerRequestDialog(
             context: context,
-            profileuid: userData['date_mate_requests'],
-            uid: userData['uid']);
+            profileuid: userData.data.data['date_mate_requests'],
+            uid: userData.firebaseUser.uid);
       }
       return Container(
           // decoration: BoxDecoration(
@@ -67,12 +66,12 @@ class _HomePageBodyState extends State<HomePageBody> {
             child: (userData == null)
                 ? Container()
                 : Column(children: <Widget>[
-                    userData['date_mate'] != null
+                    userData.data.data['date_mate'] != null
                         ? Container(
                             child: StreamBuilder(
                                 stream: Firestore.instance
                                     .collection('users')
-                                    .document(userData['date_mate'])
+                                    .document(userData.data.data['date_mate'])
                                     .snapshots(),
                                 builder:
                                     (BuildContext context, dateUserSnapshot) {
@@ -122,7 +121,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                                     await Firestore.instance
                                                         .collection('users')
                                                         .document(
-                                                            userData['uid'])
+                                                            userData.data.data['uid'])
                                                         .updateData({
                                                       'date_mate': null
                                                     }).then((_) async {
@@ -136,7 +135,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                                       });
                                                     }).then((_) {
                                                       setState(() {
-                                                        userData['date_mate'] =
+                                                        userData.data.data['date_mate'] =
                                                             null;
                                                       });
                                                     });
@@ -164,7 +163,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                       MaterialPageRoute(
                                           builder: (context) => PairView()));
                                 })),
-                    buildBody(context, userData),
+                    buildBody(context, userData.data.data),
                   ]),
           ));
     }
@@ -197,18 +196,5 @@ Widget buildBody(BuildContext context, Map userProfile) {
 Future<bool> getIsPaired(uid) async {
   await MainBloc().getUser(uid).then((profile) {
     return (profile['datemate'] != null);
-  });
-}
-
-Future<DocumentSnapshot> getCurrentFirebaseUserData() async {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  return await _firebaseAuth.currentUser().then((user) async {
-    return await (Firestore.instance
-            .collection("users")
-            .document(user.uid)
-            .get())
-        .then((userData) {
-      return userData;
-    });
   });
 }
