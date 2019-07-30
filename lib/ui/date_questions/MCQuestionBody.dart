@@ -44,7 +44,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                 partner != null ? Hero(
                     tag: 'datemate',
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(partner['photo']),
+                      backgroundImage: NetworkImage(partner['photo'] ?? ""),
                       radius:  25,
                     )) : Container(height: 0),
                 

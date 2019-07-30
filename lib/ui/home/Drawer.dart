@@ -7,7 +7,7 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-
+import 'PairView.dart';
 class DrawerScreen extends StatefulWidget {
   _DrawerScreen createState() => _DrawerScreen();
 }
@@ -24,23 +24,32 @@ class _DrawerScreen extends State<DrawerScreen> {
           return Drawer(
             child: ListView(
               // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
               children: <Widget>[
-                DrawerHeader(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: 50, maxHeight: 50, maxWidth: 50, minWidth: 50),
+                Container(
+                    color: Theme.Colors.midnightBlue,
                     child: firebaseUserData.hasData
-                      ? ClipOval(
-                          child: Image(
-                          fit: BoxFit.cover,
-                          height: 100,
-                          width: 100,
-                          image: NetworkImage(
-                              firebaseUserData.data.firebaseUser.photoUrl ??
-                                  ""),
-                        ))
-                      : prefix0.CircularProgressIndicator()),
-                ),
+                        ? Column(children: [
+                            Container(
+                              padding: EdgeInsets.all(20),
+                              child: ClipOval(
+                                  child: 
+                                  Image(
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: 100,
+                                image: NetworkImage(
+                                    firebaseUserData
+                                            .data.firebaseUser.photoUrl ??
+                                        "",
+                                    scale: 1),
+                              )),
+                            ),
+                            SizedBox(height: 10),
+                            Text(firebaseUserData.data.data['name'],
+                                style: Theme.TextStyles.dateTitle),
+                            SizedBox(height: 20)
+                          ])
+                        : prefix0.CircularProgressIndicator()),
                 ListTile(
                     title: Text('Change Profile Picture'),
                     onTap: () {
@@ -49,13 +58,23 @@ class _DrawerScreen extends State<DrawerScreen> {
                           .then((imageUrl) async {
                         var update = UserUpdateInfo();
                         update.photoUrl = imageUrl.toString();
-
                         await firebaseUserData.data.firebaseUser
                             .updateProfile((update));
                       });
                     }),
+                    ListTile(title: Text("Search Datemates"),
+                    onTap: () { 
+                       Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PairView()));}
+                    ),
                 ListTile(
-                  title: Text('Logout'),
+                  title: Text("Retrieve purchases"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: Text('Log out'),
                   onTap: () async {
                     await FirebaseAuth.instance.signOut();
                     runApp(MaterialApp(home: Login()));

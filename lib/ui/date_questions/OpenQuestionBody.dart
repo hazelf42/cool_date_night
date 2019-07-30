@@ -42,7 +42,7 @@ class OpenQuestionBody extends StatelessWidget {
                           Hero(
                               tag: 'datemate',
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(partner['photo']),
+                                backgroundImage: NetworkImage(partner['photo'] ?? ""),
                                 radius: 25,
                               )),
                           SizedBox(height: 7),
