@@ -2,6 +2,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'login_form.dart';
@@ -14,6 +15,7 @@ class Login extends StatefulWidget {
 class _MyAppState extends State<Login> {
   String _email;
   String _password;
+  String _error;
   //google sign
   /// GoogleSignIn googleauth = new GoogleSignIn();
   final formkey = new GlobalKey<FormState>();
@@ -34,11 +36,18 @@ class _MyAppState extends State<Login> {
           .signInWithEmailAndPassword(email: _email, password: _password)
           .then((user) {
         print("signed in as ${user.uid}");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+
       }).catchError((e) {
-        print(e);
-      });
+        setState(() {
+          if (e is PlatformException) {
+           _error = e.code == 'ERROR_NETWORK_REQUEST_FAILED' ? "Login failed, please try again" : "Incorrect password or email";
+         } else {
+           _error = "A network error occurred.";
+         }
+        });
+        return;
+        });
     }
   }
   Widget radioButton(bool isSelected) => Container(
@@ -124,11 +133,10 @@ class _MyAppState extends State<Login> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(30),
-                      ),
-                      
+                      ), 
+                      Container(                      
+                        color: _error != null ? Theme.Colors.midnightBlue : Colors.transparent,
+                        child: Text(_error ?? "", style: TextStyle(color: Colors.red),)),
                       SizedBox(
                         height: ScreenUtil.getInstance().setHeight(30),
                       ),

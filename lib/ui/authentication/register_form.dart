@@ -1,6 +1,5 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupFormCard extends StatelessWidget {
@@ -49,7 +48,7 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: false,
-                validator: (value) => value.isEmpty ? validation : null,
+                validator: (value) => (value.contains("@") && value.contains(".")) ? validation : "Invalid email",
                 onSaved: saveemail),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(30),
@@ -67,7 +66,7 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: false,
-                validator: (value) => value.isEmpty ? validation : null,
+                validator: (value) => value.isNotEmpty ? validation : "What's your name?",
                 onSaved: savename),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(30),
@@ -76,6 +75,7 @@ class SignupFormCard extends StatelessWidget {
                 style: TextStyle(color: Theme.Colors.mustard, fontSize: 14.0)),
             TextFormField(
                 style: TextStyle(color: Colors.white, fontSize: 14.0),
+
                 decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Theme.Colors.mustard)),
@@ -85,10 +85,10 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: true,
-                validator: (value) => value.isEmpty ? validation : null,
+                validator: (value) => value.length >= 8 ? validation : "Must be >8 characters",
                 onSaved: savepwd),
             SizedBox(
-              height: ScreenUtil.getInstance().setHeight(35),
+              height: ScreenUtil.getInstance().setHeight(10),
             ),
           ],
         ),

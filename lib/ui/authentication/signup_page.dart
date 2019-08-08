@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/ui/home/HomePage.dart';
@@ -8,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
+
 import 'register_form.dart';
 
 class Signup extends StatefulWidget {
@@ -55,8 +57,7 @@ class _SignupState extends State<Signup> {
               'photo': imageUrl
             }, merge: true);
           }).then((_) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
           }).catchError((e) {
             print(e);
           });
@@ -74,7 +75,8 @@ class _SignupState extends State<Signup> {
             print(e);
           });
         }
-      });
+      }).catchError((error) {
+      }); 
     }
   }
 

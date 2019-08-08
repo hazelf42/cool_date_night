@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:cool_date_night/ui/home/GradientAppBar.dart';
-import 'package:cool_date_night/ui/home/Drawer.dart';
-import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'DateRow.dart';
+import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/home/GradientAppBar.dart';
+import 'package:flutter/material.dart';
+
+import 'DateRow.dart';
 
 class DateList extends StatelessWidget {
   final String categorySelected;
