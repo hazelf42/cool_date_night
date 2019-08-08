@@ -49,7 +49,7 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: false,
-                validator: (value) => (value.contains("@") && value.contains(".")) ? validation : "Invalid email",
+                validator: (value) => (value.contains("@") && value.contains(".")) ? null : "Invalid email",
                 onSaved: saveemail),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(30),
@@ -68,7 +68,7 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: false,
-                validator: (value) => value.isNotEmpty ? validation : "What's your name?",
+                validator: (value) => value.isNotEmpty ? null : "What's your name?",
                 onSaved: savename),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(30),
@@ -87,7 +87,7 @@ class SignupFormCard extends StatelessWidget {
                     hintStyle:
                         TextStyle(color: Colors.white70, fontSize: 12.0)),
                 obscureText: true,
-                validator: (value) => value.length >= 8 ? validation : "Must be >8 characters",
+                validator: (value) => value.length >= 8 ? null : "Must be >8 characters",
                 onSaved: savepwd),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(10),
