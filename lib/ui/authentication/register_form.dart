@@ -1,5 +1,6 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupFormCard extends StatelessWidget {
@@ -56,6 +57,7 @@ class SignupFormCard extends StatelessWidget {
             Text("Name",
                 style: TextStyle(color: Theme.Colors.mustard, fontSize: 14.0)),
             TextFormField(
+              textCapitalization: TextCapitalization.words,
                 style: TextStyle(color: Colors.white, fontSize: 14.0),
                 decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(

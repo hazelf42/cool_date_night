@@ -110,6 +110,7 @@ class _MyAppState extends State<Login> {
                       SizedBox(height: ScreenUtil.getInstance().setHeight(40)),
                       Center(
                         child: InkWell(
+                          onTap: () => loginUser(),
                           child: Container(
                             width: ScreenUtil.getInstance().setWidth(330),
                             height: ScreenUtil.getInstance().setHeight(100),
@@ -120,7 +121,6 @@ class _MyAppState extends State<Login> {
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                onTap: loginUser(),
                                 child: Center(
                                   child: Text("SIGN IN",
                                       style: TextStyle(

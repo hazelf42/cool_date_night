@@ -1,4 +1,6 @@
+import 'package:cool_date_night/ui/authentication/forgot_password.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'signup_page.dart';
@@ -86,13 +88,19 @@ class FormCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text(
+                FlatButton(child: Text(
                   "Forgot Password?",
                   style: TextStyle(
                       color: Colors.blue,
                       fontFamily: "Poppins-Medium",
                       fontSize: ScreenUtil.getInstance().setSp(28)),
-                )
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    prefix0.MaterialPageRoute(
+                        builder: (context) => ForgotPassword()
+                    ));
+                })
               ],
             ),SizedBox(
               height: ScreenUtil.getInstance().setHeight(35),
