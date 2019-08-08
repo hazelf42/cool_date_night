@@ -109,7 +109,7 @@ class FormCard extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Siginup()));
+                                      builder: (context) => Signup()));
                             },
                             child: Text("Sign Up",
                                 style: TextStyle(

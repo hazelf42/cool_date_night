@@ -48,6 +48,7 @@ class _PairViewState extends State<PairView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.Colors.lightBlue,
         appBar: getAppBar("Pairing"),
         body: Column(children: [
           Container(
@@ -168,6 +169,7 @@ class _PairViewState extends State<PairView> {
                                 return Card(
                                     child: FlatButton(
                                         child: Container(
+                                          color: Theme.Colors.midnightBlue,
                                             height: 70,
                                             child: Row(
                                               children: <Widget>[

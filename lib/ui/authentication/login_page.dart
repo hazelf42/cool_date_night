@@ -101,7 +101,6 @@ class _MyAppState extends State<Login> {
                       SizedBox(height: ScreenUtil.getInstance().setHeight(40)),
                       Center(
                         child: InkWell(
-                          onTap: loginUser(),
                           child: Container(
                             width: ScreenUtil.getInstance().setWidth(330),
                             height: ScreenUtil.getInstance().setHeight(100),

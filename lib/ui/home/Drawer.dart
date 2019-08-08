@@ -28,6 +28,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                 Container(
                     color: Theme.Colors.midnightBlue,
                     child: firebaseUserData.hasData
+                               
                         ? Column(children: [
                             Container(
                               padding: EdgeInsets.all(20),
@@ -36,6 +37,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                                   Image(
                                 fit: BoxFit.cover,
                                 height: 100,
+                                
                                 width: 100,
                                 image: NetworkImage(
                                     firebaseUserData
@@ -45,7 +47,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                               )),
                             ),
                             SizedBox(height: 10),
-                            Text(firebaseUserData.data.data['name'],
+                            Text(firebaseUserData.data.firebaseUser.displayName ?? "",
                                 style: Theme.TextStyles.dateTitle),
                             SizedBox(height: 20)
                           ])

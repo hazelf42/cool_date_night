@@ -1,5 +1,6 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupFormCard extends StatelessWidget {
@@ -7,8 +8,13 @@ class SignupFormCard extends StatelessWidget {
   final saveemail;
   final savepwd;
   final savename;
+  final Widget button;
   SignupFormCard(
-      {this.saveemail, this.savepwd, this.savename, this.validation});
+      {this.saveemail,
+      this.savepwd,
+      this.savename,
+      this.validation,
+      this.button});
 
   //save;
   @override
@@ -21,9 +27,15 @@ class SignupFormCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
-              height: ScreenUtil.getInstance().setHeight(30),
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(child: Text("REGISTER", style: Theme.TextStyles.subheading2Light)),
+                    button
+                  ]),
             ),
+            SizedBox(height: 10),
             Text("Email",
                 style: TextStyle(color: Theme.Colors.mustard, fontSize: 14.0)),
             TextFormField(
