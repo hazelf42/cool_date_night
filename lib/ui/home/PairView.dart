@@ -3,7 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
+
 import 'GradientAppBar.dart';
 
 class ProfileRow extends StatelessWidget {
@@ -41,14 +41,14 @@ class PairView extends StatefulWidget {
 }
 
 class _PairViewState extends State<PairView> {
-  @override
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   List filteredNames = new List();
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-                      appBar: getAppBar("Pairing"),
+        appBar: getAppBar("Pairing"),
         body: Column(children: [
           Container(
               child: TextField(
@@ -142,17 +142,21 @@ class _PairViewState extends State<PairView> {
                           if (!snapshot.hasData) {
                             return CircularProgressIndicator();
                           }
-                          if (snapshot.data.documents.length == 0 && _searchText.length >= 3) {
-                            return Column(children: <Widget>[
-                               Container( child: Image(
-                            image: AssetImage(
-                                'assets/img/broken-heart.png')),
-                        width: 50,
-                        height: 50,
-                      ),
-                      SizedBox(height: 10),
-                      Text("No results found.")
-                            ],);
+                          if (snapshot.data.documents.length == 0 &&
+                              _searchText.length >= 3) {
+                            return Column(
+                              children: <Widget>[
+                                Container(
+                                  child: Image(
+                                      image: AssetImage(
+                                          'assets/img/broken-heart.png')),
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                SizedBox(height: 10),
+                                Text("No results found.")
+                              ],
+                            );
                           }
                           return ListView.builder(
                             shrinkWrap: true,
@@ -169,37 +173,37 @@ class _PairViewState extends State<PairView> {
                                               children: <Widget>[
                                                 Hero(
                                                     tag: snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['uid'] ,
+                                                        .data
+                                                        .documents[index]
+                                                        .data['uid'],
                                                     child: ClipOval(
-                                                      child: Image(image: 
-                                                          NetworkImage(snapshot
-                                                                      .data
-                                                                      .documents[
-                                                                          index]
-                                                                      .data[
-                                                                  'photo'] ??
-                                                              ""),
-                                                              fit: BoxFit.cover,
-                                                              height: 60,
-                                                              width: 60,
-                                                              ),
-                                                      
+                                                      child: Image(
+                                                        image: NetworkImage(snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                        index]
+                                                                    .data[
+                                                                'photo'] ??
+                                                            ""),
+                                                        fit: BoxFit.cover,
+                                                        height: 60,
+                                                        width: 60,
+                                                      ),
                                                     )),
-                                                    SizedBox(width: 30),
-                                                    Text(
+                                                SizedBox(width: 30),
+                                                Text(
                                                     snapshot
                                                         .data
                                                         .documents[index]
                                                         .data['name'],
-                                                    style: Theme.TextStyles.subheadingDark)
+                                                    style: Theme.TextStyles
+                                                        .subheadingDark)
                                               ],
                                             )),
                                         onPressed: (() {
                                           showPartnerDialog(
-                                              partnerProfile: snapshot.data
-                                                  .documents[index].data,
+                                              partnerProfile: snapshot
+                                                  .data.documents[index].data,
                                               currentProfileUid:
                                                   userSnapshot.data.data['uid'],
                                               context: context);
@@ -241,7 +245,8 @@ class _PairViewState extends State<PairView> {
                     child: Hero(
                         tag: partnerProfile['uid'],
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(partnerProfile['photo'] ?? ''),
+                          backgroundImage:
+                              NetworkImage(partnerProfile['photo'] ?? ''),
                           radius: 33,
                         )),
                   ),
@@ -278,7 +283,9 @@ class _PairViewState extends State<PairView> {
                               });
                             },
                           )
-                        : (snapshot.data['date_mate'] != null && snapshot.data['date_mate'] == partnerProfile['uid'])
+                        : (snapshot.data['date_mate'] != null &&
+                                snapshot.data['date_mate'] ==
+                                    partnerProfile['uid'])
                             ? FlatButton(
                                 color: Colors.white.withOpacity(.30),
                                 child: Text("GO",
@@ -298,7 +305,7 @@ class _PairViewState extends State<PairView> {
                   Firestore.instance
                       .collection('users')
                       .document(partnerProfile['uid'])
-                      .updateData ({'date_mate_requests': null});
+                      .updateData({'date_mate_requests': null});
                   Navigator.pop(context);
                 },
               )

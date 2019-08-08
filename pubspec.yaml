@@ -63,8 +63,9 @@ flutter:
     - assets/img/trivia.png
     - assets/img/vitalizer.png
     - assets/img/lauren.png
-    - assets/img/bluegradient.png
+    - assets/img/darkblue.jpg
     - assets/img/bluebackground.png
+    - assets/img/bluegradient.png
     - assets/img/broken-heart.png
     - assets/img/magnifier-with-a-heart.png
   fonts:

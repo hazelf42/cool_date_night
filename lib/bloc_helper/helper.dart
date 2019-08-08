@@ -3,7 +3,6 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 
 import 'validators.dart';
@@ -30,6 +29,7 @@ class MainBloc extends Object with Validators {
         });
     });
   }
+
 
   Future<Map> getUser(String uid) async {
     var doc = await (Firestore.instance.collection("users").document(uid).get());
@@ -105,7 +105,7 @@ class MainBloc extends Object with Validators {
             ],
           ) : Center(
             child: Container(
-              child: prefix0.CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
               height: 50,
               width: 50,
             )

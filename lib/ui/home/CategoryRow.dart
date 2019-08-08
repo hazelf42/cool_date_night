@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/ui/date_list/DateList.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 
 class CategoryRow extends StatelessWidget {
   final Map category;

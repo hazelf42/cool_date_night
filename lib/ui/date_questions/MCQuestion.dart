@@ -4,12 +4,12 @@ import 'package:cool_date_night/models/Date.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/ui/date_detail/DetailAppBar.dart';
 
-class mcQuestion extends StatelessWidget {
+class McQuestion extends StatelessWidget {
   final Date date;
   final Map partner;
   final int index; 
 
-  mcQuestion(this.date, this.partner, this.index);
+  McQuestion(this.date, this.partner, this.index);
 //    DetailScreen({Key key, @required this.todo}) : super(key: key);
 
   @override

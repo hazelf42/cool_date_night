@@ -4,8 +4,8 @@ import 'package:flutter/material.dart' as prefix0;
 class Colors {
   const Colors();
 
-  static const Color mustard = const Color(0xFFAB040);
-  static const Color lightBlue = const Color(0xF0F85F2);
+  static const Color mustard = const Color(0xFFFAB040);
+  static const Color lightBlue = const Color(0xFF0F85F2);
   static const Color coral = const Color(0xFFFC615C);
   static const Color midnightBlue = const Color(0xFF152242);
   static const Color darkBlue = const Color(0xFF010024);

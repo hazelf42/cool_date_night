@@ -1,10 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:flutter/material.dart';
-import 'package:cool_date_night/models/Date.dart';
-import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/Routes.dart';
-import 'package:fluro/fluro.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 import 'OpenQuestion.dart';
 
@@ -42,7 +41,8 @@ class OpenQuestionBody extends StatelessWidget {
                           Hero(
                               tag: 'datemate',
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(partner['photo'] ?? ""),
+                                backgroundImage:
+                                    NetworkImage(partner['photo'] ?? ""),
                                 radius: 25,
                               )),
                           SizedBox(height: 7),
@@ -51,16 +51,19 @@ class OpenQuestionBody extends StatelessWidget {
                             style: Theme.TextStyles.subheadingLight,
                           )
                         ])
-                      : Container(height: 0),
+                      : Container(height: 100),
                   SizedBox(height: 10),
-                  Container(
-                      padding: EdgeInsets.all(30),
-                      child: AutoSizeText(
-                        questionString(),
-                        style: Theme.TextStyles.subheadingLight,
-                        textAlign: TextAlign.left,
-                        maxLines: 6,
-                      )),
+                  Center(
+                    child: Container(
+                        padding: EdgeInsets.all(30),
+                        child: AutoSizeText(
+                          questionString(),
+                          style: Theme.TextStyles.subheadingLight,
+                          textAlign: TextAlign.left,
+                          maxLines: 6,
+                        )),
+                  ),
+                  SizedBox(height: 30),
                   FlatButton(
                       child: Text("Next"),
                       color: Theme.Colors.mustard,
@@ -70,13 +73,13 @@ class OpenQuestionBody extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      mcQuestion(date, partner, 0)));
+                                      McQuestion(date, partner, 0)));
                         } else {
-                          (Navigator.push(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      OpenQuestion(date, partner, index + 1))));
+                                      OpenQuestion(date, partner, index + 1)));
                         }
                       }),
                 ],
@@ -84,11 +87,6 @@ class OpenQuestionBody extends StatelessWidget {
             )),
       )
     ]);
-  }
-
-  _navigateTo(context, String id) {
-    Routes.navigateTo(context, '/questions/${date.id}',
-        transition: TransitionType.fadeIn);
   }
 
   String questionString() {

@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/models/Date.dart';
 import 'package:flutter/material.dart';
+
 import 'MCQuestion.dart';
 
 class MCQuestionBody extends StatefulWidget {
@@ -22,7 +21,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
   final Date date;
   final Map partner;
   final int index;
-  int _answerSelected = null;
+  int _answerSelected;
   _MCQuestionBody(this.mcQuestions, this.date, this.partner, this.index);
 
   @override
@@ -108,7 +107,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      mcQuestion(date, partner, index + 1)))
+                                      McQuestion(date, partner, index + 1)))
                           : null;
                     })
               ],

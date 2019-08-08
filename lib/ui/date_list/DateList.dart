@@ -15,7 +15,7 @@ class DateList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(backgroundColor: Theme.Colors.darkBlue,
-        appBar: getAppBar("Categories"),
+        appBar: getAppBar(categorySelected),
         body: 
         (userData['date_mate_requests']  != null) ?
          MainBloc().showPartnerRequestDialog(
@@ -32,9 +32,7 @@ class DateList extends StatelessWidget {
             if (!snapshot.hasData) return LinearProgressIndicator();
             return _dateList(context, snapshot.data.documents);
           },
-        ),
-        drawer: Drawer(child: DrawerScreen()));
-    ;
+        ),);
   }
 }
 
