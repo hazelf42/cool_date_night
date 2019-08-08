@@ -102,18 +102,19 @@ class _SignupState extends State<Signup> {
                         Form(
                             key: formkey,
                             child: SignupFormCard(
-                              button: OutlineButton(
+                              button: FloatingActionButton(
+                                backgroundColor: Colors.transparent,
                                 child: ClipOval(
-                                    child: Image(
-                                        fit: _photo != null
-                                            ? BoxFit.cover
-                                            : BoxFit.fitHeight,
-                                        height: 50,
-                                        width: 50,
+                                    child: _photo != null ? Image(
+                                        fit: BoxFit.cover,
+                                        height: _photo != null ? 75 : 40,
+                                        width:  _photo != null ? 75 : 40,
                                         image: _photo != null
                                             ? FileImage(_photo)
                                             : AssetImage(
-                                                "assets/img/camera.png"))),
+                                                "assets/img/camera.png"))
+                                                : Icon(Icons.camera_alt, color: Colors.white,)
+                                                ),
                                 onPressed: () async {
                                   await _getImage(ImageSource.gallery)
                                       .then((image) {
