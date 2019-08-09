@@ -4,7 +4,7 @@ import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'GradientAppBar.dart';
 
 class ProfileRow extends StatelessWidget {
@@ -185,18 +185,21 @@ class _PairViewState extends State<PairView> {
                                                         .documents[index]
                                                         .data['uid'],
                                                     child: ClipOval(
-                                                      child: Image(
-                                                        image: NetworkImage(snapshot
+
+                                                      child: 
+                                                      snapshot.hasData ? 
+                                                      CachedNetworkImage(imageUrl: snapshot
                                                                     .data
                                                                     .documents[
                                                                         index]
                                                                     .data[
                                                                 'photo'] ??
-                                                            ""),
+                                                            "",
                                                         fit: BoxFit.cover,
                                                         height: 60,
                                                         width: 60,
-                                                      ),
+                                                      )
+                                                      : CircularProgressIndicator(backgroundColor: Theme.Colors.mustard),
                                                     )),
                                                 SizedBox(width: 30),
                                                 Text(

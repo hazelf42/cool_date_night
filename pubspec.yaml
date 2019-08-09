@@ -33,6 +33,8 @@ dependencies:
   firebase_storage: ^3.0.3
   permission_handler: ^3.2.1+1
   flutter_inapp_purchase: ^1.0.1
+  cached_network_image: ^1.1.1
+
 
 
 

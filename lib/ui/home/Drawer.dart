@@ -47,7 +47,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                             SizedBox(height: 10),
                             Text(
                                 firebaseUserData
-                                        .data.firebaseUser.displayName ??
+                                        .data.data['name'] ??
                                     "",
                                 style: Theme.TextStyles.dateTitle),
                             SizedBox(height: 20)
