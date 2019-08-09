@@ -3,8 +3,9 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-
+import 'package:photo_view/photo_view.dart';
 import 'validators.dart';
 
 class UserData {
@@ -41,6 +42,22 @@ class MainBloc extends Object with Validators {
     });
   }
 
+  Widget avatar(
+      {@required ImageProvider imageProvider, @required double radius, String heroTag}) {
+    return Container(
+                            height: radius,
+                            width: radius,
+                            child: ClipOval(
+      child: PhotoView( 
+        
+        minScale: PhotoViewComputedScale.covered * 1.0,
+        maxScale: PhotoViewComputedScale.covered * 1.0,
+      imageProvider: imageProvider,
+      heroTag: heroTag,
+      loadingChild: prefix0.CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.Colors.mustard)),
+    )));}
+  
+
   Widget showPartnerRequestDialog(
       {@required BuildContext context, @required String profileuid, @required String uid}) {
           return StreamBuilder(
@@ -58,12 +75,11 @@ class MainBloc extends Object with Validators {
                   Container(
                     color: Theme.Colors.darkBlue,
                     padding: EdgeInsets.all(10),
-                    child: Hero(
-                        tag: 'datemate',
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(userSnapshot.data['photo'] ?? ""),
-                          radius: 33,
-                        )),
+                    child: avatar(
+                      imageProvider: NetworkImage(userSnapshot.data['photo'] ?? ""),
+                      radius: 50,
+                      heroTag: 'datemate'
+                    )
                   ),
                   Container(
                       width: MediaQuery.of(context).size.width - 50,

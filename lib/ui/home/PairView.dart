@@ -3,7 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
+import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'GradientAppBar.dart';
 
@@ -23,8 +23,8 @@ class ProfileRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(width: 20),
-            CircleAvatar(
-              backgroundImage: NetworkImage(profile.photo),
+            MainBloc().avatar(
+              imageProvider: NetworkImage(profile.photo),
               radius: 25,
             ),
             SizedBox(width: 20),
@@ -185,21 +185,22 @@ class _PairViewState extends State<PairView> {
                                                         .documents[index]
                                                         .data['uid'],
                                                     child: ClipOval(
-
-                                                      child: 
-                                                      snapshot.hasData ? 
-                                                      CachedNetworkImage(imageUrl: snapshot
-                                                                    .data
-                                                                    .documents[
-                                                                        index]
-                                                                    .data[
-                                                                'photo'] ??
-                                                            "",
-                                                        fit: BoxFit.cover,
-                                                        height: 60,
-                                                        width: 60,
-                                                      )
-                                                      : CircularProgressIndicator(backgroundColor: Theme.Colors.mustard),
+                                                      child: snapshot.hasData
+                                                          ? CachedNetworkImage(
+                                                              imageUrl: snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .data['photo'] ??
+                                                                  "",
+                                                              fit: BoxFit.cover,
+                                                              height: 60,
+                                                              width: 60,
+                                                            )
+                                                          : CircularProgressIndicator(
+                                                              backgroundColor:
+                                                                  Theme.Colors
+                                                                      .mustard),
                                                     )),
                                                 SizedBox(width: 30),
                                                 Text(
@@ -251,16 +252,14 @@ class _PairViewState extends State<PairView> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: Theme.Colors.darkBlue,
-                    padding: EdgeInsets.all(15),
-                    child: Hero(
-                        tag: partnerProfile['uid'],
-                        child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(partnerProfile['photo'] ?? ''),
-                          radius: 33,
-                        )),
-                  ),
+                      color: Theme.Colors.darkBlue,
+                      padding: EdgeInsets.all(15),
+                      child: MainBloc().avatar(
+                        imageProvider:
+                            NetworkImage(partnerProfile['photo'] ?? ''),
+                        radius: 66,
+                        heroTag: partnerProfile['uid'],
+                      )),
                   Container(
                       width: MediaQuery.of(context).size.width - 50,
                       padding: EdgeInsets.only(bottom: 10),
@@ -308,8 +307,8 @@ class _PairViewState extends State<PairView> {
                   }),
               FlatButton(
                 color: Colors.white.withOpacity(.30),
-                child: Text("Cancel",
- style: Theme.TextStyles.subheading2Light)   ,             onPressed: () {
+                child: Text("Cancel", style: Theme.TextStyles.subheading2Light),
+                onPressed: () {
                   Firestore.instance
                       .collection('users')
                       .document(partnerProfile['uid'])

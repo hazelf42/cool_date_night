@@ -3,7 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'OpenQuestion.dart';
 
 class OpenQuestionBody extends StatelessWidget {
@@ -37,13 +37,11 @@ class OpenQuestionBody extends StatelessWidget {
                             style: Theme.TextStyles.subheadingLight,
                           ),
                           SizedBox(height: 7),
-                          Hero(
-                              tag: 'datemate',
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(partner['photo'] ?? ""),
-                                radius: 25,
-                              )),
+                          MainBloc().avatar(
+                      imageProvider: NetworkImage(partner['photo'] ?? ""),
+                      radius:  50,
+                      heroTag: 'datemate'
+                    ),
                           SizedBox(height: 7),
                           Text(
                             partner['name'],

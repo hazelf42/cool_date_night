@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'MCQuestion.dart';
 
 class MCQuestionBody extends StatefulWidget {
@@ -40,12 +40,12 @@ class _MCQuestionBody extends State<MCQuestionBody> {
             child: Column(
               children: <Widget>[
                SizedBox(height: 20),
-                partner != null ? Hero(
-                    tag: 'datemate',
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(partner['photo'] ?? ""),
-                      radius:  25,
-                    )) : Container(height: 0),
+                partner != null ? 
+                    MainBloc().avatar(
+                      imageProvider: NetworkImage(partner['photo'] ?? ""),
+                      radius:  50,
+                      heroTag: 'datemate'
+                    ) : Container(height: 0),
                 
                 SizedBox(height: 10),
                 Container(

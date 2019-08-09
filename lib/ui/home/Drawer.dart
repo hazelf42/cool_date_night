@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-
+import 'package:photo_view/photo_view.dart';
 import 'PairView.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -30,20 +30,15 @@ class _DrawerScreen extends State<DrawerScreen> {
                     color: Theme.Colors.midnightBlue,
                     child: firebaseUserData.hasData
                         ? Column(children: [
-                            Container(
-                              padding: EdgeInsets.all(20),
-                              child: ClipOval(
-                                  child: Image(
-                                fit: BoxFit.cover,
-                                height: 100,
-                                width: 100,
-                                image: NetworkImage(
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                            child:                               MainBloc().avatar(
+                                imageProvider:  NetworkImage(
                                     firebaseUserData
                                             .data.firebaseUser.photoUrl ??
-                                        "",
-                                    scale: 1),
+                                        ""),
+                                        radius: 100,
                               )),
-                            ),
                             SizedBox(height: 10),
                             Text(
                                 firebaseUserData
@@ -89,8 +84,9 @@ class _DrawerScreen extends State<DrawerScreen> {
                       ListTile(
                         title: Text('Log out', style: Theme.TextStyles.subheading2Light),
                         onTap: () async {
-                          await FirebaseAuth.instance.signOut();
+                          await FirebaseAuth.instance.signOut().then((_) {
                           runApp(MaterialApp(home: Login()));
+                          });
                         },
                       ),
                     ],

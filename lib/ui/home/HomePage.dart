@@ -91,12 +91,13 @@ class _HomePageBodyState extends State<HomePageBody> {
                                                             EdgeInsets.all(5),
                                                         child: dateUserSnapshot
                                                                 .hasData
-                                                            ? CircleAvatar(
-                                                                backgroundImage:
+                                                            ? MainBloc().avatar(
+                                                                imageProvider:
                                                                     NetworkImage(
                                                                         dateUserSnapshot.data['photo'] ??
                                                                             ""),
-                                                                radius: 30)
+                                                                radius: 60,
+                                                              )
                                                             : Center(
                                                                 child:
                                                                     CircularProgressIndicator())),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'signup_page.dart';
+
 class FormCard extends StatelessWidget {
   final String validation;
   final saveemail;
@@ -16,7 +17,7 @@ class FormCard extends StatelessWidget {
     return new Container(
       width: double.infinity,
       decoration: BoxDecoration(
-      color: Theme.Colors.darkBlue,
+          color: Theme.Colors.darkBlue,
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
@@ -35,7 +36,7 @@ class FormCard extends StatelessWidget {
           children: <Widget>[
             Text("Login",
                 style: TextStyle(
-                  color: Colors.white,
+                    color: Colors.white,
                     fontSize: ScreenUtil.getInstance().setSp(45),
                     fontFamily: "Poppins-Bold",
                     letterSpacing: .6)),
@@ -44,10 +45,10 @@ class FormCard extends StatelessWidget {
             ),
             Text("Email",
                 style: TextStyle(
+                    color: Theme.Colors.mustard,
                     fontFamily: "Poppins-Medium",
                     fontSize: ScreenUtil.getInstance().setSp(26))),
-
-                    TextFormField(
+            TextFormField(
                 style: TextStyle(color: Colors.white, fontSize: 14.0),
                 decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
@@ -66,6 +67,7 @@ class FormCard extends StatelessWidget {
             Text(
               "Password",
               style: TextStyle(
+                  color: Theme.Colors.mustard,
                   fontFamily: "Poppins-Medium",
                   fontSize: ScreenUtil.getInstance().setSp(26)),
             ),
@@ -88,44 +90,44 @@ class FormCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FlatButton(child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontFamily: "Poppins-Medium",
-                      fontSize: ScreenUtil.getInstance().setSp(28)),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    prefix0.MaterialPageRoute(
-                        builder: (context) => ForgotPassword()
-                    ));
-                })
+                FlatButton(
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontFamily: "Poppins-Medium",
+                          fontSize: ScreenUtil.getInstance().setSp(28)),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(prefix0.MaterialPageRoute(
+                          builder: (context) => ForgotPassword()));
+                    })
               ],
-            ),SizedBox(
+            ),
+            SizedBox(
               height: ScreenUtil.getInstance().setHeight(35),
             ),
-             Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "New User? ",
-                            style: TextStyle(fontFamily: "Poppins-Medium", color: Colors.white),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Signup()));
-                            },
-                            child: Text("Sign Up",
-                                style: TextStyle(
-                                    color: Theme.Colors.mustard,
-                                    fontFamily: "Poppins-Bold")),
-                          )
-                        ],
-                      ), SizedBox(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "New User? ",
+                  style: TextStyle(
+                      fontFamily: "Poppins-Medium", color: Colors.white),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Signup()));
+                  },
+                  child: Text("Sign Up",
+                      style: TextStyle(
+                          color: Theme.Colors.mustard,
+                          fontFamily: "Poppins-Bold")),
+                )
+              ],
+            ),
+            SizedBox(
               height: ScreenUtil.getInstance().setHeight(35),
             ),
           ],
