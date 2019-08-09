@@ -48,7 +48,7 @@ class MainBloc extends Object with Validators {
             builder:  (BuildContext context, userSnapshot) {
            return (userSnapshot.hasData) ? 
            AlertDialog(
-            backgroundColor: Theme.Colors.midnightBlue,
+            backgroundColor: Theme.Colors.darkBlue,
             title: Text("Date Mate Request",
                 style: TextStyle(color: Colors.white)),
             content: Container(
@@ -56,7 +56,7 @@ class MainBloc extends Object with Validators {
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: Theme.Colors.midnightBlue,
+                    color: Theme.Colors.darkBlue,
                     padding: EdgeInsets.all(10),
                     child: Hero(
                         tag: 'datemate',

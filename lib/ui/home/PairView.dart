@@ -3,6 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 import 'GradientAppBar.dart';
 
@@ -14,7 +15,7 @@ class ProfileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-      color: Theme.Colors.midnightBlue,
+      color: Theme.Colors.darkBlue,
       elevation: 10,
       child: Container(
         height: 80,
@@ -48,21 +49,26 @@ class _PairViewState extends State<PairView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.Colors.lightBlue,
+        backgroundColor: Colors.grey,
         appBar: getAppBar("Pairing"),
         body: Column(children: [
           Container(
+              color: Theme.Colors.darkBlue,
               child: TextField(
-            controller: _filter,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: "Search by name"),
-          )),
+                controller: _filter,
+                style: Theme.TextStyles.subheading2Light,
+                decoration: InputDecoration(
+                    hintStyle: Theme.TextStyles.subheading2Light,
+                    prefixIcon: Icon(Icons.search, color: Colors.white),
+                    hintText: "Search by name"),
+              )),
           (_searchText.length <= 3)
               ? Container(
                   padding: EdgeInsets.all(20),
                   alignment: Alignment.center,
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 10),
                       Container(
                         child: Image(
                             image: AssetImage(
@@ -71,7 +77,10 @@ class _PairViewState extends State<PairView> {
                         height: 50,
                       ),
                       SizedBox(height: 10),
-                      Text("Find your Date Mate")
+                      Text(
+                        "Find your Date Mate",
+                        style: Theme.TextStyles.subheading2Dark,
+                      )
                     ],
                   ),
                 )
@@ -83,7 +92,6 @@ class _PairViewState extends State<PairView> {
     _filter.addListener(() {
       if (_filter.text.isNotEmpty && _filter.text.length > 3) {
         _searchText = _filter.text;
-        print(_searchText);
         setState(() {});
       }
     });
@@ -164,12 +172,10 @@ class _PairViewState extends State<PairView> {
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (BuildContext context, int index) {
                               if (snapshot.hasData) {
-                                print(snapshot
-                                    .data.documents[index].data['name']);
                                 return Card(
+                                    color: Theme.Colors.midnightBlue,
                                     child: FlatButton(
                                         child: Container(
-                                          color: Theme.Colors.midnightBlue,
                                             height: 70,
                                             child: Row(
                                               children: <Widget>[
@@ -198,8 +204,8 @@ class _PairViewState extends State<PairView> {
                                                         .data
                                                         .documents[index]
                                                         .data['name'],
-                                                    style: Theme.TextStyles
-                                                        .subheadingDark)
+                                                    style: Theme
+                                                        .TextStyles.dateTitle)
                                               ],
                                             )),
                                         onPressed: (() {
@@ -235,14 +241,14 @@ class _PairViewState extends State<PairView> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: Theme.Colors.midnightBlue,
+            backgroundColor: Theme.Colors.darkBlue,
             title: Text("Your DateMate", style: TextStyle(color: Colors.white)),
             content: Container(
               height: MediaQuery.of(context).size.height / 3.5,
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: Theme.Colors.midnightBlue,
+                    color: Theme.Colors.darkBlue,
                     padding: EdgeInsets.all(15),
                     child: Hero(
                         tag: partnerProfile['uid'],
@@ -274,8 +280,7 @@ class _PairViewState extends State<PairView> {
                         ? FlatButton(
                             color: Colors.white.withOpacity(.30),
                             child: Text("REQUEST",
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white)),
+                                style: Theme.TextStyles.subheading2Light),
                             onPressed: () {
                               Firestore.instance
                                   .collection('users')
@@ -291,8 +296,7 @@ class _PairViewState extends State<PairView> {
                             ? FlatButton(
                                 color: Colors.white.withOpacity(.30),
                                 child: Text("GO",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white)),
+                                    style: Theme.TextStyles.subheading2Light),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -302,8 +306,7 @@ class _PairViewState extends State<PairView> {
               FlatButton(
                 color: Colors.white.withOpacity(.30),
                 child: Text("Cancel",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-                onPressed: () {
+ style: Theme.TextStyles.subheading2Light)   ,             onPressed: () {
                   Firestore.instance
                       .collection('users')
                       .document(partnerProfile['uid'])

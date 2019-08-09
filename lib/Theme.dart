@@ -6,10 +6,10 @@ class Colors {
 
   static const Color mustard = const Color(0xFFFAB040);
   static const Color coral = const Color(0xFFFC615C);
-  static const Color midnightBlue = const Color(0xFF152242);
-  static const Color darkBlue = const Color(0xFF010024);
+  static const Color midnightBlue = const Color(0xFF142142);
+  static const Color darkBlue = const Color(0xFF101A33);
   static const Color duskBlue = const Color(0xFF4670DB);
-  static const Color lightBlue = const Color(0xFF98B0DB);
+  static const Color lightBlue = const Color(0xFF87c1f7);
 }
 
 class Dimens {

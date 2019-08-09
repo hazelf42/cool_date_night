@@ -107,7 +107,7 @@ class _SignupState extends State<Signup> {
                                 child: ClipOval(
                                     child: _photo != null ? Image(
                                         fit: BoxFit.cover,
-                                        height: _photo != null ? 8 : 40,
+                                        height: _photo != null ? 75 : 40,
                                         width:  _photo != null ? 75 : 40,
                                         image: _photo != null
                                             ? FileImage(_photo)
