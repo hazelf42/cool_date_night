@@ -1,93 +1,97 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
-import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
-import 'package:cool_date_night/ui/home/PairView.dart';
+import 'package:cool_date_night/ui/date_list/DateList.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class DateDetailBody extends StatefulWidget {
-  final Date date;
-  final Map userProfile;
-  DateDetailBody(this.date, this.userProfile);
 
-  _DateDetailBody createState() => _DateDetailBody(this.date, this.userProfile);
+  final Map userProfile;
+  final Category category;
+  DateDetailBody(this.userProfile, this.category);
+
+  _DateDetailBody createState() =>
+      _DateDetailBody(this.userProfile, this.category);
 }
 
 class _DateDetailBody extends State<DateDetailBody> {
-  final Date date;
   Map userProfile;
+  final Category category;
 
-  _DateDetailBody(this.date, this.userProfile);
+  _DateDetailBody(this.userProfile, this.category);
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: userProfile["date_mate"] != null ? Firestore()
+        stream: Firestore()
             .collection('users')
-            .document(userProfile["date_mate"])
-            .snapshots() : null,
-        builder: (context, snapshot) {
+            .document(userProfile['uid'])
+            .snapshots(),
+        builder: (context, userProfile) {
           return Stack(children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/img/bluegradient.png"),
-                      fit: BoxFit.cover)),
+              color: Theme.Colors.midnightBlue,
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 50),
                   Container(
-                      width: MediaQuery.of(context).size.width - 30,
+                      width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: <Widget>[
-                          Hero(
-                            child: Image(
-                                image: NetworkImage(date.image),
-                                height: 150,
-                                width: 150),
-                            tag: 'date-icon-${date.id}',
-                          ),
-                          SizedBox(height: 30),
+                          prefix0.SizedBox(height: 30),
+                          ClipOval(
+                              child: Container(
+                                  child: Avatar(
+                            heroTag: category.name,
+                            imagePath: category.image,
+                            radius: 70,
+                          ))),
+                          SizedBox(height: 20),
                           Text(
-                            date.name,
-                            style: Theme.TextStyles.subheadingLight,
+                            category.name,
+                            style: Theme.TextStyles.dateTitle,
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            date.description,
-                            textAlign: TextAlign.center,
-                            style: Theme.TextStyles.subheadingLight,
-                          ),
-                          SizedBox(height: 30),
+                          Container(
+                              margin: EdgeInsets.only(left: 20, right: 20),
+                              child: Text(
+                                category.longDescription,
+                                textAlign: TextAlign.justify,
+                                style: Theme.TextStyles.bodyLight,
+                              )),
+                          SizedBox(height: 10),
                         ],
                       )),
-                  userProfile['date_mate'] == null
-                      ? Column(
-                          children: <Widget>[
-                            Text("Dates are better together."),
-                            FlatButton(
-                                child: Text("Pair with your Date Mate"),
-                                color: Theme.Colors.mustard,
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PairView()));
-                                }),
-                          ],
-                        )
-                      : FlatButton(
-                          child: Text("GO"),
-                          color: Theme.Colors.mustard,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OpenQuestion(date, snapshot.data.data, 0)));
-                          },
-                        )
+                  // userProfile.data['date_mate'] == null
+                  //     ? Column(
+                  //         children: <Widget>[
+                  //           Text("Dates are better together.",
+                  //               style: Theme.TextStyles.subheading2Light),
+                  //           FlatButton(
+                  //               child: Text("Pair with your Date Mate"),
+                  //               color: Theme.Colors.mustard,
+                  //               onPressed: () {
+                  //                 Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                         builder: (context) => PairView()));
+                  //               }),
+                  //         ],
+                  //       )
+                  //     : FlatButton(
+                  //         child: Text("GO"),
+                  //         color: Theme.Colors.mustard,
+                  //         onPressed: () {
+                  //           Navigator.push(
+                  //               context,
+                  //               MaterialPageRoute(
+                  //                   builder: (context) => OpenQuestion(date,
+                  //                       userProfile.data.data, category, 0)));
+                  //         },
+                  //       ),
+                  DateList(category, userProfile.data.data)
                 ],
               ),
             )
@@ -95,26 +99,3 @@ class _DateDetailBody extends State<DateDetailBody> {
         });
   }
 }
-
-// Text(
-//               "Question",
-//               style: Theme.TextStyles.subheadingLight,
-//               ),
-
-// Card(
-//   margin: EdgeInsets.only(left: 10, right: 10),
-//   child: Padding(
-//     padding: EdgeInsets.only(top: 5, bottom: 5, left: 20, right: 20),
-//     child: Row(
-//       children: <Widget>[
-//         CircleAvatar(
-//           radius: 60,
-//           backgroundImage:
-//               AssetImage("assets/img/lauren.png"),
-//         ),
-//         SizedBox(width: 40),
-//         Text("Lauren Ipsum", style: TextStyle(color: Colors.black, fontSize: 24), )
-
-//       ],
-//     ),
-//   ))

@@ -9,9 +9,18 @@ class Colors {
   static const Color midnightBlue = const Color(0xFF142142);
   static const Color darkBlue = const Color(0xFF101A33);
   static const Color duskBlue = const Color(0xFF4670DB);
-  static const Color lightBlue = const Color(0xFF87c1f7);
-}
+  static const Color lightBlue = const Color(0xFF0f85f1);
 
+}
+Map dateColors = {
+    'Free Trial' : Colors.mustard,
+    "Parents Night Out" : Colors.mustard,
+    'Gear Shifter' : Colors.lightBlue,
+    'Icebreaker' : Colors.lightBlue,
+    'Spicy' : Colors.coral,
+    'Vitalizer': Colors.coral
+
+   };
 class Dimens {
   const Dimens();
 
@@ -22,7 +31,12 @@ class TextStyles {
   const TextStyles();
 
   static const TextStyle dateTitle = const TextStyle(
-      color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 36.0);
+      color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 35.0);
+       static const TextStyle dateTitleSmall = const TextStyle(
+      color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 25.0);
+  static const TextStyle bigTitle = const TextStyle(
+      color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 46.0);
+
   static const TextStyle bodyDark = const TextStyle(
       color: Colors.midnightBlue,
       fontFamily: 'Roboto',

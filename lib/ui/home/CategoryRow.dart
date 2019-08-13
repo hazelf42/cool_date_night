@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/ui/date_list/DateList.dart';
+import 'package:cool_date_night/bloc_helper/helper.dart';
+import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/date_detail/DateDetailPage.dart';
 import 'package:flutter/material.dart';
 
 class CategoryRow extends StatelessWidget {
-  final Map category;
+  final Category category;
   final BuildContext context;
   final Map userProfile;
 
@@ -22,34 +24,20 @@ class CategoryRow extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Container(
-                    child: Hero(
-                        tag: 'date-icon-${category['name']}',
-                        child: Container(
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage(
-                                //Set the name of the asset image as the first word of the category
-                                "assets/img/${category['name'].split(" ")[0].toLowerCase()}.png",
-                              ),
-                              backgroundColor: Colors.transparent,
-                              //radius: 30,
-                            ),
-                            // height: 50,
-                            // width: 60,
-//                padding: prefix0.EdgeInsets.only(left: 5, right: 5),
-                            decoration: new BoxDecoration(
-                              color: const Color(0xF152229), // border color
-                              shape: BoxShape.circle,
-                            )))),
+                    Avatar(
+                      radius: 50,
+                      imagePath: category.image,
+                      heroTag: category.description,
+                    ),
                 AutoSizeText(
-                  " " + category['name'] ?? '',
+                  " " + category.name ?? '',
                   style: Theme.TextStyles.dateTitle,
                   maxLines: 1,
                 ),
               ],
             ),
             SizedBox(height: 10),
-            AutoSizeText(category['description'] ?? '',
+            AutoSizeText(category.description ?? '',
                 style: Theme.TextStyles.bodyLight, maxLines: 4)
           ],
         ),
@@ -64,8 +52,7 @@ class CategoryRow extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      DateList(category['name'], userProfile)));
+                  builder: (context) => DateDetailPage(userProfile, category))); 
         },
         child: Stack(
           children: <Widget>[

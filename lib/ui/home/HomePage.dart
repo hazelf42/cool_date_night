@@ -5,6 +5,7 @@ import 'package:cool_date_night/ui/home/Drawer.dart';
 import 'package:cool_date_night/ui/home/GradientAppBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cool_date_night/models/Date.dart';
 import 'CategoryRow.dart';
 import 'PairView.dart';
 
@@ -91,11 +92,10 @@ class _HomePageBodyState extends State<HomePageBody> {
                                                             EdgeInsets.all(5),
                                                         child: dateUserSnapshot
                                                                 .hasData
-                                                            ? MainBloc().avatar(
-                                                                imageProvider:
-                                                                    NetworkImage(
+                                                            ? Avatar(
+                                                                imagePath:
                                                                         dateUserSnapshot.data['photo'] ??
-                                                                            ""),
+                                                                            "",
                                                                 radius: 60,
                                                               )
                                                             : Center(
@@ -189,12 +189,13 @@ class _HomePageBodyState extends State<HomePageBody> {
 
 Widget _categoryList(
     BuildContext context, List<DocumentSnapshot> snapshots, Map userProfile) {
+      snapshots.sort((a, b) => (int.parse(a['num'])).compareTo((int.parse(b['num']))));
   return Expanded(
       child: ListView.builder(
     itemCount: snapshots.length,
     shrinkWrap: true,
     itemBuilder: (context, index) {
-      return CategoryRow(context, snapshots[index].data, userProfile);
+      return CategoryRow(context, Category.fromSnapshot(snapshots[index]), userProfile);
     },
   ));
 }

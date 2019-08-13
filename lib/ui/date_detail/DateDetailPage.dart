@@ -1,23 +1,20 @@
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_detail/DateDetailBody.dart';
-import 'package:cool_date_night/ui/date_detail/DetailAppBar.dart';
+import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart';
 
 class DateDetailPage extends StatelessWidget {
 
-  final Date date;
+
   final Map userProfile;
-  DateDetailPage(this.date, this.userProfile);
+  final Category category;
+  DateDetailPage(this.userProfile, this.category);
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body:  Stack(
-        children: <Widget>[
-           DateDetailBody(date, userProfile),
-           DetailAppBar(),
-        ],
-      ),
+      appBar: AppBar(backgroundColor: Theme.Colors.midnightBlue),
+      body: SingleChildScrollView( child:DateDetailBody( userProfile, category))
     );
   }
 }

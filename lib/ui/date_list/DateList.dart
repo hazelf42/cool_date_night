@@ -1,45 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
-import 'package:cool_date_night/ui/home/GradientAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 import 'DateRow.dart';
 
 class DateList extends StatelessWidget {
-  final String categorySelected;
-  final Map userData; 
-  DateList(this.categorySelected, this.userData);
+  final Map userData;
+  final Category category;
+  DateList(this.category, this.userData);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Theme.Colors.darkBlue,
-        appBar: getAppBar(categorySelected),
-        body: 
-        (userData['date_mate_requests']  != null) ?
-         MainBloc().showPartnerRequestDialog(
-            context: context,
-            profileuid: userData['date_mate_requests'],
-            uid: userData['uid']) : 
-      
-        StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance
-              .collection('dates')
-              .where('category', isEqualTo: categorySelected)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return LinearProgressIndicator();
-            return _dateList(context, snapshot.data.documents);
-          },
-        ),);
+      return StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance
+                  .collection('dates')
+                  .where('category', isEqualTo: category.name)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return LinearProgressIndicator();
+                return _dateList(context, snapshot.data.documents, category);
+              },
+      );
   }
 }
 
-Widget _dateList(BuildContext context, List<DocumentSnapshot> snapshots) {
-  return Container(
-      child: ListView(
-    shrinkWrap: true,
-    children: snapshots.map((data) => DateRow(context, Date.fromSnapshot(data))).toList(),
-  ));
+Widget _dateList(
+    BuildContext context, List<DocumentSnapshot> snapshots, Category category) {
+  snapshots.sort((a, b) => (a.data['num']).compareTo(b.data['num']));
+      return Container(
+        
+                      color: Theme.dateColors[category.name],child: ListView.builder(
+        physics: prefix0.NeverScrollableScrollPhysics(),
+            itemCount: snapshots.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return DateRow(
+                context, Date.fromSnapshot(snapshots[index]), category);
+          }));
 }

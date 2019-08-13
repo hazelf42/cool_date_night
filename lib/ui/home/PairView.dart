@@ -3,7 +3,6 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'GradientAppBar.dart';
 
@@ -23,8 +22,8 @@ class ProfileRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(width: 20),
-            MainBloc().avatar(
-              imageProvider: NetworkImage(profile.photo),
+            Avatar(
+              imagePath: profile.photo,
               radius: 25,
             ),
             SizedBox(width: 20),
@@ -248,15 +247,14 @@ class _PairViewState extends State<PairView> {
             backgroundColor: Theme.Colors.darkBlue,
             title: Text("Your DateMate", style: TextStyle(color: Colors.white)),
             content: Container(
-              height: MediaQuery.of(context).size.height / 3.5,
+              height: 141,
               child: Column(
                 children: <Widget>[
                   Container(
                       color: Theme.Colors.darkBlue,
                       padding: EdgeInsets.all(15),
-                      child: MainBloc().avatar(
-                        imageProvider:
-                            NetworkImage(partnerProfile['photo'] ?? ''),
+                      child: Avatar(
+                        imagePath: partnerProfile['photo'] ?? '',
                         radius: 66,
                         heroTag: partnerProfile['uid'],
                       )),

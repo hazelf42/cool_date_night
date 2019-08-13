@@ -6,8 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
 import 'PairView.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrawerScreen extends StatefulWidget {
   _DrawerScreen createState() => _DrawerScreen();
@@ -32,11 +32,11 @@ class _DrawerScreen extends State<DrawerScreen> {
                         ? Column(children: [
                           Padding(
                             padding: EdgeInsets.all(15),
-                            child:                               MainBloc().avatar(
-                                imageProvider:  NetworkImage(
+                            child:                               Avatar(
+                                imagePath:  
                                     firebaseUserData
                                             .data.firebaseUser.photoUrl ??
-                                        ""),
+                                        "",
                                         radius: 100,
                               )),
                             SizedBox(height: 10),
@@ -62,7 +62,11 @@ class _DrawerScreen extends State<DrawerScreen> {
                               var update = UserUpdateInfo();
                               update.photoUrl = imageUrl.toString();
                               await firebaseUserData.data.firebaseUser
-                                  .updateProfile((update));
+                                  .updateProfile((update)).then((_) {
+                                    Firestore.instance.collection('users').document(firebaseUserData.data.firebaseUser.uid).updateData((
+                                  {'photo' : imageUrl}
+                                    ));
+                                  });
                             });
                           }),
                       Divider(height: 1, color: prefix0.Colors.white30),

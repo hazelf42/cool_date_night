@@ -1,84 +1,126 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/bloc_helper/helper.dart';
+import 'package:cool_date_night/models/Date.dart' as Date;
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:flutter/material.dart';
-import 'package:cool_date_night/bloc_helper/helper.dart';
+
 import 'OpenQuestion.dart';
 
 class OpenQuestionBody extends StatelessWidget {
   final int index;
   final List<dynamic> openQuestions;
-  final Date date;
+  final Date.Date date;
   final Map partner;
-  OpenQuestionBody(this.openQuestions, this.partner, this.date, this.index);
+  final Date.Category category;
+  OpenQuestionBody(this.openQuestions, this.partner, this.date, this.category, this.index);
 
   @override
   Widget build(BuildContext context) {
+    num height = MediaQuery.of(context).size.height;
+    num width = MediaQuery.of(context).size.width;
     return Stack(children: <Widget>[
       ConstrainedBox(
-        constraints:
-            BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+        constraints: BoxConstraints(
+            minHeight: height - 80,
+            maxHeight: height - 80),
         child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/img/bluegradient.png"),
-                    fit: BoxFit.cover)),
+            width: width,
+            color: Theme.Colors.midnightBlue,
             child: Container(
-              width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
-                  partner != null
-                      ? Column(children: <Widget>[
-                          SizedBox(height: 75),
-                          Text(
-                            "Your date with",
-                            style: Theme.TextStyles.subheadingLight,
-                          ),
-                          SizedBox(height: 7),
-                          MainBloc().avatar(
-                      imageProvider: NetworkImage(partner['photo'] ?? ""),
-                      radius:  50,
-                      heroTag: 'datemate'
-                    ),
-                          SizedBox(height: 7),
-                          Text(
-                            partner['name'],
-                            style: Theme.TextStyles.subheadingLight,
-                          )
-                        ])
-                      : Container(height: 100),
+                  partner == null
+                      ? Container(
+                          width: double.infinity,
+                          height:
+                              height / 2 -
+                                  60,
+                          color: Theme.dateColors[date.category],
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(height: 25),
+                                Text(
+                                  category.name,
+                                  style: Theme.TextStyles.bigTitle
+                                ),
+                                SizedBox(height: 15),
+                                ClipOval(
+                                  child: Container(color: Colors.white, 
+                                  child: Avatar(
+                                    imagePath: category.image,
+                                    radius: 75,
+                                    heroTag: 'category'))),
+                                SizedBox(
+                                  height: 25,
+                                )
+                              ]))
+                      : Container(
+                          width: double.infinity,
+                          height:
+                              height / 2 -
+                                  60,
+                          color: Theme.dateColors[date.category],
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(height: 25),
+                                Text(
+                                  "Your date with",
+                                  style: Theme.TextStyles.subheading2Light,
+                                ),
+                                Text(
+                                  partner['name'],
+                                  style: Theme.TextStyles.dateTitle,
+                                ),
+                                SizedBox(height: 15),
+                                Avatar(
+                                    imagePath: category.image,
+                                    radius: 75,
+                                    heroTag: 'datemate'),
+                                SizedBox(
+                                  height: 25,
+                                )
+                              ]))
+                      ,
                   SizedBox(height: 10),
-                  Center(
-                    child: Container(
-                        padding: EdgeInsets.all(30),
-                        child: AutoSizeText(
+                     Container(
+                        padding: EdgeInsets.all(20),
+                        height: height/2 - 110,
+                        child: Center( child: AutoSizeText(
                           questionString(),
                           style: Theme.TextStyles.subheadingLight,
                           textAlign: TextAlign.left,
                           maxLines: 6,
-                        )),
-                  ),
-                  SizedBox(height: 30),
-                  FlatButton(
-                      child: Text("Next"),
-                      color: Theme.Colors.mustard,
-                      onPressed: () {
-                        if (openQuestions.length == (index + 1)) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      McQuestion(date, partner, 0)));
-                        } else {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      OpenQuestion(date, partner, index + 1)));
-                        }
-                      }),
+                        ))),
+                  Expanded(
+                      child: Container(
+                          margin: EdgeInsets.all(20),
+                          child: ButtonTheme(
+                              minWidth: 200,
+                              child: FlatButton(
+                                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                                  child: Text("Next"),
+                                  color: Theme.dateColors[date.category],
+                                  onPressed: () {
+                                    if (openQuestions.length == (index + 1)) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => McQuestion(
+                                                  date, partner, category, 0)));
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OpenQuestion(date, partner, category,
+                                                      index + 1)));
+                                    }
+                                  })))),
                 ],
               ),
             )),

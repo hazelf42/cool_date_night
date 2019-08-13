@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart' as prefix0;
 
-@override
 class ForgotPassword extends StatelessWidget {
   Future<void> resetPassword(String email) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  @override
   String _email;
+  
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.Colors.midnightBlue,),

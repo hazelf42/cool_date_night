@@ -1,13 +1,46 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
+
 import 'validators.dart';
 
+class Avatar extends StatelessWidget {
+
+  final double radius;
+  final String imagePath;
+  final String heroTag;
+
+  const Avatar({
+    Key key, 
+    this.radius, 
+    this.imagePath,
+    this.heroTag
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      constraints: new BoxConstraints(
+        minHeight: radius,
+        maxHeight: radius,
+        minWidth: radius,
+        maxWidth: radius,
+      ),
+      child: new ClipOval(
+        child: new CachedNetworkImage(
+          placeholder: (context, url) => CircularProgressIndicator(),
+          fit: BoxFit.cover,
+          imageUrl: imagePath,
+        ),
+      ),
+    );
+  }
+
+}
 class UserData {
   final FirebaseUser firebaseUser;
   final DocumentSnapshot data;
@@ -42,21 +75,6 @@ class MainBloc extends Object with Validators {
     });
   }
 
-  Widget avatar(
-      {@required ImageProvider imageProvider, @required double radius, String heroTag}) {
-    return Container(
-                            height: radius,
-                            width: radius,
-                            child: ClipOval(
-      child: PhotoView( 
-        
-        minScale: PhotoViewComputedScale.covered * 1.0,
-        maxScale: PhotoViewComputedScale.covered * 1.0,
-      imageProvider: imageProvider,
-      heroTag: heroTag,
-      loadingChild: prefix0.CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.Colors.mustard)),
-    )));}
-  
 
   Widget showPartnerRequestDialog(
       {@required BuildContext context, @required String profileuid, @required String uid}) {
@@ -69,14 +87,14 @@ class MainBloc extends Object with Validators {
             title: Text("Date Mate Request",
                 style: TextStyle(color: Colors.white)),
             content: Container(
-              height: MediaQuery.of(context).size.height / 3.5,
+              height: 100,
               child: Column(
                 children: <Widget>[
                   Container(
                     color: Theme.Colors.darkBlue,
                     padding: EdgeInsets.all(10),
-                    child: avatar(
-                      imageProvider: NetworkImage(userSnapshot.data['photo'] ?? ""),
+                    child: Avatar(
+                      imagePath: userSnapshot.data['photo'] ?? "",
                       radius: 50,
                       heroTag: 'datemate'
                     )
