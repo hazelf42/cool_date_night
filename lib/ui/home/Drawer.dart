@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'PairView.dart';
+import 'package:cool_date_night/ui/purchases/Storefront.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -30,20 +31,16 @@ class _DrawerScreen extends State<DrawerScreen> {
                     color: Theme.Colors.midnightBlue,
                     child: firebaseUserData.hasData
                         ? Column(children: [
-                          Padding(
-                            padding: EdgeInsets.all(15),
-                            child:                               Avatar(
-                                imagePath:  
-                                    firebaseUserData
-                                            .data.firebaseUser.photoUrl ??
-                                        "",
-                                        radius: 100,
-                              )),
+                            Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Avatar(
+                                  imagePath: firebaseUserData
+                                          .data.firebaseUser.photoUrl ??
+                                      "",
+                                  radius: 100,
+                                )),
                             SizedBox(height: 10),
-                            Text(
-                                firebaseUserData
-                                        .data.data['name'] ??
-                                    "",
+                            Text(firebaseUserData.data.data['name'] ?? "",
                                 style: Theme.TextStyles.dateTitle),
                             SizedBox(height: 20)
                           ])
@@ -54,7 +51,8 @@ class _DrawerScreen extends State<DrawerScreen> {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                          title: Text('Change Profile Picture', style: Theme.TextStyles.subheading2Light),
+                          title: Text('Change Profile Picture',
+                              style: Theme.TextStyles.subheading2Light),
                           onTap: () {
                             _getImage(ImageSource.gallery,
                                     firebaseUserData.data.firebaseUser.uid)
@@ -62,16 +60,20 @@ class _DrawerScreen extends State<DrawerScreen> {
                               var update = UserUpdateInfo();
                               update.photoUrl = imageUrl.toString();
                               await firebaseUserData.data.firebaseUser
-                                  .updateProfile((update)).then((_) {
-                                    Firestore.instance.collection('users').document(firebaseUserData.data.firebaseUser.uid).updateData((
-                                  {'photo' : imageUrl}
-                                    ));
-                                  });
+                                  .updateProfile((update))
+                                  .then((_) {
+                                Firestore.instance
+                                    .collection('users')
+                                    .document(
+                                        firebaseUserData.data.firebaseUser.uid)
+                                    .updateData(({'photo': imageUrl}));
+                              });
                             });
                           }),
                       Divider(height: 1, color: prefix0.Colors.white30),
                       ListTile(
-                          title: Text("Search Datemates" , style: Theme.TextStyles.subheading2Light),
+                          title: Text("Search Datemates",
+                              style: Theme.TextStyles.subheading2Light),
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -80,16 +82,24 @@ class _DrawerScreen extends State<DrawerScreen> {
                           }),
                       Divider(height: 1, color: prefix0.Colors.white30),
                       ListTile(
-                        title: Text("Retrieve purchases", style: Theme.TextStyles.subheading2Light,),
-                        onTap: () {},
+                        title: Text(
+                          "Retrieve purchases",
+                          style: Theme.TextStyles.subheading2Light,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MarketScreen()));
+                        },
                       ),
                       Divider(height: 1, color: prefix0.Colors.white30),
-                      
                       ListTile(
-                        title: Text('Log out', style: Theme.TextStyles.subheading2Light),
+                        title: Text('Log out',
+                            style: Theme.TextStyles.subheading2Light),
                         onTap: () async {
                           await FirebaseAuth.instance.signOut().then((_) {
-                          runApp(MaterialApp(home: Login()));
+                            runApp(MaterialApp(home: Login()));
                           });
                         },
                       ),

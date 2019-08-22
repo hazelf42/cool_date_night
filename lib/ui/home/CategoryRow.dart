@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
-import 'package:cool_date_night/ui/date_detail/DateDetailPage.dart';
+import 'package:cool_date_night/ui/date_detail/CategoryDetailPage.dart';
 import 'package:flutter/material.dart';
 
 class CategoryRow extends StatelessWidget {
@@ -52,7 +52,7 @@ class CategoryRow extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => DateDetailPage(userProfile, category))); 
+                  builder: (context) => CategoryDetailPage(userProfile, category))); 
         },
         child: Stack(
           children: <Widget>[

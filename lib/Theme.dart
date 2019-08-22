@@ -67,6 +67,13 @@ class TextStyles {
       fontFamily: 'Roboto',
       fontSize: 14.0,
       fontWeight: FontWeight.w600);
+      
+  static const TextStyle subheading2Mustard = const TextStyle(
+      color: Colors.mustard,
+      fontFamily: 'Roboto',
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600);
+
 
 static const TextStyle subheading2Light = const TextStyle(
       color: prefix0.Colors.white,
