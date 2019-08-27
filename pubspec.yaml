@@ -35,6 +35,8 @@ dependencies:
   in_app_purchase: ^0.2.1
   cached_network_image: ^1.1.1
   photo_view: ^0.3.1
+  url_launcher: ^5.1.2
+
 
 
 flutter_icons:
@@ -67,6 +69,7 @@ flutter:
     - assets/img/broken-heart.png
     - assets/img/camera.png
     - assets/img/magnifier-with-a-heart.png
+    - assets/img/launcher_icon.png
   fonts:
       - family: DKVisum
         fonts:

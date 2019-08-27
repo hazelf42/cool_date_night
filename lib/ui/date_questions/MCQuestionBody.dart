@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/main.dart';
 import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/date_questions/DateComplete.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'MCQuestion.dart';
+import 'dart:math';
 
 class MCQuestionBody extends StatefulWidget {
   final List<dynamic> mcQuestionsList;
@@ -32,12 +35,12 @@ class _MCQuestionBody extends State<MCQuestionBody> {
 
   @override
   Widget build(BuildContext context) {
+    print(_answerSelected);
     num height = MediaQuery.of(context).size.height;
     num width = MediaQuery.of(context).size.width;
     return Stack(children: <Widget>[
       ConstrainedBox(
-        constraints:
-            BoxConstraints(minHeight: height),
+        constraints: BoxConstraints(minHeight: height),
         child: Container(
             color: Theme.dateColors[date.name],
             child: Container(
@@ -45,7 +48,8 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                 children: <Widget>[
                   partner != null
                       ? Avatar(
-                          imagePath: partner['photo'] ?? "",
+                          imagePath: partner['photo'] ??
+                              "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                           radius: 50,
                           heroTag: 'datemate')
                       : Container(
@@ -90,12 +94,16 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                     itemBuilder: (_, i) => Container(
                         margin: prefix0.EdgeInsets.only(
                             bottom: 5, left: 30, right: 30),
-                        child: OutlineButton(
-                          padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                        child: FlatButton(
+                          color: _answerSelected == i
+                              ? Theme.Colors.mustard
+                              : Colors.transparent,
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, left: 10, right: 10),
                           shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(20.0)),
-                          borderSide: prefix0.BorderSide(
-                              color: Colors.white),
+                            borderRadius: new BorderRadius.circular(20.0),
+                            side: prefix0.BorderSide(color: Colors.white),
+                          ),
                           child: AutoSizeText(
                             mcQuestions[index]['answers'][i].trim(),
                             style: Theme.TextStyles.subheading2Light,
@@ -104,73 +112,82 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                             textAlign: prefix0.TextAlign.center,
                           ),
                           splashColor: Theme.Colors.mustard,
-                          color: (_answerSelected == i)
-                              ? Theme.Colors.mustard
-                              : Colors.white,
                           onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    backgroundColor: Theme.Colors.midnightBlue,
-                                    title: Text("Challenge",
-                                        style: TextStyle(color: Colors.white)),
-                                    content: Text(
-                                        (index == 1)
-                                            ? "Brutally criticize your date's answer as best you can. Don't hold back!"
-                                            : "Be as enthusiastic as possible about your date's answer -- even if you don't agree.",
-                                        style:
-                                            Theme.TextStyles.subheadingLight),
-                                    actions: <Widget>[
-                                      Center(
-                                          child: FlatButton(
-                                        color: Colors.white30,
-                                        child: Text("OK",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18)),
-                                        onPressed: () {
-                                          setState(() {
-                                            _answerSelected = i;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                      )),
-                                    ],
-                                  );
-                                });
+                            setState(() {
+                              _answerSelected = i;
+                            });
+                            _showRandomChallenge();
                           },
                         )),
                     shrinkWrap: true,
                   ),
-                  Container(
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: ButtonTheme(
-                          minWidth: 200,
-                          child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(20.0)),
-                              child: Text("Next"),
-                              color: Theme.dateColors[date.category],
-                              onPressed: () {
-                                if (mcQuestions.length == (index + 1)) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => McQuestion(
-                                              date, partner, category, 0)));
-                                } else {Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => McQuestion(
-                                              date, partner, category, index+1)));
-                                }
-                              })))
+                  _nextButton()
                 ],
               ),
             )),
       )
     ]);
+  }
+
+  Widget _nextButton() {
+    return Container(
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: ButtonTheme(
+            minWidth: 200,
+            child: FlatButton(
+                splashColor: (_answerSelected == null)
+                    ? Colors.transparent
+                    : Colors.black12,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(20.0)),
+                child: Text("Next"),
+                color: _answerSelected == null
+                    ? Colors.grey
+                    : Theme.dateColors[date.category],
+                onPressed: () {
+                  if (_answerSelected != null) {
+                    if (mcQuestions.length == (index + 1)) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DateCompleteScreen(date, category)));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => McQuestion(
+                                  date, partner, category, index + 1)));
+                    }
+                  }
+                })));
+  }
+
+  void _showRandomChallenge() {
+    Random rnd = Random();
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Theme.Colors.midnightBlue,
+            title: Text("Challenge", style: TextStyle(color: Colors.white)),
+            content: Text(
+                MainBloc().listOfChallenges[
+                    rnd.nextInt(MainBloc().listOfChallenges.length)],
+                style: Theme.TextStyles.subheadingLight),
+            actions: <Widget>[
+              Center(
+                  child: FlatButton(
+                color: Colors.white30,
+                child: Text("OK",
+                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )),
+            ],
+          );
+        });
   }
 }

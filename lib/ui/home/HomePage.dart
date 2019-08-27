@@ -95,7 +95,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                                             ? Avatar(
                                                                 imagePath:
                                                                         dateUserSnapshot.data['photo'] ??
-                                                                            "",
+                                                                            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                                                 radius: 60,
                                                               )
                                                             : Center(

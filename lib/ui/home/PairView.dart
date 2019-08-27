@@ -191,7 +191,7 @@ class _PairViewState extends State<PairView> {
                                                                       .documents[
                                                                           index]
                                                                       .data['photo'] ??
-                                                                  "",
+                                                                  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                                               fit: BoxFit.cover,
                                                               height: 60,
                                                               width: 60,
@@ -254,7 +254,7 @@ class _PairViewState extends State<PairView> {
                       color: Theme.Colors.darkBlue,
                       padding: EdgeInsets.all(15),
                       child: Avatar(
-                        imagePath: partnerProfile['photo'] ?? '',
+                        imagePath: partnerProfile['photo'] ?? "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                         radius: 66,
                         heroTag: partnerProfile['uid'],
                       )),

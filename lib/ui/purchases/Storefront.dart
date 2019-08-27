@@ -48,6 +48,7 @@ class MarketScreenState extends State<MarketScreen> {
   void _initialize() async {
 
     // Check availability of In App Purchases
+    print(_iap);
     _available = await _iap.isAvailable();
 
     if (_available) {

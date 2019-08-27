@@ -14,7 +14,7 @@ class Colors {
 }
 Map dateColors = {
     'Free Trial' : Colors.mustard,
-    "Parents Night Out" : Colors.mustard,
+    "Parents' Night Out" : Colors.mustard,
     'Gear Shifter' : Colors.lightBlue,
     'Icebreaker' : Colors.lightBlue,
     'Spicy' : Colors.coral,

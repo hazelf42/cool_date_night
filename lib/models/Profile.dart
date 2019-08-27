@@ -12,6 +12,6 @@ class Profile {
    Profile.fromSnapshot(DocumentSnapshot snapshot)
       : uid = snapshot.documentID,
         name = snapshot['name'],
-        photo = snapshot['photo'] ?? '',
+        photo = snapshot['photo'] ?? "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
         partners = [];
 }

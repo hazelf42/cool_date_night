@@ -13,6 +13,7 @@ class OpenQuestionBody extends StatelessWidget {
   final Date.Date date;
   final Map partner;
   final Date.Category category;
+  
   OpenQuestionBody(this.openQuestions, this.partner, this.date, this.category, this.index);
 
   @override

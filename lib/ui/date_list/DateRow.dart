@@ -7,6 +7,7 @@ import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DateRow extends StatelessWidget {
@@ -47,16 +48,29 @@ class DateRow extends StatelessWidget {
       ),
       onTap: () async {
         await MainBloc().getCurrentFirebaseUserData().then((userData) async {
+          final purchases =
+              await InAppPurchaseConnection.instance.queryPastPurchases();
+          if (purchases.pastPurchases.length > 0 &&
+              userData.data.data['isPaid'] != true) {
+            Firestore.instance
+                .collection('users')
+                .document(userData.firebaseUser.uid)
+                .updateData({'isPaid': true});
+          }
           if (userData.data.data['isPaid'] == null ||
               userData.data.data['isPaid'] == false) {
+            final purchases =
+                await InAppPurchaseConnection.instance.queryPastPurchases();
+            if (purchases.pastPurchases.length > 0) {
+              Firestore.instance
+                  .collection('users')
+                  .document(userData.firebaseUser.uid)
+                  .updateData({'isPaid': true});
+            }
             prefix0.showDialog(
                 context: context,
                 builder: (context) {
-                  return StreamBuilder(
-                      stream: _isLoading,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                       return _notPaidPopup(userData: userData);
-                      });
+                  _notPaidPopup(userData: userData);
                 });
             //     },
             //    );
@@ -90,9 +104,20 @@ class DateRow extends StatelessWidget {
         _isLoading.value
             ? CircularProgressIndicator()
             : FlatButton(
-                child: Text("Unlock All".toUpperCase(), style: Theme.TextStyles.subheading2Mustard),
+                child: Text("Unlock All".toUpperCase(),
+                    style: Theme.TextStyles.subheading2Mustard),
                 onPressed: () {
                   _isLoading.add(true);
+                  InAppPurchaseConnection.instance.buyNonConsumable(
+                      purchaseParam: PurchaseParam(
+                    productDetails: ProductDetails(
+                        title: "Unlock All",
+                        description: "Get all the current dates (Testing only)",
+                        id: "unlock_all",
+                        price: "0.99"),
+                    applicationUserName: userData.firebaseUser.uid,
+                    sandboxTesting: true,
+                  ));
                   Future.delayed(const Duration(seconds: 1)).then((_) {
                     Firestore.instance
                         .collection("users")
@@ -103,15 +128,19 @@ class DateRow extends StatelessWidget {
                     Navigator.of(context).pop();
                   });
                 },
-              ), 
-              FlatButton(
-                child: Text("CANCEL", style: Theme.TextStyles.subheading2Light),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
+              ),
+        FlatButton(
+          child: Text("CANCEL", style: Theme.TextStyles.subheading2Light),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
       ],
-      title: Text("Unlock All Dates?", textAlign: prefix0.TextAlign.center, style: TextStyle(color: Colors.white),),
+      title: Text(
+        "Unlock All Dates?",
+        textAlign: prefix0.TextAlign.center,
+        style: TextStyle(color: Colors.white),
+      ),
       backgroundColor: Theme.Colors.darkBlue,
     );
   }

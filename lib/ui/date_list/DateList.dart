@@ -13,30 +13,33 @@ class DateList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance
-                  .collection('dates')
-                  .where('category', isEqualTo: category.name)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return LinearProgressIndicator();
-                return _dateList(context, snapshot.data.documents, category);
-              },
-      );
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection('dates')
+          .where('category', isEqualTo: category.name)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+        return _dateList(context, snapshot.data.documents, category);
+      },
+    );
   }
 }
 
 Widget _dateList(
     BuildContext context, List<DocumentSnapshot> snapshots, Category category) {
   snapshots.sort((a, b) => (a.data['num']).compareTo(b.data['num']));
-      return Container(
-        
-                      color: Theme.dateColors[category.name],child: ListView.builder(
-        physics: prefix0.NeverScrollableScrollPhysics(),
-            itemCount: snapshots.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return DateRow(
-                context, Date.fromSnapshot(snapshots[index]), category);
-          }));
+  return Container(
+      color: Theme.dateColors[category.name],
+      child: ConstrainedBox(
+          constraints: prefix0.BoxConstraints(
+              minHeight: prefix0.MediaQuery.of(context).size.height / 2),
+          child: ListView.builder(
+              physics: prefix0.NeverScrollableScrollPhysics(),
+              itemCount: snapshots.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return DateRow(
+                    context, Date.fromSnapshot(snapshots[index]), category);
+              })));
 }

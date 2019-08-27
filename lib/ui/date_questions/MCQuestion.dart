@@ -48,7 +48,7 @@ Widget buildBody(
       if (!snapshots.hasData) return LinearProgressIndicator();
       print(MediaQuery.of(context).size.height);
       return MCQuestionBody(
-          snapshots.data.data['mc_questions'], date, partner, category, index);
+          snapshots.data.data['mc_questions'].reversed.toList(), date, partner, category, index);
     },
   );
 }

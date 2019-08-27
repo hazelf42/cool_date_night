@@ -43,7 +43,7 @@ Widget buildBody(BuildContext context, Date date, Map partner, Category category
     stream: Firestore.instance.collection('dates_with_questions').document(date.name).snapshots(),
     builder: (context, snapshots) {
       if (!snapshots.hasData) return LinearProgressIndicator();
-      return OpenQuestionBody(snapshots.data.data['open_questions'], partner, date, category, index);
+      return OpenQuestionBody(snapshots.data.data['open_questions'].reversed.toList(), partner, date, category, index);
    },
   );
 }
