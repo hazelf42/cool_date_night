@@ -10,11 +10,11 @@ import 'OpenQuestion.dart';
 class OpenQuestionBody extends StatelessWidget {
   final int index;
   final List<dynamic> openQuestions;
-  final Date.Date date;
+  final List dateList;
   final Map partner;
   final Date.Category category;
   
-  OpenQuestionBody(this.openQuestions, this.partner, this.date, this.category, this.index);
+  OpenQuestionBody(this.openQuestions, this.partner, this.dateList, this.category, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class OpenQuestionBody extends StatelessWidget {
                           height:
                               height / 2 -
                                   60,
-                          color: Theme.dateColors[date.category],
+                          color: Theme.dateColors[category.name],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,7 +63,7 @@ class OpenQuestionBody extends StatelessWidget {
                           height:
                               height / 2 -
                                   60,
-                          color: Theme.dateColors[date.category],
+                          color: Theme.dateColors[category.name],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,20 +105,20 @@ class OpenQuestionBody extends StatelessWidget {
                               child: FlatButton(
                                 shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
                                   child: Text("Next"),
-                                  color: Theme.dateColors[date.category],
+                                  color: Theme.dateColors[category.name],
                                   onPressed: () {
                                     if (openQuestions.length == (index + 1)) {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => McQuestion(
-                                                  date, partner, category, 0)));
+                                                  dateList, partner, category, 0)));
                                     } else {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  OpenQuestion(date, partner, category,
+                                                  OpenQuestion(dateList, partner, category,
                                                       index + 1)));
                                     }
                                   })))),

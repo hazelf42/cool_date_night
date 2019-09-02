@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatelessWidget {
 
-  final Date date;
+  final List dateList;
   final Map partner;
   final int index; 
   final Category category;
 
-  OpenQuestion(this.date, this.partner, this.category, this.index);
+  OpenQuestion(this.dateList, this.partner, this.category, this.index);
 //    DetailScreen({Key key, @required this.todo}) : super(key: key);
 
   @override

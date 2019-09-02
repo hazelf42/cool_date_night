@@ -48,31 +48,31 @@ class DateRow extends StatelessWidget {
       ),
       onTap: () async {
         await MainBloc().getCurrentFirebaseUserData().then((userData) async {
-          final purchases =
-              await InAppPurchaseConnection.instance.queryPastPurchases();
-          if (purchases.pastPurchases.length > 0 &&
-              userData.data.data['isPaid'] != true) {
-            Firestore.instance
-                .collection('users')
-                .document(userData.firebaseUser.uid)
-                .updateData({'isPaid': true});
-          }
-          if (userData.data.data['isPaid'] == null ||
-              userData.data.data['isPaid'] == false) {
-            final purchases =
-                await InAppPurchaseConnection.instance.queryPastPurchases();
-            if (purchases.pastPurchases.length > 0) {
-              Firestore.instance
-                  .collection('users')
-                  .document(userData.firebaseUser.uid)
-                  .updateData({'isPaid': true});
-            }
-            prefix0.showDialog(
-                context: context,
-                builder: (context) {
-                  _notPaidPopup(userData: userData);
-                });
-          } else {
+          // final purchases =
+          //     await InAppPurchaseConnection.instance.queryPastPurchases();
+          // if (purchases.pastPurchases.length > 0 &&
+          //     userData.data.data['isPaid'] != true) {
+          //   Firestore.instance
+          //       .collection('users')
+          //       .document(userData.firebaseUser.uid)
+          //       .updateData({'isPaid': true});
+          // }
+          // if (userData.data.data['isPaid'] == null ||
+          //     userData.data.data['isPaid'] == false) {
+          //   // final purchases =
+          //   //     await InAppPurchaseConnection.instance.queryPastPurchases();
+          //   // if (purchases.pastPurchases.length > 0) {
+          //   //   Firestore.instance
+          //   //       .collection('users')
+          //   //       .document(userData.firebaseUser.uid)
+          //   //       .up  dateData({'isPaid': true});
+          //   // }
+          //   prefix0.showDialog(
+          //       context: context,
+          //       builder: (context) {
+          //        return _notPaidPopup(userData: userData);
+          //       });
+          // } else {
             await Firestore.instance
                 .collection('users')
                 .document(userData.data.data['date_mate'])
@@ -83,9 +83,9 @@ class DateRow extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          OpenQuestion(date, partner.data, category, 0)));
+                          OpenQuestion(dateList, partner.data, category, 0)));
             });
-          }
+         // }
         });
       },
     );
@@ -101,7 +101,7 @@ class DateRow extends StatelessWidget {
     return AlertDialog(
       actions: <Widget>[
         _isLoading.value
-            ? CircularProgressIndicator()
+            ? Container(child: CircularProgressIndicator())
             : FlatButton(
                 child: Text("Unlock All".toUpperCase(),
                     style: Theme.TextStyles.subheading2Mustard),
@@ -115,7 +115,6 @@ class DateRow extends StatelessWidget {
                         id: "unlock_all",
                         price: "0.99"),
                     applicationUserName: userData.firebaseUser.uid,
-                    sandboxTesting: true,
                   ));
                   Future.delayed(const Duration(seconds: 1)).then((_) {
                     Firestore.instance
