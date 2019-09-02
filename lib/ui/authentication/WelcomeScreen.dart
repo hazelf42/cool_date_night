@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
             child:  Column(
             children: <Widget>[
               prefix0.SizedBox(height: 40),
-              Image(image: AssetImage('assets/img/vitalizer.png'), height: 50, width: 50),
+              Image(image: AssetImage('assets/img/cooldatenightmustard.png'), height: 50, width: 50),
               prefix0.SizedBox(height: 40),
               Text("Welcome!", style: Theme.TextStyles.dateTitle),
               prefix0.SizedBox(height: 40),

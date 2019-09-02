@@ -72,19 +72,18 @@ class DateRow extends StatelessWidget {
                 builder: (context) {
                   _notPaidPopup(userData: userData);
                 });
-            //     },
-            //    );
           } else {
             await Firestore.instance
                 .collection('users')
                 .document(userData.data.data['date_mate'])
                 .get()
                 .then((partner) {
+                  var dateList = MainBloc().randomizeDateQuestions(date);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          OpenQuestion(date, partner.data, category, 0)));
+                          OpenQuestion(dateList, partner.data, category, 0)));
             });
           }
         });

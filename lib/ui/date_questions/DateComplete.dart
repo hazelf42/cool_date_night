@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
 class DateCompleteScreen extends StatelessWidget {
-  final Date date;
   final Category category;
-  DateCompleteScreen(this.date, this.category);
+  DateCompleteScreen(this.category);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
       width: prefix0.MediaQuery.of(context).size.width,
-      color: Theme.dateColors[date.category],
+      color: Theme.dateColors[category],
       padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
       child: Container(
         child: Card(
@@ -29,7 +28,7 @@ class DateCompleteScreen extends StatelessWidget {
               prefix0.SizedBox(height: 75),
               prefix0.FlatButton(
                   color: Theme.dateColors[category.name],
-                child: Text("BACK TO " + date.category.toUpperCase(),
+                child: Text("BACK TO " + category.name.toUpperCase(),
                     style: Theme.TextStyles.subheading2Light),
                 onPressed: () {
                   Navigator.of(context).popUntil((route) => route.isFirst);

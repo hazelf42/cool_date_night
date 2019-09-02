@@ -9,29 +9,27 @@ import 'package:flutter/material.dart' as prefix0;
 import 'MCQuestion.dart';
 import 'dart:math';
 
+import 'OpenQuestion.dart';
+
 class MCQuestionBody extends StatefulWidget {
-  final List<dynamic> mcQuestionsList;
-  final Date date;
+  final List dateList;
   final Map partner;
   final int index;
   final Category category;
-  MCQuestionBody(
-      this.mcQuestionsList, this.date, this.partner, this.category, this.index);
+  MCQuestionBody(this.dateList, this.partner, this.category, this.index);
 
   @override
   _MCQuestionBody createState() =>
-      _MCQuestionBody(mcQuestionsList, date, partner, category, index);
+      _MCQuestionBody(dateList, partner, category, index);
 }
 
 class _MCQuestionBody extends State<MCQuestionBody> {
-  final List<dynamic> mcQuestions;
-  final Date date;
+  final List<dynamic> dateList;
   final Map partner;
   final int index;
   final Category category;
   int _answerSelected;
-  _MCQuestionBody(
-      this.mcQuestions, this.date, this.partner, this.category, this.index);
+  _MCQuestionBody(this.dateList, this.partner, this.category, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
       ConstrainedBox(
         constraints: BoxConstraints(minHeight: height),
         child: Container(
-            color: Theme.dateColors[date.name],
+            color: Theme.dateColors[category.name],
             child: Container(
               child: Column(
                 children: <Widget>[
@@ -55,7 +53,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                       : Container(
                           width: width,
                           height: 160,
-                          color: Theme.dateColors[date.category],
+                          color: Theme.dateColors[category],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +77,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                   Container(
                       padding: EdgeInsets.only(left: 30, right: 30, top: 10),
                       child: AutoSizeText(
-                        mcQuestions[index]['question'],
+                        dateList[index]['question'],
                         style: prefix0.TextStyle(
                             fontWeight: prefix0.FontWeight.w500,
                             fontSize: 18,
@@ -90,7 +88,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                   prefix0.SizedBox(height: 10),
                   ListView.builder(
                     physics: prefix0.NeverScrollableScrollPhysics(),
-                    itemCount: (mcQuestions[index]['answers'].length),
+                    itemCount: (dateList[index]['answers'].length),
                     itemBuilder: (_, i) => Container(
                         margin: prefix0.EdgeInsets.only(
                             bottom: 5, left: 30, right: 30),
@@ -105,7 +103,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                             side: prefix0.BorderSide(color: Colors.white),
                           ),
                           child: AutoSizeText(
-                            mcQuestions[index]['answers'][i].trim(),
+                            dateList[index]['answers'][i].trim(),
                             style: Theme.TextStyles.subheading2Light,
                             maxLines: 3,
                             softWrap: true,
@@ -143,24 +141,34 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                 child: Text("Next"),
                 color: _answerSelected == null
                     ? Colors.grey
-                    : Theme.dateColors[date.category],
+                    : Theme.dateColors[category],
                 onPressed: () {
-                  if (_answerSelected != null) {
-                    if (mcQuestions.length == (index + 1)) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DateCompleteScreen(date, category)));
-                    } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => McQuestion(
-                                  date, partner, category, index + 1)));
-                    }
-                  }
+                  next(context);
                 })));
+  }
+
+  void next(BuildContext context) {
+    if (_answerSelected != null) {
+      if (dateList.length == (index + 1)) {
+        //This couldn't happen, but whatever
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DateCompleteScreen(category)));
+      } else if (dateList[index+1].answers != null){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    McQuestion(dateList, partner, category, index + 1)));
+      } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  OpenQuestion(dateList, partner, category, index + 1)));
+      }
+    }
   }
 
   void _showRandomChallenge() {

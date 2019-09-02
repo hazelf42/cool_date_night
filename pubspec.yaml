@@ -70,6 +70,8 @@ flutter:
     - assets/img/camera.png
     - assets/img/magnifier-with-a-heart.png
     - assets/img/launcher_icon.png
+    - assets/img/cooldatenightmustard.png
+
   fonts:
       - family: DKVisum
         fonts:
