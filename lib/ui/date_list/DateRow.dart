@@ -83,7 +83,7 @@ class DateRow extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          OpenQuestion(dateList, partner.data, category, 0)));
+                          OpenQuestion(date, partner.data, category, 0)));
             });
           }
         });

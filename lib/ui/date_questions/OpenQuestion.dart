@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatelessWidget {
 
-  final List dateList;
+  final Date date;
   final Map partner;
   final int index; 
   final Category category;
 
-  OpenQuestion(this.dateList, this.partner, this.category, this.index);
+  OpenQuestion(this.date, this.partner, this.category, this.index);
 //    DetailScreen({Key key, @required this.todo}) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class OpenQuestion extends StatelessWidget {
       
       body:  SingleChildScrollView( child: Stack(
         children: <Widget>[
-           buildBody(context, dateList, partner, category, index),
+           buildBody(context, date, partner, category, index),
         ],
       )),
     );
@@ -38,6 +38,12 @@ class OpenQuestion extends StatelessWidget {
 }
 
 @override
-Widget buildBody(BuildContext context, List dateList, Map partner, Category category, index) {
-      return OpenQuestionBody(dateList, partner, category, index);
+Widget buildBody(BuildContext context, Date date, Map partner, Category category, index) {
+  return StreamBuilder<DocumentSnapshot> (
+    stream: Firestore.instance.collection('dates_with_questions').document(date.name).snapshots(),
+    builder: (context, snapshots) {
+      if (!snapshots.hasData) return LinearProgressIndicator();
+      return OpenQuestionBody(snapshots.data.data['open_questions'].reversed.toList(), partner, date, category, index);
+   },
+  );
 }
