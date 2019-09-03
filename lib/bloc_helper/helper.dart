@@ -197,17 +197,27 @@ class MainBloc extends Object with Validators {
         });
   }
 
-  List randomizeDateQuestions(Date date) {
-    //Flip a coin
-    var dateList = date.openQuestions;
-    final finalQuestion = dateList.removeLast();
-    dateList.addAll(date.mcQuestions);
-    var random = Random();
-    for (var i = dateList.length - 1; i > 0; i--) {
-      
-    }
-    dateList.add(finalQuestion);
-    return dateList;
+  Future<List> randomizeDateQuestions(Date date) async {
+    return await Firestore.instance
+        .collection('dates_with_questions').document(date.name).get().then((snapshot) {
+      var openList = new List.from(snapshot['open_questions']);
+      openList = openList.reversed.toList();
+      final finalQuestion = openList.removeLast();
+      var mcList = new List.from(snapshot['mc_questions']);
+      mcList = mcList.reversed.toList();
+      var random = Random();
+      var randDateList = [];
+      var n = openList.length + mcList.length;
+      while (randDateList.length < n) {
+        if (random.nextInt(2) == 0 && openList.length != 0) {
+          randDateList.add(openList.removeAt(0));
+        } else if (mcList.length != 0) {
+          randDateList.add(mcList.removeAt(0));
+        }
+      }
+      randDateList.add(finalQuestion);
+      return randDateList;
+    });
   }
 }
 

@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
+import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
+import 'package:cool_date_night/ui/date_questions/MCQuestionBody.dart';
 import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -73,19 +75,21 @@ class DateRow extends StatelessWidget {
           //        return _notPaidPopup(userData: userData);
           //       });
           // } else {
-            await Firestore.instance
-                .collection('users')
-                .document(userData.data.data['date_mate'])
-                .get()
-                .then((partner) {
-                  var dateList = MainBloc().randomizeDateQuestions(date);
+          await Firestore.instance
+              .collection('users')
+              .document(userData.data.data['date_mate'])
+              .get()
+              .then((partner) async {
+            await MainBloc().randomizeDateQuestions(date).then((dateList) {
               Navigator.push(
                   context,
+                 
                   MaterialPageRoute(
                       builder: (context) =>
-                          OpenQuestion(dateList, partner.data, category, 0)));
+                          (dateList[0] is String) ?  OpenQuestion(dateList, partner.data, category, 0) : McQuestion(dateList, partner.data, category, 0) )); 
             });
-         // }
+          });
+          // }
         });
       },
     );

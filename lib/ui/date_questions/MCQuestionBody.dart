@@ -3,6 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/main.dart';
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_questions/DateComplete.dart';
+import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -11,27 +12,27 @@ import 'dart:math';
 
 class MCQuestionBody extends StatefulWidget {
   final List<dynamic> mcQuestionsList;
-  final Date date;
+  final List questionList;
   final Map partner;
   final int index;
   final Category category;
   MCQuestionBody(
-      this.mcQuestionsList, this.date, this.partner, this.category, this.index);
+      this.mcQuestionsList, this.questionList, this.partner, this.category, this.index);
 
   @override
   _MCQuestionBody createState() =>
-      _MCQuestionBody(mcQuestionsList, date, partner, category, index);
+      _MCQuestionBody(mcQuestionsList, questionList, partner, category, index);
 }
 
 class _MCQuestionBody extends State<MCQuestionBody> {
   final List<dynamic> mcQuestions;
-  final Date date;
+  final List questionList;
   final Map partner;
   final int index;
   final Category category;
   int _answerSelected;
   _MCQuestionBody(
-      this.mcQuestions, this.date, this.partner, this.category, this.index);
+      this.mcQuestions, this.questionList, this.partner, this.category, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,6 @@ class _MCQuestionBody extends State<MCQuestionBody> {
       ConstrainedBox(
         constraints: BoxConstraints(minHeight: height),
         child: Container(
-            color: Theme.dateColors[date.name],
             child: Container(
               child: Column(
                 children: <Widget>[
@@ -55,7 +55,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                       : Container(
                           width: width,
                           height: 160,
-                          color: Theme.dateColors[date.category],
+                          color: Theme.dateColors[category.name],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +106,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                           ),
                           child: AutoSizeText(
                             mcQuestions[index]['answers'][i].trim(),
-                            style: Theme.TextStyles.subheading2Light,
+                            style: _answerSelected == i ? Theme.TextStyles.subheading2Dark : Theme.TextStyles.subheading2Light,
                             maxLines: 3,
                             softWrap: true,
                             textAlign: prefix0.TextAlign.center,
@@ -143,7 +143,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                 child: Text("Next"),
                 color: _answerSelected == null
                     ? Colors.grey
-                    : Theme.dateColors[date.category],
+                    : Theme.dateColors[category.name],
                 onPressed: () {
                   if (_answerSelected != null) {
                     if (mcQuestions.length == (index + 1)) {
@@ -156,8 +156,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => McQuestion(
-                                  date, partner, category, index + 1)));
+                              builder: (context) =>  (questionList[index+1] is String) ?  OpenQuestion(questionList, partner, category, index+1) : McQuestion(questionList, partner, category, index+1) )); 
                     }
                   }
                 })));

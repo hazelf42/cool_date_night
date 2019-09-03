@@ -5,16 +5,16 @@ import 'package:cool_date_night/models/Date.dart' as Date;
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:flutter/material.dart';
 
+import 'DateComplete.dart';
 import 'OpenQuestion.dart';
 
 class OpenQuestionBody extends StatelessWidget {
   final int index;
-  final List<dynamic> openQuestions;
-  final List dateList;
+  final List questionList;
   final Map partner;
   final Date.Category category;
-  
-  OpenQuestionBody(this.openQuestions, this.partner, this.dateList, this.category, this.index);
+
+  OpenQuestionBody(this.partner, this.questionList, this.category, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,8 @@ class OpenQuestionBody extends StatelessWidget {
     num width = MediaQuery.of(context).size.width;
     return Stack(children: <Widget>[
       ConstrainedBox(
-        constraints: BoxConstraints(
-            minHeight: height - 80,
-            maxHeight: height - 80),
+        constraints:
+            BoxConstraints(minHeight: height - 80, maxHeight: height - 80),
         child: Container(
             width: width,
             color: Theme.Colors.midnightBlue,
@@ -34,35 +33,30 @@ class OpenQuestionBody extends StatelessWidget {
                   partner == null
                       ? Container(
                           width: double.infinity,
-                          height:
-                              height / 2 -
-                                  60,
+                          height: height / 2 - 60,
                           color: Theme.dateColors[category.name],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(height: 25),
-                                Text(
-                                  category.name,
-                                  style: Theme.TextStyles.bigTitle
-                                ),
+                                Text(category.name,
+                                    style: Theme.TextStyles.bigTitle),
                                 SizedBox(height: 15),
                                 ClipOval(
-                                  child: Container(color: Colors.white, 
-                                  child: Avatar(
-                                    imagePath: category.image,
-                                    radius: 75,
-                                    heroTag: 'category'))),
+                                    child: Container(
+                                        color: Colors.white,
+                                        child: Avatar(
+                                            imagePath: category.image,
+                                            radius: 75,
+                                            heroTag: 'category'))),
                                 SizedBox(
                                   height: 25,
                                 )
                               ]))
                       : Container(
                           width: double.infinity,
-                          height:
-                              height / 2 -
-                                  60,
+                          height: height / 2 - 60,
                           color: Theme.dateColors[category.name],
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,41 +79,54 @@ class OpenQuestionBody extends StatelessWidget {
                                 SizedBox(
                                   height: 25,
                                 )
-                              ]))
-                      ,
+                              ])),
                   SizedBox(height: 10),
-                     Container(
-                        padding: EdgeInsets.all(20),
-                        height: height/2 - 110,
-                        child: Center( child: AutoSizeText(
-                          questionString(),
-                          style: Theme.TextStyles.subheadingLight,
-                          textAlign: TextAlign.left,
-                          maxLines: 6,
-                        ))),
+                  Container(
+                      padding: EdgeInsets.all(20),
+                      height: height / 2 - 110,
+                      child: Center(
+                          child: AutoSizeText(
+                        questionString(),
+                        style: Theme.TextStyles.subheadingLight,
+                        textAlign: TextAlign.left,
+                        maxLines: 6,
+                      ))),
                   Expanded(
                       child: Container(
                           margin: EdgeInsets.all(20),
                           child: ButtonTheme(
                               minWidth: 200,
                               child: FlatButton(
-                                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20.0)),
                                   child: Text("Next"),
                                   color: Theme.dateColors[category.name],
                                   onPressed: () {
-                                    if (openQuestions.length == (index + 1)) {
+                                    if (questionList.length == (index + 1)) {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => McQuestion(
-                                                  dateList, partner, category, 0)));
+                                              builder: (context) =>
+                                                  DateCompleteScreen(
+                                                      category)));
                                     } else {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  OpenQuestion(dateList, partner, category,
-                                                      index + 1)));
+                                                  (questionList[index + 1]
+                                                          is String)
+                                                      ? OpenQuestion(
+                                                          questionList,
+                                                          partner,
+                                                          category,
+                                                          index + 1)
+                                                      : McQuestion(
+                                                          questionList,
+                                                          partner,
+                                                          category,
+                                                          index + 1)));
                                     }
                                   })))),
                 ],
@@ -130,7 +137,7 @@ class OpenQuestionBody extends StatelessWidget {
   }
 
   String questionString() {
-    final a = openQuestions[index];
+    final a = questionList[index];
     List<String> b = a.split("}")[0].split("");
     var c = List<String>.from(b);
     c.removeAt(0);
