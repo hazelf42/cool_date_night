@@ -12,7 +12,7 @@ class DateCompleteScreen extends StatelessWidget {
     return Scaffold(
         body: Container(
       width: prefix0.MediaQuery.of(context).size.width,
-      color: Theme.dateColors[category],
+      color: Theme.dateColors[category.name],
       padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
       child: Container(
         child: Card(
@@ -29,7 +29,7 @@ class DateCompleteScreen extends StatelessWidget {
               prefix0.FlatButton(
                   color: Theme.dateColors[category.name],
                 child: Text("BACK TO " + category.name.toUpperCase(),
-                    style: Theme.TextStyles.subheading2Light),
+                    style: Theme.TextStyles.subheading2Dark),
                 onPressed: () {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
