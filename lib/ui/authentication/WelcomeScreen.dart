@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,14 @@ class WelcomeScreen extends StatelessWidget {
           child:
           Container(
             padding: prefix0.EdgeInsets.all(10),
-            child:  Column(
+            child:  SingleChildScrollView(child: Stack(
             children: <Widget>[
               prefix0.SizedBox(height: 40),
               Image(image: AssetImage('assets/img/cooldatenightmustard.png'), height: 50, width: 50),
               prefix0.SizedBox(height: 40),
               Text("Welcome!", style: Theme.TextStyles.dateTitle),
               prefix0.SizedBox(height: 40),
-              Text(_welcomeString, style: Theme.TextStyles.bodyLight, textAlign: prefix0.TextAlign.center,),
+              AutoSizeText(_welcomeString, style: Theme.TextStyles.bodyLight, textAlign: prefix0.TextAlign.center, maxLines: 11),
               prefix0.SizedBox(height: 40),
 
               prefix0.FlatButton(
@@ -43,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 },
               )
             ],
-          )),
+          ))),
         ),
       ),
     ));

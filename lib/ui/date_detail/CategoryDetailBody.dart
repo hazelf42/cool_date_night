@@ -34,6 +34,9 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
               color: Theme.Colors.midnightBlue,
               child: Column(
                 children: <Widget>[
+                  ConstrainedBox(
+                    constraints: prefix0.BoxConstraints(minHeight: prefix0.MediaQuery.of(context).size.height/2),
+                    child: 
                   Container(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
@@ -63,7 +66,7 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
                               )),
                           SizedBox(height: 10),
                         ],
-                      )),
+                      ))),
                   // userProfile.data['date_mate'] == null
                   //     ? Column(
                   //         children: <Widget>[

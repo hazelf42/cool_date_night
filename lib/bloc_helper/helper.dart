@@ -203,6 +203,7 @@ class MainBloc extends Object with Validators {
       var openList = new List.from(snapshot['open_questions']);
       openList = openList.reversed.toList();
       final finalQuestion = openList.removeLast();
+      final firstQuestion = openList.remove(0);
       var mcList = new List.from(snapshot['mc_questions']);
       mcList = mcList.reversed.toList();
       var random = Random();
@@ -215,6 +216,7 @@ class MainBloc extends Object with Validators {
           randDateList.add(mcList.removeAt(0));
         }
       }
+      randDateList.insert(0, firstQuestion);
       randDateList.add(finalQuestion);
       return randDateList;
     });

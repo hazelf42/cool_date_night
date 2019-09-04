@@ -23,7 +23,7 @@ class OpenQuestionBody extends StatelessWidget {
     return Stack(children: <Widget>[
       ConstrainedBox(
         constraints:
-            BoxConstraints(minHeight: height - 80, maxHeight: height - 80),
+            BoxConstraints(minHeight: height/2, maxHeight: height - 80),
         child: Container(
             width: width,
             color: Theme.Colors.midnightBlue,
