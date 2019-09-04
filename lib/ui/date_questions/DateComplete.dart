@@ -32,7 +32,7 @@ class DateCompleteScreen extends StatelessWidget {
                     style: Theme.TextStyles.subheading2Dark),
                 onPressed: () {
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                },
+                }, 
               )
             ],
           ),
