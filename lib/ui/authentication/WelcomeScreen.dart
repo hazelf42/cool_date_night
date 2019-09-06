@@ -11,49 +11,51 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      width: prefix0.MediaQuery.of(context).size.width,
-      height: prefix0.MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/img/darkblue.jpg"), fit: BoxFit.cover)),
-      padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
-      child: Container(
-        child: Card(
-          elevation: 5,
-          color: Theme.Colors.midnightBlue,
-          child: Container(
-              padding: prefix0.EdgeInsets.all(10),
+      body: Container(
+        width: prefix0.MediaQuery.of(context).size.width,
+        height: prefix0.MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/img/darkblue.jpg"),
+                fit: BoxFit.cover)),
+        padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
+        child: Container(
+          child: Card(
+              elevation: 5,
+              color: Theme.Colors.midnightBlue,
+              child: Container(
+                  padding: prefix0.EdgeInsets.all(10),
                   child: Column(
-                children: <Widget>[
-                  prefix0.SizedBox(height: 40),
-                  Image(
-                      image: AssetImage('assets/img/cooldatenightmustard.png'),
-                      height: 50,
-                      width: 50),
-                  prefix0.SizedBox(height: 40),
-                  Text("Welcome!", style: Theme.TextStyles.dateTitle),
-                  prefix0.SizedBox(height: 40),
-                  Expanded(
-                                          flex:1,
-
-                    child: SingleChildScrollView(
-                      child: 
-                  AutoSizeText(_welcomeString,
-                      style: Theme.TextStyles.bodyLight,
-                      textAlign: prefix0.TextAlign.center,
-                      maxLines: 11))),
-                  prefix0.SizedBox(height: 40),
-                  prefix0.FlatButton(
-                    color: Theme.Colors.mustard,
-                    child: Text("OK", style: Theme.TextStyles.subheading2Dark),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    },
-                  )
-                ],
-              ))),
+                    children: <Widget>[
+                      prefix0.SizedBox(height: 40),
+                      Image(
+                          image:
+                              AssetImage('assets/img/cooldatenightmustard.png'),
+                          height: 50,
+                          width: 50),
+                      prefix0.SizedBox(height: 40),
+                      Text("Welcome!", style: Theme.TextStyles.dateTitle),
+                      prefix0.SizedBox(height: 40),
+                      Expanded(
+                          flex: 1,
+                          child: SingleChildScrollView(
+                              child: AutoSizeText(_welcomeString,
+                                  style: Theme.TextStyles.bodyLight,
+                                  textAlign: prefix0.TextAlign.center,
+                                  maxLines: 11))),
+                      prefix0.SizedBox(height: 40),
+                      prefix0.FlatButton(
+                        color: Theme.Colors.mustard,
+                        child:
+                            Text("OK", style: Theme.TextStyles.subheading2Dark),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
+                        },
+                      )
+                    ],
+                  ))),
         ),
       ),
     );

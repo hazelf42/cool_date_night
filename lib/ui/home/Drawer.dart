@@ -30,13 +30,14 @@ class _DrawerScreen extends State<DrawerScreen> {
               children: <Widget>[
                 Container(
                     color: Theme.Colors.midnightBlue,
-                    child: firebaseUserData.hasData
-                        ? Column(children: [
+                    child: StreamBuilder(
+                      stream: Firestore.instance.collection('users').document(firebaseUserData.data.firebaseUser.uid).snapshots() ,
+                      builder: (BuildContext context, AsyncSnapshot snapshot){
+                        return snapshot.hasData ? Column(children: [
                             Padding(
                                 padding: EdgeInsets.all(15),
                                 child: Avatar(
-                                  imagePath: firebaseUserData
-                                          .data.firebaseUser.photoUrl ??
+                                  imagePath: snapshot.data['photo'] ??
                                       "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                   radius: 100,
                                 )),
@@ -44,8 +45,11 @@ class _DrawerScreen extends State<DrawerScreen> {
                             Text(firebaseUserData.data.data['name'] ?? "",
                                 style: Theme.TextStyles.dateTitle),
                             SizedBox(height: 20)
-                          ])
-                        : prefix0.CircularProgressIndicator()),
+                          ])                         : prefix0.CircularProgressIndicator();
+
+                      },
+                    )),
+                    
                 Container(
                   color: Theme.Colors.darkBlue,
                   height: MediaQuery.of(context).size.height - 150,
