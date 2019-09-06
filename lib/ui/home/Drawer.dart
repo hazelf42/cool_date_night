@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/ui/authentication/LoginPage.dart';
@@ -7,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'PairView.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'PairView.dart';
 
 class DrawerScreen extends StatefulWidget {
   _DrawerScreen createState() => _DrawerScreen();

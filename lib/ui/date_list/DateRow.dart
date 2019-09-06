@@ -4,10 +4,9 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
-import 'package:cool_date_night/ui/date_questions/MCQuestionBody.dart';
 import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
@@ -83,7 +82,6 @@ class DateRow extends StatelessWidget {
             await MainBloc().randomizeDateQuestions(date).then((dateList) {
               Navigator.push(
                   context,
-                 
                   MaterialPageRoute(
                       builder: (context) =>
                           (dateList[0] is String) ?  OpenQuestion(dateList, partner.data, category, 0) : McQuestion(dateList, partner.data, category, 0) )); 
