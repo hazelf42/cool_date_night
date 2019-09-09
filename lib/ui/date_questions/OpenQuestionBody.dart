@@ -73,7 +73,7 @@ class OpenQuestionBody extends StatelessWidget {
                                 ),
                                 SizedBox(height: 15),
                                 Avatar(
-                                    imagePath: category.image,
+                                    imagePath: partner['photo'],
                                     radius: 75,
                                     heroTag: 'datemate'),
                                 SizedBox(

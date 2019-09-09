@@ -52,6 +52,7 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
                           SizedBox(height: 20),
                           Text(
                             category.name,
+                            textScaleFactor: 1,
                             style: Theme.TextStyles.dateTitle,
                           ),
                           SizedBox(

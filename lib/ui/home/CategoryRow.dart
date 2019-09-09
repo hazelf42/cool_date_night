@@ -4,6 +4,7 @@ import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_detail/CategoryDetailPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class CategoryRow extends StatelessWidget {
   final Category category;
@@ -16,7 +17,7 @@ class CategoryRow extends StatelessWidget {
     final planetCard = Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       color: Theme.Colors.midnightBlue,
-      elevation: 16.0,  
+      elevation: 16.0,
       child: Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -24,16 +25,18 @@ class CategoryRow extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                    Avatar(
-                      radius: 50,
-                      imagePath: category.image,
-                      heroTag: category.description,
-                    ),
-                AutoSizeText(
-                  " " + category.name ?? '',
-                  style: Theme.TextStyles.dateTitle,
-                  maxLines: 1,
+                Avatar(
+                  radius: 50,
+                  imagePath: category.image,
+                  heroTag: category.description,
                 ),
+                prefix0.SizedBox(
+                    width: prefix0.MediaQuery.of(context).size.width -110,
+                    child: AutoSizeText(
+                      " " + category.name ?? '',
+                      style: Theme.TextStyles.dateTitle,
+                      maxLines: 1,
+                    ))
               ],
             ),
             SizedBox(height: 10),
@@ -52,7 +55,8 @@ class CategoryRow extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CategoryDetailPage(userProfile, category))); 
+                  builder: (context) =>
+                      CategoryDetailPage(userProfile, category)));
         },
         child: Stack(
           children: <Widget>[
