@@ -6,10 +6,11 @@ class McQuestion extends StatelessWidget {
   final List questionList;
   final Map partner;
   final int index;
+  final bool challenged;
 
   final Category category;
 
-  McQuestion(this.questionList, this.partner, this.category, this.index);
+  McQuestion(this.questionList, this.partner, this.category, this.challenged, this.index);
 //    DetailScreen({Key key, @required this.todo}) : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class McQuestion extends StatelessWidget {
       ),
       backgroundColor: Theme.Colors.midnightBlue,
       body: SingleChildScrollView(
-          child: buildBody(context, questionList, partner, category, index),
+          child: buildBody(context, questionList, partner, category, challenged, index),
       )
     );
   }
@@ -37,9 +38,9 @@ class McQuestion extends StatelessWidget {
 
 @override
 Widget buildBody(
-    BuildContext context, List questionList, Map partner, Category category, index) {
+    BuildContext context, List questionList, Map partner, Category category, bool challenged, index) {
  
       return MCQuestionBody(
-          questionList, questionList, partner, category, index);
+          questionList, questionList, partner, category, challenged, index);
 
 }

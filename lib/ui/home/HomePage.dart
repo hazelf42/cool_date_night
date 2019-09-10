@@ -27,6 +27,7 @@ class HomePage extends StatelessWidget {
                   width: 50,
                   child: CircularProgressIndicator(),
                   alignment: Alignment.center,
+                  color: Theme.Colors.midnightBlue
                 ),
                 drawer: Drawer(child: DrawerScreen()));
           }
@@ -176,7 +177,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PairView()));
+                                                    PairView(user.uid)));
                                       })),
                           buildBody(context, userData.data),
                         ]),

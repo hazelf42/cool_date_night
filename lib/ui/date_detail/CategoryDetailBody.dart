@@ -5,6 +5,7 @@ import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_list/DateList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CategoryDetailBody extends StatefulWidget {
 
@@ -50,7 +51,7 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
                             radius: 70,
                           ))),
                           SizedBox(height: 20),
-                          Text(
+                          AutoSizeText(
                             category.name,
                             textScaleFactor: 1,
                             style: Theme.TextStyles.dateTitle,

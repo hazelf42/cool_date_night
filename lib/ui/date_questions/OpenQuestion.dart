@@ -9,8 +9,8 @@ class OpenQuestion extends StatelessWidget {
   final Map partner;
   final int index; 
   final Category category;
-
-  OpenQuestion(this.questionList, this.partner, this.category, this.index);
+  final bool challenged;
+  OpenQuestion(this.questionList, this.partner, this.category, this.challenged, this.index);
 //    DetailScreen({Key key, @required this.todo}) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class OpenQuestion extends StatelessWidget {
       
       body:  SingleChildScrollView( child: Stack(
         children: <Widget>[
-           buildBody(context, questionList, partner, category, index),
+           buildBody(context, questionList, partner, category, challenged, index),
         ],
       )),
     );
@@ -37,6 +37,6 @@ class OpenQuestion extends StatelessWidget {
 }
 
 @override
-Widget buildBody(BuildContext context, List questionList, Map partner, Category category, index) {
-      return OpenQuestionBody(partner, questionList, category, index);
+Widget buildBody(BuildContext context, List questionList, Map partner, Category category, bool challenged, index) {
+      return OpenQuestionBody(partner, questionList, category, challenged, index);
 }

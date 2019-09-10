@@ -4,6 +4,7 @@ import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 import 'DateComplete.dart';
 import 'OpenQuestion.dart';
@@ -13,8 +14,8 @@ class OpenQuestionBody extends StatelessWidget {
   final List questionList;
   final Map partner;
   final Date.Category category;
-
-  OpenQuestionBody(this.partner, this.questionList, this.category, this.index);
+  final bool challenged;
+  OpenQuestionBody(this.partner, this.questionList, this.category, this.challenged, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class OpenQuestionBody extends StatelessWidget {
 return
       ConstrainedBox(
         constraints:
-            BoxConstraints(minHeight: height-72, maxHeight: height-72),
+            BoxConstraints(minHeight: height-72),
         child: Container(
             width: width,
             color: Theme.Colors.midnightBlue,
@@ -40,7 +41,8 @@ return
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(height: 25),
-                                Text(category.name,
+                                AutoSizeText(category.name,
+                                maxLines: 1,
                                     style: Theme.TextStyles.bigTitle),
                                 SizedBox(height: 15),
                                 ClipOval(
@@ -81,15 +83,15 @@ return
                                 )
                               ])),
                   SizedBox(height: 10),
-                  Container(
-                      padding: EdgeInsets.all(20),
-                      height: height / 2 - 110,
-                      child: Center(
+                  prefix0.ConstrainedBox(
+                      constraints: prefix0.BoxConstraints(maxHeight: height/2-50, minHeight: height/2-110),
+                      child: Container(
+                        padding: EdgeInsets.only(left: 30, right: 20, top:20, bottom:10),
                           child: AutoSizeText(
                         questionString(),
                         style: Theme.TextStyles.subheadingLight,
                         textAlign: TextAlign.left,
-                        maxLines: 6,
+                        maxLines: 10,
                       ))),Container(
                           margin: EdgeInsets.all(20),
                           child: ButtonTheme(
@@ -119,11 +121,13 @@ return
                                                           questionList,
                                                           partner,
                                                           category,
+                                                          challenged,
                                                           index + 1)
                                                       : McQuestion(
                                                           questionList,
                                                           partner,
                                                           category,
+                                                          challenged,
                                                           index + 1)));
                                     }
                                   }))),

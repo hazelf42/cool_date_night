@@ -31,6 +31,7 @@ class _DrawerScreen extends State<DrawerScreen> {
               children: <Widget>[
                 Container(
                     color: Theme.Colors.midnightBlue,
+                    padding: EdgeInsets.zero,
                     child: StreamBuilder(
                       stream: Firestore.instance.collection('users').document(firebaseUserData.data.firebaseUser.uid).snapshots() ,
                       builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -47,6 +48,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                                 style: Theme.TextStyles.dateTitle),
                             SizedBox(height: 20)
                           ])                         : prefix0.CircularProgressIndicator();
+
 
                       },
                     )),
@@ -84,7 +86,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PairView()));
+                                    builder: (context) => PairView(firebaseUserData.data.firebaseUser.uid)));
                           })),
                       Divider(height: 1, color: prefix0.Colors.white30),
                       MenuItem(

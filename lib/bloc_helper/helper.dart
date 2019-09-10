@@ -198,6 +198,7 @@ class MainBloc extends Object with Validators {
   }
 
   Future<List> randomizeDateQuestions(Date date) async {
+    //Changed it to pseudorandom so that datemates don't end up with different question sets
     return await Firestore.instance
         .collection('dates_with_questions').document(date.name).get().then((snapshot) {
       var openList = new List.from(snapshot['open_questions']);
@@ -206,15 +207,17 @@ class MainBloc extends Object with Validators {
       final firstQuestion = openList.removeAt(0);
       var mcList = new List.from(snapshot['mc_questions']);
       mcList = mcList.reversed.toList();
-      var random = Random();
+      var i=0;
+      final algorithm = ('ommoomommommooommomomoommooommommooommommoommooommommooommommo').split('').toList();
       var randDateList = [];
       var n = openList.length + mcList.length;
       while (randDateList.length < n) {
-        if (random.nextInt(2) == 0 && openList.length != 0) {
+        if (algorithm[i] == 'o' && openList.length != 0) {
           randDateList.add(openList.removeAt(0));
         } else if (mcList.length != 0) {
           randDateList.add(mcList.removeAt(0));
         }
+        i+=1;
       }
       randDateList.insert(0, firstQuestion);
       randDateList.add(finalQuestion);

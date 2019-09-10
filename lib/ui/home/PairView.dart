@@ -36,64 +36,80 @@ class ProfileRow extends StatelessWidget {
 }
 
 class PairView extends StatefulWidget {
+  final uid;
   @override
-  _PairViewState createState() => _PairViewState();
+  PairView(this.uid);
+  _PairViewState createState() => _PairViewState(this.uid);
 }
 
 class _PairViewState extends State<PairView> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   List filteredNames = new List();
+  final uid;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey,
-        appBar: getAppBar("Pairing"),
-        body: Column(children: [
-          Container(
-              color: Theme.Colors.darkBlue,
-              child: TextField(
-                controller: _filter,
-                style: Theme.TextStyles.subheading2Light,
-                decoration: InputDecoration(
-                    hintStyle: Theme.TextStyles.subheading2Light,
-                    prefixIcon: Icon(Icons.search, color: Colors.white),
-                    hintText: "Search by name"),
-              )),
-          (_searchText.length <= 3)
-              ? Container(
-                  padding: EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 10),
-                      Container(
-                        child: Image(
-                            image: AssetImage(
-                                'assets/img/magnifier-with-a-heart.png')),
-                        width: 50,
-                        height: 50,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Find your Date Mate",
-                        style: Theme.TextStyles.subheading2Dark,
-                      )
-                    ],
-                  ),
-                )
-              : _buildList()
-        ]));
-  }
-
-  _PairViewState() {
+  _PairViewState(this.uid) {
     _filter.addListener(() {
       if (_filter.text.isNotEmpty && _filter.text.length > 3) {
         _searchText = _filter.text;
         setState(() {});
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream:
+            Firestore.instance.collection("users").document(uid).snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data['date_mate_requests'] != null) {
+              return MainBloc().showPartnerRequestDialog(
+                  context: context,
+                  profileuid: snapshot.data['date_mate_requests'],
+                  uid: uid);
+            }
+          }
+          return Scaffold(
+              backgroundColor: Colors.grey,
+              appBar: getAppBar("Pairing"),
+              body: Column(children: [
+                Container(
+                    color: Theme.Colors.darkBlue,
+                    child: TextField(
+                      controller: _filter,
+                      style: Theme.TextStyles.subheading2Light,
+                      decoration: InputDecoration(
+                          hintStyle: Theme.TextStyles.subheading2Light,
+                          prefixIcon: Icon(Icons.search, color: Colors.white),
+                          hintText: "Search by name"),
+                    )),
+                (_searchText.length <= 3)
+                    ? Container(
+                        padding: EdgeInsets.all(20),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 10),
+                            Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/img/magnifier-with-a-heart.png')),
+                              width: 50,
+                              height: 50,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Find your Date Mate",
+                              style: Theme.TextStyles.subheading2Dark,
+                            )
+                          ],
+                        ),
+                      )
+                    : _buildList()
+              ]));
+        });
   }
 
   Widget _buildList() {
@@ -110,127 +126,88 @@ class _PairViewState extends State<PairView> {
       filteredNames = tempList;
 
       //TODO: - WARNING: This is NOT SCALABLE. Pay for Algolia and do string querying.
-      return FutureBuilder(
-          future: MainBloc().getCurrentFirebaseUser(),
-          builder: (BuildContext context, userSnapshot) {
-            return userSnapshot.hasData
-                ? StreamBuilder(
-                    stream: Firestore.instance
-                        .collection("users")
-                        .document(userSnapshot.data.uid)
-                        .snapshots(),
-                    builder: (BuildContext context, userSnapshot) {
-                      final alpha = 'abcdefghijklmnopqrstuvwxyz'.split('');
-                      if (userSnapshot.hasData &&
-                          userSnapshot.data['date_mate_requests'] != null) {
-                        return MainBloc().showPartnerRequestDialog(
-                            context: context,
-                            profileuid: userSnapshot.data['date_mate_requests'],
-                            uid: userSnapshot.data['uid']);
-                      }
-                      return StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('users')
-                            .orderBy('lower_name')
-                            .startAt([_searchText.toLowerCase()])
-                            .endAt(( //The next letter of the alphabet
-                                [
-                              alpha[(alpha
-                                      .indexOf(_searchText.toLowerCase()[0])) +
-                                  1]
-                            ]))
-                            .snapshots(),
-                        builder: (
-                          BuildContext context,
-                          snapshot,
-                        ) {
-                          if (snapshot.hasData) {
-                            print(snapshot.data.documents.length);
-                          }
-                          if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
-                          }
-                          if (snapshot.data.documents.length == 0 &&
-                              _searchText.length >= 3) {
-                            return Column(
+      final alpha = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+      return StreamBuilder(
+        stream: Firestore.instance
+            .collection('users')
+            .orderBy('lower_name')
+            .startAt([_searchText.toLowerCase()])
+            .endAt(( //The next letter of the alphabet
+                [alpha[(alpha.indexOf(_searchText.toLowerCase()[0])) + 1]]))
+            .snapshots(),
+        builder: (
+          BuildContext context,
+          snapshot,
+        ) {
+          if (snapshot.hasData) {
+            print(snapshot.data.documents.length);
+          }
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.data.documents.length == 0 && _searchText.length >= 3) {
+            return Column(
+              children: <Widget>[
+                Container(
+                  child:
+                      Image(image: AssetImage('assets/img/broken-heart.png')),
+                  width: 50,
+                  height: 50,
+                ),
+                SizedBox(height: 10),
+                Text("No results found.")
+              ],
+            );
+          }
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (snapshot.hasData) {
+                return Card(
+                    color: Theme.Colors.midnightBlue,
+                    child: FlatButton(
+                        child: Container(
+                            height: 70,
+                            child: Row(
                               children: <Widget>[
-                                Container(
-                                  child: Image(
-                                      image: AssetImage(
-                                          'assets/img/broken-heart.png')),
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                SizedBox(height: 10),
-                                Text("No results found.")
+                                Avatar(
+                                    heroTag: snapshot
+                                        .data.documents[index].data['uid'],
+                                    radius: 60,
+                                    imagePath: snapshot.hasData
+                                        ? snapshot.data.documents[index]
+                                                .data['photo'] ??
+                                            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                                        : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"),
+                                SizedBox(width: 30),
+                                Text(
+                                    snapshot.data.documents[index].data['name'],
+                                    style: Theme.TextStyles.dateTitle)
                               ],
-                            );
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.documents.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (snapshot.hasData) {
-                                return Card(
-                                    color: Theme.Colors.midnightBlue,
-                                    child: FlatButton(
-                                        child: Container(
-                                            height: 70,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Hero(
-                                                    tag: snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['uid'],
-                                                    child: ClipOval(
-                                                      child: snapshot.hasData
-                                                          ? CachedNetworkImage(
-                                                              imageUrl: snapshot
-                                                                      .data
-                                                                      .documents[
-                                                                          index]
-                                                                      .data['photo'] ??
-                                                                  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                              fit: BoxFit.cover,
-                                                              height: 60,
-                                                              width: 60,
-                                                            )
-                                                          : CircularProgressIndicator(
-                                                              backgroundColor:
-                                                                  Theme.Colors
-                                                                      .mustard),
-                                                    )),
-                                                SizedBox(width: 30),
-                                                Text(
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['name'],
-                                                    style: Theme
-                                                        .TextStyles.dateTitle)
-                                              ],
-                                            )),
-                                        onPressed: (() {
-                                          showPartnerDialog(
-                                              partnerProfile: snapshot
-                                                  .data.documents[index].data,
-                                              currentProfileUid:
-                                                  userSnapshot.data.data['uid'],
-                                              context: context);
-                                        })));
-                              } else {
-                                return Text(
-                                    "No profiles found, try double checking your spelling and internet connection.");
-                              }
-                            },
-                          );
-                        },
-                      );
-                    })
-                : Container();
-            //});
-          });
+                            )),
+                        onPressed: (() async {
+                          await showPartnerDialog(
+                                  partnerProfile:
+                                      snapshot.data.documents[index].data,
+                                  currentProfileUid: uid,
+                                  context: context)
+                              .then((_) {
+                            Firestore.instance
+                                .collection('users')
+                                .document(uid)
+                                .updateData({'requesting': false});
+                          });
+                        })));
+              } else {
+                return Text(
+                    "No profiles found, try double checking your spelling and internet connection.");
+              }
+            },
+          );
+        },
+      );
     }
   }
 
@@ -243,79 +220,104 @@ class _PairViewState extends State<PairView> {
     return await showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            backgroundColor: Theme.Colors.darkBlue,
-            title: Text("Your DateMate", style: TextStyle(color: Colors.white)),
-            content: Container(
-              height: 141,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      color: Theme.Colors.darkBlue,
-                      padding: EdgeInsets.all(15),
-                      child: Avatar(
-                        imagePath: partnerProfile['photo'] ?? "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                        radius: 66,
-                        heroTag: partnerProfile['uid'],
-                      )),
-                  Container(
-                      width: MediaQuery.of(context).size.width - 50,
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Center(
-                          child: Text(partnerProfile['name'],
-                              style: TextStyle(
-                                  fontSize: 21, color: Colors.white)))),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              StreamBuilder(
-                  stream: Firestore.instance
-                      .collection('users')
-                      .document(currentProfileUid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    return (snapshot.hasData &&
-                            snapshot.data['date_mate_requests'] == null)
-                        ? FlatButton(
-                            color: Colors.white.withOpacity(.30),
-                            child: Text("REQUEST",
-                                style: Theme.TextStyles.subheading2Light),
-                            onPressed: () {
-                              Firestore.instance
-                                  .collection('users')
-                                  .document(partnerProfile['uid'])
-                                  .updateData({
-                                'date_mate_requests': currentProfileUid
-                              });
-                            },
-                          )
-                        : (snapshot.data['date_mate'] != null &&
-                                snapshot.data['date_mate'] ==
-                                    partnerProfile['uid'])
-                            ? FlatButton(
-                                color: Colors.white.withOpacity(.30),
-                                child: Text("GO",
-                                    style: Theme.TextStyles.subheading2Light),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                })
-                            : CircularProgressIndicator();
-                  }),
-              FlatButton(
-                color: Colors.white.withOpacity(.30),
-                child: Text("Cancel", style: Theme.TextStyles.subheading2Light),
-                onPressed: () {
-                  Firestore.instance
-                      .collection('users')
-                      .document(partnerProfile['uid'])
-                      .updateData({'date_mate_requests': null});
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
+          return StatefulBuilder(builder: (BuildContext context, setState) {
+            return StreamBuilder(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document(currentProfileUid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return AlertDialog(
+                    backgroundColor: Theme.Colors.darkBlue,
+                    title: (snapshot.data['date_mate'] != null &&
+                            snapshot.data['date_mate'] == partnerProfile['uid'])
+                        ? Text("Request Accepted!",
+                            style: TextStyle(color: Colors.white))
+                        : Text("Request Date Mate",
+                            style: TextStyle(color: Colors.white)),
+                    content: Container(
+                      height: 141,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                              color: Theme.Colors.darkBlue,
+                              padding: EdgeInsets.all(15),
+                              child: Avatar(
+                                imagePath: partnerProfile['photo'] ??
+                                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                radius: 66,
+                                heroTag: partnerProfile['uid'],
+                              )),
+                          Container(
+                              width: MediaQuery.of(context).size.width - 50,
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: Center(
+                                  child: Text(partnerProfile['name'],
+                                      style: TextStyle(
+                                          fontSize: 21, color: Colors.white)))),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      (snapshot.hasData &&
+                              snapshot.data['date_mate_requests'] == null &&
+                              snapshot.data['requesting'] != true)
+                          ? FlatButton(
+                              color: Colors.white.withOpacity(.30),
+                              child: Text("REQUEST",
+                                  style: Theme.TextStyles.subheading2Light),
+                              onPressed: () {
+                                Firestore.instance
+                                    .collection('users')
+                                    .document(partnerProfile['uid'])
+                                    .updateData({
+                                  'date_mate_requests': currentProfileUid
+                                });
+                                Firestore.instance
+                                    .collection('users')
+                                    .document(currentProfileUid)
+                                    .updateData({'requesting': true});
+
+                                setState(() {});
+                              },
+                            )
+                          : (snapshot.data['date_mate'] != null &&
+                                  snapshot.data['date_mate'] ==
+                                      partnerProfile['uid'])
+                              ? FlatButton(
+                                  color: Colors.white.withOpacity(.30),
+                                  child: Text("GO",
+                                      style: Theme.TextStyles.subheading2Light),
+                                  onPressed: () {
+                                    Firestore.instance
+                                        .collection('users')
+                                        .document(currentProfileUid)
+                                        .updateData({'requesting': false});
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  })
+                              : CircularProgressIndicator(),
+                      FlatButton(
+                        color: Colors.white.withOpacity(.30),
+                        child: Text("Cancel",
+                            style: Theme.TextStyles.subheading2Light),
+                        onPressed: () {
+                          Firestore.instance
+                              .collection('users')
+                              .document(partnerProfile['uid'])
+                              .updateData({'date_mate_requests': null});
+
+                          Firestore.instance
+                              .collection('users')
+                              .document(currentProfileUid)
+                              .updateData({'requesting': false});
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+          });
         });
   }
 }
