@@ -20,10 +20,10 @@ class OpenQuestionBody extends StatelessWidget {
   Widget build(BuildContext context) {
     num height = MediaQuery.of(context).size.height;
     num width = MediaQuery.of(context).size.width;
-    return Stack(children: <Widget>[
+return
       ConstrainedBox(
         constraints:
-            BoxConstraints(minHeight: height/2, maxHeight: height - 80),
+            BoxConstraints(minHeight: height-72, maxHeight: height-72),
         child: Container(
             width: width,
             color: Theme.Colors.midnightBlue,
@@ -90,9 +90,7 @@ class OpenQuestionBody extends StatelessWidget {
                         style: Theme.TextStyles.subheadingLight,
                         textAlign: TextAlign.left,
                         maxLines: 6,
-                      ))),
-                  Expanded(
-                      child: Container(
+                      ))),Container(
                           margin: EdgeInsets.all(20),
                           child: ButtonTheme(
                               minWidth: 200,
@@ -128,12 +126,11 @@ class OpenQuestionBody extends StatelessWidget {
                                                           category,
                                                           index + 1)));
                                     }
-                                  })))),
+                                  }))),
                 ],
               ),
             )),
-      )
-    ]);
+      );
   }
 
   String questionString() {
