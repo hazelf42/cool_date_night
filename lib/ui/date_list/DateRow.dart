@@ -19,35 +19,41 @@ class DateRow extends StatelessWidget {
 
   final _isLoading = BehaviorSubject<bool>();
   Stream<bool> get isLoading => _isLoading.stream;
+  final _isDateLoading = BehaviorSubject<bool>();
+  Stream<bool> get isDateLoading => _isDateLoading.stream;
 
   @override
   Widget build(BuildContext context) {
     _isLoading.add(false);
+    _isDateLoading.add(false);
     final planetCard = InkWell(
       child: Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         color: Theme.Colors.midnightBlue,
         elevation: 16.0,
-        child: Container(
-          margin: const EdgeInsets.only(top: 10.0, left: 30.0),
-          padding: EdgeInsets.only(top: 0, right: 10, bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              AutoSizeText(
-                date.name ?? '',
-                style: Theme.TextStyles.dateTitleSmall,
-                maxLines: 1,
+        child: _isDateLoading.value
+            ? CircularProgressIndicator()
+            : Container(
+                margin: const EdgeInsets.only(top: 10.0, left: 30.0),
+                padding: EdgeInsets.only(top: 0, right: 10, bottom: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AutoSizeText(
+                      date.name ?? '',
+                      style: Theme.TextStyles.dateTitleSmall,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 10),
+                    AutoSizeText(date.description ?? '',
+                        style: Theme.TextStyles.bodyLight, maxLines: 4)
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              AutoSizeText(date.description ?? '',
-                  style: Theme.TextStyles.bodyLight, maxLines: 4)
-            ],
-          ),
-        ),
       ),
       onTap: () async {
+        _isDateLoading.add(true);
         await MainBloc().getCurrentFirebaseUserData().then((userData) async {
           // final purchases =
           //     await InAppPurchaseConnection.instance.queryPastPurchases();

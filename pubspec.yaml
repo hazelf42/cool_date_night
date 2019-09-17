@@ -36,7 +36,8 @@ dependencies:
   cached_network_image: ^1.1.1
   photo_view: ^0.3.1
   url_launcher: ^5.1.2
-
+  font_awesome_flutter: ^8.5.0
+  social_share_plugin: ^0.2.0
 
 
 flutter_icons:
@@ -71,7 +72,6 @@ flutter:
     - assets/img/magnifier-with-a-heart.png
     - assets/img/launcher_icon.png
     - assets/img/cooldatenightmustard.png
-
   fonts:
       - family: DKVisum
         fonts:

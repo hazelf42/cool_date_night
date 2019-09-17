@@ -200,7 +200,6 @@ Widget _categoryList(
     },
   ));
 }
-
 @override
 Widget buildBody(BuildContext context, DocumentSnapshot userProfile) {
   return StreamBuilder<QuerySnapshot>(

@@ -211,6 +211,7 @@ class MainBloc extends Object with Validators {
       final algorithm = ('ommoomommommooommomomoommooommommooommommoommooommommooommommo').split('').toList();
       var randDateList = [];
       var n = openList.length + mcList.length;
+      Stopwatch stopwatch = new Stopwatch()..start();
       while (randDateList.length < n) {
         if (algorithm[i] == 'o' && openList.length != 0) {
           randDateList.add(openList.removeAt(0));
@@ -221,6 +222,8 @@ class MainBloc extends Object with Validators {
       }
       randDateList.insert(0, firstQuestion);
       randDateList.add(finalQuestion);
+      print('doSomething() executed in ${stopwatch.elapsed}');
+
       return randDateList;
     });
   }
