@@ -32,12 +32,12 @@ dependencies:
   image_picker: ^0.6.0+3
   firebase_storage: ^3.0.3
   permission_handler: ^3.2.1+1
-  in_app_purchase: ^0.2.1
   cached_network_image: ^1.1.1
   photo_view: ^0.3.1
   url_launcher: ^5.1.2
   font_awesome_flutter: ^8.5.0
-  social_share_plugin: ^0.2.0
+  flutter_inapp_purchase: ^2.0.0+6
+
 
 
 flutter_icons:

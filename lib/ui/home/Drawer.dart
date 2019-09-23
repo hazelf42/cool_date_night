@@ -7,9 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'PairView.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -18,6 +17,16 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreen extends State<DrawerScreen> {
   _DrawerScreen();
+  @override
+  void initState() { 
+    super.initState();
+    asyncInitState(); // async is not allowed on initState() directly
+  }
+
+
+  void asyncInitState() async {
+    await FlutterInappPurchase.instance.initConnection;
+  }
 
   //var image = NetworkImage(_firebaseUser.);
   Widget build(BuildContext context) {
@@ -135,17 +144,17 @@ class _DrawerScreen extends State<DrawerScreen> {
   Future<Widget> retrievePurchasesDialog(
       {@required BuildContext context,
       @required DocumentSnapshot userData}) async {
-    final snapshot =
-        await InAppPurchaseConnection.instance.queryPastPurchases();
-    if (snapshot.pastPurchases.length > 0 && userData['isPaid'] == false) {
+    final snapshot = await FlutterInappPurchase.instance.getPurchaseHistory();
+    if (snapshot.length > 0 && userData['isPaid'] == false) {
       Firestore.instance
           .collection('users')
           .document(userData['uid'])
           .updateData({"isPaid": true});
     }
-    prefix0.showDialog(
+    return await prefix0.showDialog(
         context: context,
         builder: (context) {
+          print("Alert");
           return AlertDialog(
               actions: <Widget>[
                 prefix0.FlatButton(
@@ -155,17 +164,27 @@ class _DrawerScreen extends State<DrawerScreen> {
                   },
                 )
               ],
-              title: snapshot.error != null
+              title: snapshot == null
                   ? Text("An error occurred.")
-                  : "Retrieve Purchases",
-              content: snapshot.error != null
+                  : Text("Retrieve Purchases"),
+              content: snapshot == null
                   ? Text("In app purchases are not currently available.")
                   : (userData['isPaid'] == true)
-                      ? Text("You have unlocked all dates.")
-                      : (snapshot.pastPurchases.length > 0)
+                      ? Text("You have unlocked all dates. userData:" + userData.toString())
+                      : (snapshot.length > 0)
                           ? Text(
                               "Purchase found but could not process them. Please logout and log back in.")
-                          : Text("You have unlocked all dates."));
+                          : Column(children: <Widget>[
+                            Text("No purchases found"),
+                            FlatButton(child: Text("Unlock All"),
+                            onPressed: () async {
+                              print("Pressed");
+                                await FlutterInappPurchase.instance.getAppStoreInitiatedProducts().then((products) {
+                                  print(products.toString());
+                                FlutterInappPurchase.instance.requestPurchase(products[0].productId);});
+                              },
+                            ),
+                          ]));
         });
   }
 }
@@ -212,6 +231,6 @@ class MenuItem extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ); 
   }
 }

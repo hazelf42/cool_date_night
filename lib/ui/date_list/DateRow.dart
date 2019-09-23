@@ -8,9 +8,8 @@ import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 class DateRow extends StatelessWidget {
   final Date.Date date;
   final BuildContext context;
@@ -118,15 +117,9 @@ class DateRow extends StatelessWidget {
                     style: Theme.TextStyles.subheading2Mustard),
                 onPressed: () {
                   _isLoading.add(true);
-                  InAppPurchaseConnection.instance.buyNonConsumable(
-                      purchaseParam: PurchaseParam(
-                    productDetails: ProductDetails(
-                        title: "Unlock All",
-                        description: "Get all the current dates (Testing only)",
-                        id: "unlock_all",
-                        price: "0.99"),
-                    applicationUserName: userData.firebaseUser.uid,
-                  ));
+//prob broken
+                  FlutterInappPurchase.instance.requestPurchase("unlock_all");
+
                   Future.delayed(const Duration(seconds: 1)).then((_) {
                     Firestore.instance
                         .collection("users")
