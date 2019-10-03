@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
@@ -199,10 +201,24 @@ class MainBloc extends Object with Validators {
                 ));
         });
   }
+    StreamSubscription<List<PurchaseDetails>> _subscription;
+  Stream<bool> get isLoading => _isLoading.stream;
+  void initState() {
+    final Stream purchaseUpdates =
+        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdates.listen((purchases) {
+    });
+  }
 
+  @override
+  void dispose() {
+    _subscription.cancel();
+  }
   Future<Widget> retrievePurchasesDialog(
       {@required BuildContext context,
       @required DocumentSnapshot userData}) async {
+
+      StreamSubscription<List<PurchaseDetails>> _subscription;
     print("Fetching");
     return await InAppPurchaseConnection.instance
         .queryPastPurchases()
@@ -242,12 +258,15 @@ class MainBloc extends Object with Validators {
                         ? Text("You have unlocked all dates.",
                             style: TextStyle(color: Colors.white))
                         : _notPaidUI(userData['uid'], context));
+          
           });
+
+
     });
+    
   }
 
   final _isLoading = BehaviorSubject<bool>();
-  Stream<bool> get isLoading => _isLoading.stream;
   Widget _notPaidUI(String uid, BuildContext context) {
     _isLoading.add(false);
     var _iap = InAppPurchaseConnection.instance;
@@ -276,15 +295,11 @@ class MainBloc extends Object with Validators {
                       await _iap
                           .buyConsumable(
                               purchaseParam: PurchaseParam(
-                                  sandboxTesting: true,
+                                sandboxTesting: true,
                                   productDetails:
                                       prodDetails.productDetails[0]))
                           .then((purchase) async {
                         if (purchase == true) {
-                          await Firestore.instance
-                              .collection("users")
-                              .document(uid)
-                              .updateData({'isPaid': true});
                           Navigator.of(context).pop();
                           purchaseComplete(context: context, success: true);
                         } else {
@@ -350,7 +365,6 @@ class MainBloc extends Object with Validators {
               .toList();
       var randDateList = [];
       var n = openList.length + mcList.length;
-      Stopwatch stopwatch = new Stopwatch()..start();
       while (randDateList.length < n) {
         if (algorithm[i] == 'o' && openList.length != 0) {
           randDateList.add(openList.removeAt(0));
@@ -361,7 +375,6 @@ class MainBloc extends Object with Validators {
       }
       randDateList.insert(0, firstQuestion);
       randDateList.add(finalQuestion);
-      print('doSomething() executed in ${stopwatch.elapsed}');
 
       return randDateList;
     });
