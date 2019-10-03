@@ -35,6 +35,9 @@ class TextStyles {
        static const TextStyle dateTitleSmall = const TextStyle(
       color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 25.0
       );
+      static const TextStyle dateTitleSmallDark = const TextStyle(
+      color: Colors.darkBlue, fontFamily: 'DKVisum', fontSize: 45.0, 
+      );
   static const TextStyle bigTitle = const TextStyle(
       color: prefix0.Colors.white, fontFamily: 'DKVisum', fontSize: 46.0);
 

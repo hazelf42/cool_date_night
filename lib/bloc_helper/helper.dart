@@ -5,8 +5,11 @@ import 'package:cool_date_night/models/Date.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-import 'dart:math';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:rxdart/rxdart.dart';
+
 import 'validators.dart';
 
 //Custom avatar
@@ -197,18 +200,154 @@ class MainBloc extends Object with Validators {
         });
   }
 
+  Future<Widget> retrievePurchasesDialog(
+      {@required BuildContext context,
+      @required DocumentSnapshot userData}) async {
+    print("Fetching");
+    return await InAppPurchaseConnection.instance
+        .queryPastPurchases()
+        .then((snapshot) async {
+      print("snapshot" + snapshot.toString());
+
+      // if (snapshot.pastPurchases.length > 0 && userData['isPaid'] == false) {
+      //   Firestore.instance
+      //       .collection('users')
+      //       .document(userData['uid'])
+      //       .updateData({"isPaid": true});
+      // }
+      return await showDialog(
+          context: context,
+          builder: (context) {
+            print("Alert");
+            return AlertDialog(
+                backgroundColor: Theme.Colors.midnightBlue,
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Done",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                    color: Colors.white.withOpacity(.30),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+                title: snapshot == null
+                    ? Text("An error occurred.",
+                        style: TextStyle(color: Colors.white))
+                    : Text("Retrieve Purchases",
+                        style: TextStyle(color: Colors.white)),
+                content: snapshot == null
+                    ? Text("In app purchases are not currently available.")
+                    : (userData['isPaid'] == true)
+                        ? Text("You have unlocked all dates.",
+                            style: TextStyle(color: Colors.white))
+                        : _notPaidUI(userData['uid'], context));
+          });
+    });
+  }
+
+  final _isLoading = BehaviorSubject<bool>();
+  Stream<bool> get isLoading => _isLoading.stream;
+  Widget _notPaidUI(String uid, BuildContext context) {
+    _isLoading.add(false);
+    var _iap = InAppPurchaseConnection.instance;
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 50),
+        Center(
+            child: ButtonTheme(
+                height: MediaQuery.of(context).size.width/1.5,
+                minWidth: MediaQuery.of(context).size.width/1.5,
+                child: FlatButton(
+                    color: Theme.Colors.mustard,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(MediaQuery.of(context).size.width/3)),
+                    child: RichText(
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: "Unlock All Cool Dates!",
+                            style: Theme.TextStyles.dateTitleSmallDark, )),
+                    onPressed: () async {
+                      _isLoading.add(true);
+                      var prodDetails = await _iap
+                          .queryProductDetails(Set.from(["unlock_all"]));
+                      print(prodDetails.productDetails[0]);
+                      await _iap
+                          .buyConsumable(
+                              purchaseParam: PurchaseParam(
+                                  sandboxTesting: true,
+                                  productDetails:
+                                      prodDetails.productDetails[0]))
+                          .then((purchase) async {
+                        if (purchase == true) {
+                          await Firestore.instance
+                              .collection("users")
+                              .document(uid)
+                              .updateData({'isPaid': true});
+                          Navigator.of(context).pop();
+                          purchaseComplete(context: context, success: true);
+                        } else {
+                          purchaseComplete(context: context, success: false);
+                        }
+                      });
+                    })))
+      ],
+    );
+  }
+
+  Future<Widget> purchaseComplete(
+      {@required BuildContext context, @required bool success}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          print("Alert");
+          return AlertDialog(
+            backgroundColor: Theme.Colors.midnightBlue,
+            actions: <Widget>[
+              FlatButton(
+                child: Text(success ? "LET'S GO!" : "OK",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
+                color: Colors.white.withOpacity(.30),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+            title: success
+                ? Text("Welcome to Cool Date Night!",
+                    style: TextStyle(color: Colors.white))
+                : Text("An error occurred",
+                    style: TextStyle(color: Colors.white)),
+            content: success == false
+                ? Text(
+                    "An error occurred, please try again, or contact us via the Feedback button.",
+                    style: TextStyle(color: Colors.white))
+                : Text(
+                    "You've unlocked all our cool dates. Grab your date mate and let's get started!",
+                    style: TextStyle(color: Colors.white)),
+          );
+        });
+  }
+
   Future<List> randomizeDateQuestions(Date date) async {
     //Changed it to pseudorandom so that datemates don't end up with different question sets
     return await Firestore.instance
-        .collection('dates_with_questions').document(date.name).get().then((snapshot) {
+        .collection('dates_with_questions')
+        .document(date.name)
+        .get()
+        .then((snapshot) {
       var openList = new List.from(snapshot['open_questions']);
       openList = openList.reversed.toList();
       final finalQuestion = openList.removeLast();
       final firstQuestion = openList.removeAt(0);
       var mcList = new List.from(snapshot['mc_questions']);
       mcList = mcList.reversed.toList();
-      var i=0;
-      final algorithm = ('ommoomommommooommomomoommooommommooommommoommooommommooommommo').split('').toList();
+      var i = 0;
+      final algorithm =
+          ('ommoomommommooommomomoommooommommooommommoommooommommooommommo')
+              .split('')
+              .toList();
       var randDateList = [];
       var n = openList.length + mcList.length;
       Stopwatch stopwatch = new Stopwatch()..start();
@@ -218,7 +357,7 @@ class MainBloc extends Object with Validators {
         } else if (mcList.length != 0) {
           randDateList.add(mcList.removeAt(0));
         }
-        i+=1;
+        i += 1;
       }
       randDateList.insert(0, firstQuestion);
       randDateList.add(finalQuestion);
@@ -228,5 +367,4 @@ class MainBloc extends Object with Validators {
     });
   }
 }
-
 //Determine whether the next question will be MC or Open with RNG

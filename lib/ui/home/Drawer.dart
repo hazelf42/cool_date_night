@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'PairView.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -18,14 +17,8 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreen extends State<DrawerScreen> {
   _DrawerScreen();
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    asyncInitState(); // async is not allowed on initState() directly
-  }
-
-
-  void asyncInitState() async {
-    await FlutterInappPurchase.instance.initConnection;
   }
 
   //var image = NetworkImage(_firebaseUser.);
@@ -42,26 +35,28 @@ class _DrawerScreen extends State<DrawerScreen> {
                     color: Theme.Colors.midnightBlue,
                     padding: EdgeInsets.zero,
                     child: StreamBuilder(
-                      stream: Firestore.instance.collection('users').document(firebaseUserData.data.firebaseUser.uid).snapshots() ,
-                      builder: (BuildContext context, AsyncSnapshot snapshot){
-                        return snapshot.hasData ? Column(children: [
-                            Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Avatar(
-                                  imagePath: snapshot.data['photo'] ??
-                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                  radius: 100,
-                                )),
-                            SizedBox(height: 10),
-                            Text(firebaseUserData.data.data['name'] ?? "",
-                                style: Theme.TextStyles.dateTitle),
-                            SizedBox(height: 20)
-                          ])                         : prefix0.CircularProgressIndicator();
-
-
+                      stream: Firestore.instance
+                          .collection('users')
+                          .document(firebaseUserData.data.firebaseUser.uid)
+                          .snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return snapshot.hasData
+                            ? Column(children: [
+                                Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: Avatar(
+                                      imagePath: snapshot.data['photo'] ??
+                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                      radius: 100,
+                                    )),
+                                SizedBox(height: 10),
+                                Text(firebaseUserData.data.data['name'] ?? "",
+                                    style: Theme.TextStyles.dateTitle),
+                                SizedBox(height: 20)
+                              ])
+                            : prefix0.CircularProgressIndicator();
                       },
                     )),
-                    
                 Container(
                   color: Theme.Colors.darkBlue,
                   height: MediaQuery.of(context).size.height - 150,
@@ -95,14 +90,16 @@ class _DrawerScreen extends State<DrawerScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PairView(firebaseUserData.data.firebaseUser.uid)));
+                                    builder: (context) => PairView(
+                                        firebaseUserData
+                                            .data.firebaseUser.uid)));
                           })),
                       Divider(height: 1, color: prefix0.Colors.white30),
                       MenuItem(
                           iconData: Icons.shopping_cart,
                           string: "Retrieve Purchases",
                           onTap: (() async {
-                            retrievePurchasesDialog(
+                            MainBloc().retrievePurchasesDialog(
                                 context: context,
                                 userData: firebaseUserData.data.data);
                           })),
@@ -139,53 +136,6 @@ class _DrawerScreen extends State<DrawerScreen> {
       StorageUploadTask uploadTask = ref.putFile(image);
       return await (await uploadTask.onComplete).ref.getDownloadURL();
     });
-  }
-
-  Future<Widget> retrievePurchasesDialog(
-      {@required BuildContext context,
-      @required DocumentSnapshot userData}) async {
-    final snapshot = await FlutterInappPurchase.instance.getPurchaseHistory();
-    if (snapshot.length > 0 && userData['isPaid'] == false) {
-      Firestore.instance
-          .collection('users')
-          .document(userData['uid'])
-          .updateData({"isPaid": true});
-    }
-    return await prefix0.showDialog(
-        context: context,
-        builder: (context) {
-          print("Alert");
-          return AlertDialog(
-              actions: <Widget>[
-                prefix0.FlatButton(
-                  child: Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-              title: snapshot == null
-                  ? Text("An error occurred.")
-                  : Text("Retrieve Purchases"),
-              content: snapshot == null
-                  ? Text("In app purchases are not currently available.")
-                  : (userData['isPaid'] == true)
-                      ? Text("You have unlocked all dates. userData:" + userData.toString())
-                      : (snapshot.length > 0)
-                          ? Text(
-                              "Purchase found but could not process them. Please logout and log back in.")
-                          : Column(children: <Widget>[
-                            Text("No purchases found"),
-                            FlatButton(child: Text("Unlock All"),
-                            onPressed: () async {
-                              print("Pressed");
-                                await FlutterInappPurchase.instance.getAppStoreInitiatedProducts().then((products) {
-                                  print(products.toString());
-                                FlutterInappPurchase.instance.requestPurchase(products[0].productId);});
-                              },
-                            ),
-                          ]));
-        });
   }
 }
 
@@ -231,6 +181,6 @@ class MenuItem extends StatelessWidget {
           ),
         ),
       ),
-    ); 
+    );
   }
 }

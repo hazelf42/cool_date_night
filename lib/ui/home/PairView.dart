@@ -3,7 +3,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'GradientAppBar.dart';
 
 class ProfileRow extends StatelessWidget {

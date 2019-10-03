@@ -1,4 +1,3 @@
-import 'dart:ui' as prefix1;
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/bloc_helper/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
