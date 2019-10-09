@@ -201,40 +201,22 @@ class MainBloc extends Object with Validators {
                 ));
         });
   }
-    StreamSubscription<List<PurchaseDetails>> _subscription;
+
   Stream<bool> get isLoading => _isLoading.stream;
-  void initState() {
-    final Stream purchaseUpdates =
-        InAppPurchaseConnection.instance.purchaseUpdatedStream;
-    _subscription = purchaseUpdates.listen((purchases) {
-    });
-  }
 
   @override
-  void dispose() {
-    _subscription.cancel();
-  }
+
   Future<Widget> retrievePurchasesDialog(
       {@required BuildContext context,
       @required DocumentSnapshot userData}) async {
-
-      StreamSubscription<List<PurchaseDetails>> _subscription;
     print("Fetching");
     return await InAppPurchaseConnection.instance
         .queryPastPurchases()
         .then((snapshot) async {
       print("snapshot" + snapshot.toString());
-
-      // if (snapshot.pastPurchases.length > 0 && userData['isPaid'] == false) {
-      //   Firestore.instance
-      //       .collection('users')
-      //       .document(userData['uid'])
-      //       .updateData({"isPaid": true});
-      // }
       return await showDialog(
           context: context,
           builder: (context) {
-            print("Alert");
             return AlertDialog(
                 backgroundColor: Theme.Colors.midnightBlue,
                 actions: <Widget>[
@@ -247,7 +229,7 @@ class MainBloc extends Object with Validators {
                     },
                   )
                 ],
-                title: snapshot == null
+                title: snapshot.error != null
                     ? Text("An error occurred.",
                         style: TextStyle(color: Colors.white))
                     : Text("Retrieve Purchases",
@@ -258,15 +240,15 @@ class MainBloc extends Object with Validators {
                         ? Text("You have unlocked all dates.",
                             style: TextStyle(color: Colors.white))
                         : _notPaidUI(userData['uid'], context));
-          
           });
-
-
     });
-    
   }
 
   final _isLoading = BehaviorSubject<bool>();
+
+  final Stream purchaseUpdates =
+      InAppPurchaseConnection.instance.purchaseUpdatedStream;
+
   Widget _notPaidUI(String uid, BuildContext context) {
     _isLoading.add(false);
     var _iap = InAppPurchaseConnection.instance;
@@ -275,18 +257,22 @@ class MainBloc extends Object with Validators {
         SizedBox(height: 50),
         Center(
             child: ButtonTheme(
-                height: MediaQuery.of(context).size.width/1.5,
-                minWidth: MediaQuery.of(context).size.width/1.5,
+                height: MediaQuery.of(context).size.width / 1.5,
+                minWidth: MediaQuery.of(context).size.width / 1.5,
                 child: FlatButton(
                     color: Theme.Colors.mustard,
                     shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(MediaQuery.of(context).size.width/3)),
-                    child: RichText(
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text: "Unlock All Cool Dates!",
-                            style: Theme.TextStyles.dateTitleSmallDark, )),
+                        borderRadius: new BorderRadius.circular(
+                            MediaQuery.of(context).size.width / 3)),
+                    child: _isLoading.value == true
+                        ? CircularProgressIndicator()
+                        : RichText(
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "Unlock All Cool Dates!",
+                              style: Theme.TextStyles.dateTitleSmallDark,
+                            )),
                     onPressed: () async {
                       _isLoading.add(true);
                       var prodDetails = await _iap
@@ -295,16 +281,15 @@ class MainBloc extends Object with Validators {
                       await _iap
                           .buyConsumable(
                               purchaseParam: PurchaseParam(
-                                sandboxTesting: true,
                                   productDetails:
                                       prodDetails.productDetails[0]))
                           .then((purchase) async {
-                        if (purchase == true) {
+                        purchaseUpdates.listen((purchases) {
                           Navigator.of(context).pop();
-                          purchaseComplete(context: context, success: true);
-                        } else {
-                          purchaseComplete(context: context, success: false);
-                        }
+                          print(purchases);
+                          print(purchases.length);
+                          purchaseComplete(context: context, success: (purchases.length > 0));
+                        });
                       });
                     })))
       ],
