@@ -20,7 +20,6 @@ class WelcomeScreen extends StatelessWidget {
             elevation: 5,
             color: Theme.Colors.midnightBlue,
             child: Container(
-                height: 100,
                 padding: prefix0.EdgeInsets.all(10),
                 child: Column(
                   children: <Widget>[
