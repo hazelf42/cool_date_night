@@ -46,8 +46,8 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        versionCode 10
-        versionName "10"
+        versionCode 12
+        versionName "12"
     }
 
         signingConfigs {
@@ -56,15 +56,12 @@ android {
            keyPassword keystoreProperties['keyPassword']
            storeFile file(keystoreProperties['storeFile'])
            storePassword keystoreProperties['storePassword']
-       
+       }
    }
    buildTypes {
        release {
-           debuggable true
            signingConfig signingConfigs.release
        }
-
-        
    }
 }
 
@@ -76,7 +73,7 @@ dependencies {
    // implementation 'com.google.firebase:firebase-core:17.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     apply plugin: 'com.google.gms.google-services'
-    }
 }
+

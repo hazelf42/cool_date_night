@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/bloc_helper/helper.dart';
+import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Profile.dart';
 import 'package:flutter/material.dart';
 

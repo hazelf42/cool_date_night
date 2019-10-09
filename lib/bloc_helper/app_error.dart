@@ -1,4 +1,0 @@
-enum AppError {
-  EMPTY,
-  INVALID,
-}

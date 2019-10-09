@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/bloc_helper/helper.dart';
+import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
