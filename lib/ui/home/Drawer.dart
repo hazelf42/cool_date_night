@@ -28,8 +28,9 @@ class _DrawerScreen extends State<DrawerScreen> {
         builder:
             (BuildContext context, AsyncSnapshot<UserData> firebaseUserData) {
           return Drawer(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
+            child:
+            firebaseUserData.data != null ? 
+             ListView(
               children: <Widget>[
                 Container(
                     color: Theme.Colors.midnightBlue,
@@ -113,15 +114,15 @@ class _DrawerScreen extends State<DrawerScreen> {
                           iconData: Icons.exit_to_app,
                           string: "Log out",
                           onTap: () async {
-                            await FirebaseAuth.instance.signOut().then((_) {
-                              runApp(MaterialApp(home: Login()));
-                            });
+                            FirebaseAuth.instance.signOut();
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Login()));
                           }),
                     ],
                   ),
                 ),
               ],
-            ),
+            ) : 
+            Container(child: prefix0.CircularProgressIndicator()),
           );
         });
   }

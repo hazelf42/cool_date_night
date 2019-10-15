@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/authentication/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,9 @@ class MainBloc extends Object with Validators {
 
   Future<UserData> getCurrentFirebaseUserData() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    print(_firebaseAuth.toString() == null);
+    print( _firebaseAuth.currentUser() == null);
+    if (_firebaseAuth.currentUser() != null) { 
     return await _firebaseAuth.currentUser().then((user) async {
       return await (Firestore.instance
               .collection("users")
@@ -109,7 +113,10 @@ class MainBloc extends Object with Validators {
           .then((userData) {
         return UserData(data: userData, firebaseUser: user);
       });
+    }).catchError((e){                            
+
     });
+    } 
   }
 
   Future<Map> getUser(String uid) async {
@@ -203,8 +210,6 @@ class MainBloc extends Object with Validators {
 
   Stream<bool> get isLoading => _isLoading.stream;
 
-  @override
-
   Future<Widget> retrievePurchasesDialog(
       {@required BuildContext context,
       @required DocumentSnapshot userData}) async {
@@ -217,6 +222,8 @@ class MainBloc extends Object with Validators {
           context: context,
           builder: (context) {
             return AlertDialog(
+              contentPadding:  MediaQuery.of(context).viewInsets + const EdgeInsets.symmetric(horizontal: 0.0, vertical: 24.0),
+
                 backgroundColor: Theme.Colors.midnightBlue,
                 actions: <Widget>[
                   FlatButton(
@@ -229,8 +236,7 @@ class MainBloc extends Object with Validators {
                   )
                 ],
                 title: snapshot.error != null
-                    ? Text("An error occurred.",
-                        style: TextStyle(color: Colors.white))
+                    ? Text("Unlock All", style: TextStyle(color: Colors.white))
                     : Text("Retrieve Purchases",
                         style: TextStyle(color: Colors.white)),
                 content: snapshot == null
@@ -287,7 +293,9 @@ class MainBloc extends Object with Validators {
                           Navigator.of(context).pop();
                           print(purchases);
                           print(purchases.length);
-                          purchaseComplete(context: context, success: (purchases.length > 0));
+                          purchaseComplete(
+                              context: context,
+                              success: (purchases.length > 0));
                         });
                       });
                     })))

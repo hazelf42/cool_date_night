@@ -50,11 +50,19 @@ class _MCQuestionBody extends State<MCQuestionBody> {
           child: Column(
             children: <Widget>[
               partner != null
-                  ? Avatar(
-                      imagePath: partner['photo'] ??
-                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                      radius: 50,
-                      heroTag: 'datemate')
+                  ? Container(
+                      width: width,
+                      color: Theme.dateColors[category.name],
+                      child: Column(children: [
+                        prefix0.SizedBox(height: 30),
+                        Avatar(
+                          imagePath: partner['photo'] ??
+                              "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                          radius: 60,
+                          heroTag: 'datemate'),
+                          
+                        prefix0.SizedBox(height: 30)
+                          ]))
                   : Container(
                       width: width,
                       height: 160,
