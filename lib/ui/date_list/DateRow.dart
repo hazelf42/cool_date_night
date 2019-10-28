@@ -16,7 +16,7 @@ class DateRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final planetCard = InkWell(
+    final planetCard = Wrap(children: [InkWell(
       child: Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
@@ -33,9 +33,9 @@ class DateRow extends StatelessWidget {
                 style: Theme.TextStyles.dateTitleSmall,
                 maxLines: 1,
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10, width: double.infinity),
               AutoSizeText(date.description ?? '',
-                  style: Theme.TextStyles.bodyLight, maxLines: 4)
+                  style: Theme.TextStyles.bodyLight, maxLines: 2)
             ],
           ),
         ),
@@ -66,7 +66,7 @@ class DateRow extends StatelessWidget {
           }
         });
       },
-    );
+    )]);
 
     return Container(
       height: 120,

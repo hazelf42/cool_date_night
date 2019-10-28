@@ -1,6 +1,6 @@
+import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:flutter/material.dart' as prefix0;
 
 class ForgotPassword extends StatelessWidget {

@@ -30,8 +30,6 @@ class Category {
   final String image;
   final String longDescription;
 
-  //TODO: Datelist? DOnt seem to need it rn
-
   const Category({this.id, this.name, this.description, this.image, this.longDescription});
 
    Category.fromSnapshot(DocumentSnapshot snapshot)

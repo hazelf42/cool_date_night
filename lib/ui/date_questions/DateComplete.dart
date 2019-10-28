@@ -3,46 +3,42 @@ import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 
 class DateCompleteScreen extends StatelessWidget {
   final Category category;
   DateCompleteScreen(this.category);
   @override
   Widget build(BuildContext context) {
+    var height = prefix0.MediaQuery.of(context).size.height;
     return Scaffold(
         body: Container(
       width: prefix0.MediaQuery.of(context).size.width,
       color: Theme.dateColors[category.name],
       padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
-      child: Container(
-        child: Card(
-          elevation: 5,
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: prefix0.EdgeInsets.all(10),
           color: Theme.Colors.midnightBlue,
           child: Column(
             children: <Widget>[
-              prefix0.SizedBox(height: 120),
+              prefix0.SizedBox(height: height / 20),
               Avatar(
                   imagePath: category.image, radius: 75, heroTag: 'category'),
-              prefix0.SizedBox(height: 50),
+              prefix0.SizedBox(height: height / 20),
               Text("Date Complete!", style: Theme.TextStyles.dateTitle),
-              prefix0.SizedBox(height: 75),
-              Text("Snap a #cooldatenight selfie to celebrate!",
+              prefix0.SizedBox(height: height / 30),
+              Text("Snap a selfie to celebrate!",
+                            textAlign: prefix0.TextAlign.center,
+
                   style: Theme.TextStyles.subheading2Light),
-              Text("Then tag us with #cooldatenight",
+              Text("Then tag us with #cooldatenight!",
+                  textAlign: prefix0.TextAlign.center,
                   style: Theme.TextStyles.bodyLight),
-              IconButton(
-                  icon: Icon(FontAwesomeIcons.cameraRetro),
-                  onPressed: () {
-                    _getSelfie(
-                      imageSource: ImageSource.camera,
-                    );
-                  }),
+              prefix0.SizedBox(height: height / 30),
               prefix0.FlatButton(
                 color: Theme.dateColors[category.name],
-                child: Text("BACK TO " + category.name.toUpperCase(),
-                    style: Theme.TextStyles.subheading2Dark),
+                child: Text("Done", style: TextStyle(color: Colors.black87)),
                 onPressed: () {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
@@ -55,14 +51,6 @@ class DateCompleteScreen extends StatelessWidget {
   }
   //Image?
 
-  static Future _getSelfie({
-    @required ImageSource imageSource,
-  }) async {
-    await ImagePicker.pickImage(source: imageSource).then((image) async{
-      print("Hi");
-      //await showPicDialog();
-    });
-  }
 
   showPicDialog() {}
 }

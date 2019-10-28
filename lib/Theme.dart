@@ -10,7 +10,7 @@ class Colors {
   static const Color darkBlue = const Color(0xFF101A33);
   static const Color duskBlue = const Color(0xFF4670DB);
   static const Color lightBlue = const Color(0xFF0f85f1);
-
+  static const Color greyBlue = const Color(0xFF2B6A8F);
 }
 Map dateColors = {
     'Free Trial' : Colors.mustard,

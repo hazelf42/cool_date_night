@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
-import 'package:cool_date_night/ui/authentication/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
@@ -103,20 +103,18 @@ class MainBloc extends Object with Validators {
   Future<UserData> getCurrentFirebaseUserData() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     print(_firebaseAuth.toString() == null);
-    print( _firebaseAuth.currentUser() == null);
-    if (_firebaseAuth.currentUser() != null) { 
-    return await _firebaseAuth.currentUser().then((user) async {
-      return await (Firestore.instance
-              .collection("users")
-              .document(user.uid)
-              .get())
-          .then((userData) {
-        return UserData(data: userData, firebaseUser: user);
-      });
-    }).catchError((e){                            
-
-    });
-    } 
+    print(_firebaseAuth.currentUser() == null);
+    if (_firebaseAuth.currentUser() != null) {
+      return await _firebaseAuth.currentUser().then((user) async {
+        return await (Firestore.instance
+                .collection("users")
+                .document(user.uid)
+                .get())
+            .then((userData) {
+          return UserData(data: userData, firebaseUser: user);
+        });
+      }).catchError((e) {});
+    }
   }
 
   Future<Map> getUser(String uid) async {
@@ -221,30 +219,38 @@ class MainBloc extends Object with Validators {
       return await showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              contentPadding:  MediaQuery.of(context).viewInsets + const EdgeInsets.symmetric(horizontal: 0.0, vertical: 24.0),
-
-                backgroundColor: Theme.Colors.midnightBlue,
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("Done",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
-                    color: Colors.white.withOpacity(.30),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-                title: snapshot.error != null
-                    ? Text("Unlock All", style: TextStyle(color: Colors.white))
-                    : Text("Retrieve Purchases",
-                        style: TextStyle(color: Colors.white)),
-                content: snapshot == null
-                    ? Text("In app purchases are not currently available.")
-                    : (userData['isPaid'] == true)
-                        ? Text("You have unlocked all dates.",
-                            style: TextStyle(color: Colors.white))
-                        : _notPaidUI(userData['uid'], context));
+            return Wrap(
+              alignment: prefix0.WrapAlignment.center,
+              crossAxisAlignment: prefix0.WrapCrossAlignment.center,
+              children: [
+                prefix0.SizedBox(height: prefix0.MediaQuery.of(context).size.height/6,width: double.infinity),
+              AlertDialog(
+                  contentPadding: MediaQuery.of(context).viewInsets +
+                      const EdgeInsets.symmetric(
+                          horizontal: 0.0, vertical: 24.0),
+                  backgroundColor: Theme.Colors.midnightBlue,
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text(userData['isPaid'] != true ? "Not Now" : "OK",
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                      color: Colors.white.withOpacity(.30),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                  title: snapshot.error != null
+                      ? Text("Unlock All",
+                          style: TextStyle(color: Colors.white))
+                      : Text("Retrieve Purchases",
+                          style: TextStyle(color: Colors.white)),
+                  content: snapshot == null
+                      ? Text("In app purchases are not currently available.")
+                      : (userData['isPaid'] == true)
+                          ? Text("You have unlocked all dates.",
+                              style: TextStyle(color: Colors.white))
+                          : _notPaidUI(userData['uid'], context))
+            ]);
           });
     });
   }
@@ -261,44 +267,51 @@ class MainBloc extends Object with Validators {
       children: <Widget>[
         SizedBox(height: 50),
         Center(
-            child: ButtonTheme(
-                height: MediaQuery.of(context).size.width / 1.5,
-                minWidth: MediaQuery.of(context).size.width / 1.5,
-                child: FlatButton(
-                    color: Theme.Colors.mustard,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(
-                            MediaQuery.of(context).size.width / 3)),
-                    child: _isLoading.value == true
-                        ? CircularProgressIndicator()
-                        : RichText(
-                            softWrap: true,
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: "Unlock All Cool Dates!",
-                              style: Theme.TextStyles.dateTitleSmallDark,
-                            )),
-                    onPressed: () async {
-                      _isLoading.add(true);
-                      var prodDetails = await _iap
-                          .queryProductDetails(Set.from(["unlock_all"]));
-                      print(prodDetails.productDetails[0]);
-                      await _iap
-                          .buyConsumable(
-                              purchaseParam: PurchaseParam(
-                                  productDetails:
-                                      prodDetails.productDetails[0]))
-                          .then((purchase) async {
-                        purchaseUpdates.listen((purchases) {
-                          Navigator.of(context).pop();
-                          print(purchases);
-                          print(purchases.length);
-                          purchaseComplete(
-                              context: context,
-                              success: (purchases.length > 0));
-                        });
-                      });
-                    })))
+            child: IconButton(
+                icon: Icon(Icons.lock_open, color: Theme.Colors.mustard),
+                iconSize: prefix0.MediaQuery.of(context).size.width / 3,
+                onPressed: () async {
+                  _isLoading.add(true);
+                  var prodDetails =
+                      await _iap.queryProductDetails(Set.from(["unlock_all"]));
+                  print(prodDetails.productDetails[0]);
+                  await _iap
+                      .buyConsumable(
+                          purchaseParam: PurchaseParam(
+                              productDetails: prodDetails.productDetails[0]))
+                      .then((purchase) async {
+                    purchaseUpdates.listen((purchases) {
+                      Navigator.of(context).pop();
+                      print(purchases);
+                      print(purchases.length);
+                      purchaseComplete(
+                          context: context, success: (purchases.length > 0));
+                    });
+                  });
+                })),
+        RaisedButton(
+            elevation: 7.5,
+            color: Theme.Colors.mustard,
+            child: Text("Unlock all cool dates"),
+            onPressed: () async {
+              _isLoading.add(true);
+              var prodDetails =
+                  await _iap.queryProductDetails(Set.from(["unlock_all"]));
+              print(prodDetails.productDetails[0]);
+              await _iap
+                  .buyConsumable(
+                      purchaseParam: PurchaseParam(
+                          productDetails: prodDetails.productDetails[0]))
+                  .then((purchase) async {
+                purchaseUpdates.listen((purchases) {
+                  Navigator.of(context).pop();
+                  print(purchases);
+                  print(purchases.length);
+                  purchaseComplete(
+                      context: context, success: (purchases.length > 0));
+                });
+              });
+            })
       ],
     );
   }
