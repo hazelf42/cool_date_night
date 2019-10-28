@@ -10,6 +10,8 @@ import 'CategoryRow.dart';
 import 'PairView.dart';
 
 class HomePage extends StatelessWidget {
+    static const routeName = "/home";
+
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: FirebaseAuth.instance.currentUser(),

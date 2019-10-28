@@ -26,7 +26,6 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
 
   @override
   void initState() {
-    print("Initstate");
     final Stream purchaseUpdates =
         InAppPurchaseConnection.instance.purchaseUpdatedStream;
     _subscription = purchaseUpdates.listen((purchases) {

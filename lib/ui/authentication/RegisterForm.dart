@@ -1,4 +1,5 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/ui/authentication/SignupPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -91,6 +92,26 @@ class SignupFormCard extends StatelessWidget {
                 onSaved: savepwd),
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(10),
+            ),
+             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "New User? ",
+                  style: TextStyle(
+                      fontFamily: "Poppins-Medium", color: Colors.white),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Signup()));
+                  },
+                  child: Text("Sign Up",
+                      style: TextStyle(
+                          color: Theme.Colors.mustard,
+                          fontFamily: "Poppins-Bold")),
+                )
+              ],
             ),
           ],
         ),

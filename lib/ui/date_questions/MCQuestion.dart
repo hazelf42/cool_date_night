@@ -1,6 +1,7 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_questions/MCQuestionBody.dart';
+import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:flutter/material.dart';
 class McQuestion extends StatelessWidget {
   final List questionList;
@@ -22,9 +23,14 @@ class McQuestion extends StatelessWidget {
             icon: Icon(
               Icons.cancel,
             ),
-            onPressed: () => Navigator.popUntil(
-                context, ModalRoute.withName(Navigator.defaultRouteName)),
-          )
+            onPressed: () => {
+                  Navigator.popUntil(context, (Route<dynamic> route) {
+                    bool shouldPop = false;
+                    if (route.settings.name == HomePage.routeName) {
+                      shouldPop = true;
+                    }
+                    return shouldPop;
+                  })})
         ],
         backgroundColor: Theme.Colors.midnightBlue,
       ),

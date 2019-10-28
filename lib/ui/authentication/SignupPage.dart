@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:cool_date_night/ui/authentication/WelcomeScreen.dart';
 import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -64,8 +63,8 @@ class _SignupState extends State<Signup> {
               'photo': imageUrl
             }, merge: true);
           }).then((_) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+            Navigator.pushReplacementNamed(
+                context, 'welcome');
           }).catchError((e) {
             setState(() {
               _isLoading = false;

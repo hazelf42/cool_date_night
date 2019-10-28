@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
 class WelcomeScreen extends StatelessWidget {
-  final _welcomeString =
+  static const  _welcomeString =
       "Each Cool Date contains 20 questions that you and your Date Mate can read and take turns answering. You'll find a category that fits every type of couple! Just be honest and take time to explain your decisions, but most importantly, HAVE FUN!";
   @override
   Widget build(BuildContext context) {
     var height = prefix0.MediaQuery.of(context).size.height;
-
     return Scaffold(
         body: (Container(
             height: prefix0.MediaQuery.of(context).size.height,

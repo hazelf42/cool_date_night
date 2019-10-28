@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class CategoryDetailPage extends StatelessWidget {
 
+    static const routeName = "/category";
 
   final Map userProfile;
   final Category category;

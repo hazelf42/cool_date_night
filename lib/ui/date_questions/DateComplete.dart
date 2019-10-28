@@ -30,8 +30,7 @@ class DateCompleteScreen extends StatelessWidget {
               Text("Date Complete!", style: Theme.TextStyles.dateTitle),
               prefix0.SizedBox(height: height / 30),
               Text("Snap a selfie to celebrate!",
-                            textAlign: prefix0.TextAlign.center,
-
+                  textAlign: prefix0.TextAlign.center,
                   style: Theme.TextStyles.subheading2Light),
               Text("Then tag us with #cooldatenight!",
                   textAlign: prefix0.TextAlign.center,
@@ -41,8 +40,13 @@ class DateCompleteScreen extends StatelessWidget {
                 color: Theme.dateColors[category.name],
                 child: Text("Done", style: TextStyle(color: Colors.black87)),
                 onPressed: () {
-
-                  Navigator.pushReplacement(context,  MaterialPageRoute(builder: (context) => HomePage()));
+                   Navigator.popUntil(context, (Route<dynamic> route){
+            bool shouldPop = false;
+            if(route.settings.name==HomePage.routeName){
+              shouldPop = true;
+            }
+            return shouldPop;
+          });
                 },
               )
             ],
@@ -52,7 +56,6 @@ class DateCompleteScreen extends StatelessWidget {
     ));
   }
   //Image?
-
 
   showPicDialog() {}
 }

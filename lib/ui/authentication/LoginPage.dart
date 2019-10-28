@@ -8,12 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'LoginForm.dart';
 import 'WelcomeScreen.dart';
 
-class Login extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _LoginState createState() => new _LoginState();
 }
 
-class _MyAppState extends State<Login> {
+class _LoginState extends State<LoginPage> {
   String _email;
   String _password;
   String _error;
@@ -35,7 +35,7 @@ class _MyAppState extends State<Login> {
   loginUser() {
     if (checkFields() != null && checkFields()) {
       setState(() {
-       _isLoading = true; 
+        _isLoading = true;
       });
       FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password)
@@ -58,6 +58,7 @@ class _MyAppState extends State<Login> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
@@ -104,14 +105,14 @@ class _MyAppState extends State<Login> {
                               color: Colors.transparent,
                               child: InkWell(
                                 child: Center(
-                                  child: 
-                                  
-            _isLoading ? prefix0.CircularProgressIndicator() : Text("SIGN IN",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Poppins-Bold",
-                                          fontSize: 18,
-                                          letterSpacing: 1.0)),
+                                  child: _isLoading
+                                      ? prefix0.CircularProgressIndicator()
+                                      : Text("SIGN IN",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Poppins-Bold",
+                                              fontSize: 18,
+                                              letterSpacing: 1.0)),
                                 ),
                               ),
                             ),

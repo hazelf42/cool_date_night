@@ -115,7 +115,7 @@ class _DrawerScreen extends State<DrawerScreen> {
                           string: "Log out",
                           onTap: () async {
                             FirebaseAuth.instance.signOut();
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Login()));
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
                           }),
                     ],
                   ),

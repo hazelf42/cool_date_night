@@ -117,7 +117,7 @@ class FormCard extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => Signup()));
                   },
                   child: Text("Sign Up",
