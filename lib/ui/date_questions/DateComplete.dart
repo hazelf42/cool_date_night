@@ -1,6 +1,7 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
@@ -40,7 +41,8 @@ class DateCompleteScreen extends StatelessWidget {
                 color: Theme.dateColors[category.name],
                 child: Text("Done", style: TextStyle(color: Colors.black87)),
                 onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+
+                  Navigator.pushReplacement(context,  MaterialPageRoute(builder: (context) => HomePage()));
                 },
               )
             ],

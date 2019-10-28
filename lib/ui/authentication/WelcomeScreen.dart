@@ -1,9 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final _welcomeString =
@@ -11,7 +9,6 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = prefix0.MediaQuery.of(context).size.height;
-    var width = prefix0.MediaQuery.of(context).size.width;
 
     return Scaffold(
         body: (Container(
