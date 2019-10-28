@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/ui/authentication/WelcomeScreen.dart';
 import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -80,7 +81,7 @@ class _SignupState extends State<Signup> {
             'last_seen': DateTime.now(),
           }, merge: true).then((_) {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomePage()));
+                .push(MaterialPageRoute(builder: (context) => WelcomeScreen()));
           }).catchError((e) {
             setState(() {
               _isLoading = false;

@@ -30,16 +30,10 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseAuth.instance.currentUser().then((user) {
       if (user == null) {
-        runApp(MaterialApp(
-          home: prefix0.LoginPage(),
-        ));
+        Navigator.of(context).pushReplacementNamed('/login');
       } else {
-        runApp(MaterialApp(
-         
-          initialRoute: HomePage.routeName,
-        ));
+        Navigator.of(context).pushReplacementNamed('/home');
       }
-
       return Center(
         child: CircularProgressIndicator(),
       );

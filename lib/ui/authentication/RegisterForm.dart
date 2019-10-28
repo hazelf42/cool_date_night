@@ -1,4 +1,5 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/ui/authentication/LoginPage.dart';
 import 'package:cool_date_night/ui/authentication/SignupPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -91,27 +92,30 @@ class SignupFormCard extends StatelessWidget {
                 validator: (value) => value.length >= 8 ? null : "Must be >8 characters",
                 onSaved: savepwd),
             SizedBox(
-              height: ScreenUtil.getInstance().setHeight(10),
+              height: 20,
             ),
              Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "New User? ",
+                  "Have an account? ",
                   style: TextStyle(
                       fontFamily: "Poppins-Medium", color: Colors.white),
                 ),
                 InkWell(
                   onTap: () {
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Signup()));
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
-                  child: Text("Sign Up",
+                  child: Text("Login",
                       style: TextStyle(
                           color: Theme.Colors.mustard,
                           fontFamily: "Poppins-Bold")),
                 )
               ],
+            ),
+               SizedBox(
+              height: 20,
             ),
           ],
         ),
