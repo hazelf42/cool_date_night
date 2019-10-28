@@ -22,8 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage {
-}
+class LoginPage {}
 
 class LandingPage extends StatelessWidget {
   @override
@@ -34,9 +33,9 @@ class LandingPage extends StatelessWidget {
       } else {
         Navigator.of(context).pushReplacementNamed('/home');
       }
-      return Center(
-        child: CircularProgressIndicator(),
-      );
     });
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

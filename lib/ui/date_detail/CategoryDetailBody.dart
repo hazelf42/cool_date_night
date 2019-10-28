@@ -131,6 +131,7 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
               )
             ]);
           }
+          return Container();
         });
   }
 }

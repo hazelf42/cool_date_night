@@ -1,7 +1,6 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
 import 'package:cool_date_night/ui/date_questions/OpenQuestionBody.dart';
-import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatelessWidget {

@@ -1,6 +1,5 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/ui/authentication/LoginPage.dart';
-import 'package:cool_date_night/ui/authentication/SignupPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
