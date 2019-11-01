@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart';
@@ -12,30 +13,30 @@ import 'package:flutter/material.dart' as prefix0;
 import 'MCQuestion.dart';
 
 class MCQuestionBody extends StatefulWidget {
-  final List<dynamic> mcQuestionsList;
-  final List questionList;
-  final Map partner;
+  final List<dynamic> questionList;
+  final String uid;
+  final DocumentSnapshot partnerData;
   final int index;
   final Category category;
-  bool challenged;
-  MCQuestionBody(this.mcQuestionsList, this.questionList, this.partner,
-      this.category, this.challenged, this.index);
+  int challenged;
+  MCQuestionBody(this.questionList, this.uid, this.partnerData, this.category,
+      this.challenged, this.index);
 
   @override
   _MCQuestionBody createState() => _MCQuestionBody(
-      mcQuestionsList, questionList, partner, category, challenged, index);
+      questionList, uid, partnerData, category, challenged, index);
 }
 
 class _MCQuestionBody extends State<MCQuestionBody> {
-  final List<dynamic> mcQuestions;
-  final List questionList;
-  final Map partner;
+  final List<dynamic> questionList;
+  final String uid;
+  final DocumentSnapshot partnerData;
   final int index;
   final Category category;
-  bool challenged;
+  int challenged;
   int _answerSelected;
-  _MCQuestionBody(this.mcQuestions, this.questionList, this.partner,
-      this.category, this.challenged, this.index);
+  _MCQuestionBody(this.questionList, this.uid, this.partnerData, this.category,
+      this.challenged, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +50,19 @@ class _MCQuestionBody extends State<MCQuestionBody> {
             child: Container(
           child: Column(
             children: <Widget>[
-              partner != null
+              partnerData.data != null
                   ? Container(
                       width: width,
                       color: Theme.dateColors[category.name],
                       child: Column(children: [
                         prefix0.SizedBox(height: 30),
                         Avatar(
-                          imagePath: partner['photo'] ??
-                              "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                          radius: 60,
-                          heroTag: 'datemate'),
-                          
+                            imagePath: partnerData['photo'] ??
+                                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                            radius: 60,
+                            heroTag: 'datemate'),
                         prefix0.SizedBox(height: 30)
-                          ]))
+                      ]))
                   : Container(
                       width: width,
                       height: 160,
@@ -90,7 +90,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
               Container(
                   padding: EdgeInsets.only(left: 30, right: 30, top: 10),
                   child: AutoSizeText(
-                    mcQuestions[index]['question'],
+                    questionList[index]['question'],
                     style: prefix0.TextStyle(
                         fontWeight: prefix0.FontWeight.w500,
                         fontSize: 18,
@@ -101,7 +101,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
               prefix0.SizedBox(height: 10),
               ListView.builder(
                 physics: prefix0.NeverScrollableScrollPhysics(),
-                itemCount: (mcQuestions[index]['answers'].length),
+                itemCount: (questionList[index]['answers'].length),
                 itemBuilder: (_, i) => Container(
                     margin:
                         prefix0.EdgeInsets.only(bottom: 5, left: 30, right: 30),
@@ -116,7 +116,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                         side: prefix0.BorderSide(color: Colors.white),
                       ),
                       child: AutoSizeText(
-                        mcQuestions[index]['answers'][i].trim(),
+                        questionList[index]['answers'][i].trim(),
                         style: _answerSelected == i
                             ? Theme.TextStyles.subheading2Dark
                             : Theme.TextStyles.subheading2Light,
@@ -158,39 +158,61 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                     : Theme.dateColors[category.name],
                 onPressed: () async {
                   if (_answerSelected != null &&
-                      challenged == false &&
+                      challenged <= 0 &&
                       Random().nextInt(4) == 2) {
-                    await _showRandomChallenge().then((_) {
-                      challenged = true;
-                      nextQuestion();
-                    });
-                  } else if (mcQuestions.length == (index + 1) &&
-                      challenged == false) {
-                    await _showRandomChallenge().then((_) {
-                      challenged = true;
-                      nextQuestion();
-                    });
+                    challenged == -1
+                        ? await _showChallengeInstructions().then((_) async {
+                            await _showRandomChallenge().then((_) {
+                              challenged = 1;
+                              _nextQuestion();
+                            });
+                          })
+                        : await _showRandomChallenge().then((_) {
+                            challenged = 1;
+                            _nextQuestion();
+                          });
+                  } else if (questionList.length == (index + 1) &&
+                      challenged <= 0) {
+                    challenged == -1
+                        ? await _showChallengeInstructions().then((_) async {
+                            await _showRandomChallenge().then((_) {
+                              challenged = 1;
+                              _nextQuestion();
+                            });
+                          })
+                        : await _showRandomChallenge().then((_) {
+                            challenged = 1;
+                            _nextQuestion();
+                          });
                   } else if (_answerSelected != null) {
-                    nextQuestion();
+                    _nextQuestion();
                   }
                 })));
   }
 
-  void nextQuestion() {
-    if (mcQuestions.length == (index + 1)) {
+  void _nextQuestion() {
+    if (questionList.length == (index + 1)) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DateCompleteScreen(category)));
+          context, SlideRightRoute(page: DateCompleteScreen(category, uid)));
     } else {
       Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => (questionList[index + 1] is String)
+          SlideRightRoute(
+              page: (questionList[index + 1] is String)
                   ? OpenQuestion(
-                      questionList, partner, category, challenged, index + 1)
+                      questionList,
+                      uid,
+                      partnerData.data == null ? null : partnerData['uid'],
+                      category,
+                      challenged,
+                      index + 1)
                   : McQuestion(
-                      questionList, partner, category, challenged, index + 1)));
+                      questionList,
+                      uid,
+                      partnerData.data == null ? null : partnerData['uid'],
+                      category,
+                      challenged,
+                      index + 1)));
     }
   }
 
@@ -216,6 +238,34 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                     style: TextStyle(color: Colors.white, fontSize: 18)),
                 onPressed: () {
                   Navigator.of(context).pop();
+                },
+              )),
+            ],
+          );
+        });
+  }
+
+  Future<Widget> _showChallengeInstructions() async {
+    //This will only show if user has not completed a date.
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Theme.Colors.midnightBlue,
+            title: Text("Secret Challenge (Keep this to yourself!)",
+                style: TextStyle(color: Colors.white)),
+            content: Text(
+                "Try to complete this challenge without your Datemate suspecting anything. Let's see how well they REALLY know you!",
+                style: Theme.TextStyles.subheadingLight),
+            actions: <Widget>[
+              Center(
+                  child: FlatButton(
+                color: Colors.white30,
+                child: Text("OK",
+                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await _showRandomChallenge();
                 },
               )),
             ],

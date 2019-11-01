@@ -20,14 +20,15 @@ class DateList extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
-        return _dateList(context, snapshot.data.documents, category);
+        return _dateList(
+            context, userData['uid'], snapshot.data.documents, category);
       },
     );
   }
 }
 
-Widget _dateList(
-    BuildContext context, List<DocumentSnapshot> snapshots, Category category) {
+Widget _dateList(BuildContext context, uid, List<DocumentSnapshot> snapshots,
+    Category category) {
   snapshots.sort((a, b) => (a.data['num']).compareTo(b.data['num']));
   return Container(
       color: Theme.dateColors[category.name],
@@ -39,7 +40,7 @@ Widget _dateList(
               itemCount: snapshots.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return DateRow(
-                    context, Date.fromSnapshot(snapshots[index]), category);
+                return DateRow(context, uid,
+                    Date.fromSnapshot(snapshots[index]), category);
               })));
 }

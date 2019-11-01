@@ -17,7 +17,6 @@ class FluroRouter {
       'home',
       handler: _homeHandler,
     );
-    
     router.define(
       'welcome',
       handler: _welcomeHandler,

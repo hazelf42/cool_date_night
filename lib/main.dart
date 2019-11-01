@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage {}
 
 class LandingPage extends StatelessWidget {
   @override

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
@@ -12,10 +13,11 @@ import 'OpenQuestion.dart';
 class OpenQuestionBody extends StatelessWidget {
   final int index;
   final List questionList;
-  final Map partner;
+  final String uid;
+  final Map partnerData;
   final Date.Category category;
-  final bool challenged;
-  OpenQuestionBody(this.partner, this.questionList, this.category,
+  final int challenged;
+  OpenQuestionBody(this.uid, this.partnerData, this.questionList, this.category,
       this.challenged, this.index);
 
   @override
@@ -30,7 +32,7 @@ class OpenQuestionBody extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                partner == null
+                partnerData == null
                     ? Container(
                         width: double.infinity,
                         height: height / 2 - 60,
@@ -69,12 +71,12 @@ class OpenQuestionBody extends StatelessWidget {
                                 style: Theme.TextStyles.subheading2Light,
                               ),
                               Text(
-                                partner['name'],
+                                partnerData['name'],
                                 style: Theme.TextStyles.dateTitle,
                               ),
                               SizedBox(height: 15),
                               Avatar(
-                                  imagePath: partner['photo'] ??
+                                  imagePath: partnerData['photo'] ??
                                       "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                   radius: 75,
                                   heroTag: 'datemate'),
@@ -107,29 +109,29 @@ class OpenQuestionBody extends StatelessWidget {
                             color: Theme.dateColors[category.name],
                             onPressed: () {
                               if (questionList.length == (index + 1)) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DateCompleteScreen(category)));
+                                Navigator.push(context, SlideRightRoute(
+                                    page: DateCompleteScreen(category, uid)));
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            (questionList[index + 1] is String)
-                                                ? OpenQuestion(
-                                                    questionList,
-                                                    partner,
-                                                    category,
-                                                    challenged,
-                                                    index + 1)
-                                                : McQuestion(
-                                                    questionList,
-                                                    partner,
-                                                    category,
-                                                    challenged,
-                                                    index + 1)));
+                                Navigator.push(context, SlideRightRoute(
+                                    page: (questionList[index + 1] is String)
+                                        ? OpenQuestion(
+                                            questionList,
+                                            uid,
+                                            partnerData == null
+                                                ? null
+                                                : partnerData['uid'],
+                                            category,
+                                            challenged,
+                                            index + 1)
+                                        : McQuestion(
+                                            questionList,
+                                            uid,
+                                            partnerData == null
+                                                ? null
+                                                : partnerData['uid'],
+                                            category,
+                                            challenged,
+                                            index + 1)));
                               }
                             }))),
               ],

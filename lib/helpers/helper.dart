@@ -220,37 +220,42 @@ class MainBloc extends Object with Validators {
           context: context,
           builder: (context) {
             return Wrap(
-              alignment: prefix0.WrapAlignment.center,
-              crossAxisAlignment: prefix0.WrapCrossAlignment.center,
-              children: [
-                prefix0.SizedBox(height: prefix0.MediaQuery.of(context).size.height/6,width: double.infinity),
-              AlertDialog(
-                  contentPadding: MediaQuery.of(context).viewInsets +
-                      const EdgeInsets.symmetric(
-                          horizontal: 0.0, vertical: 24.0),
-                  backgroundColor: Theme.Colors.midnightBlue,
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text(userData['isPaid'] != true ? "Not Now" : "OK",
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
-                      color: Colors.white.withOpacity(.30),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                  title: snapshot.error != null
-                      ? Text("Unlock All",
-                          style: TextStyle(color: Colors.white))
-                      : Text("Retrieve Purchases",
-                          style: TextStyle(color: Colors.white)),
-                  content: snapshot == null
-                      ? Text("In app purchases are not currently available.")
-                      : (userData['isPaid'] == true)
-                          ? Text("You have unlocked all dates.",
+                alignment: prefix0.WrapAlignment.center,
+                crossAxisAlignment: prefix0.WrapCrossAlignment.center,
+                children: [
+                  prefix0.SizedBox(
+                      height: prefix0.MediaQuery.of(context).size.height / 6,
+                      width: double.infinity),
+                  AlertDialog(
+                      contentPadding: MediaQuery.of(context).viewInsets +
+                          const EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 24.0),
+                      backgroundColor: Theme.Colors.midnightBlue,
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text(
+                              userData['isPaid'] != true ? "Not Now" : "OK",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white)),
+                          color: Colors.white.withOpacity(.30),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                      title: snapshot.error != null
+                          ? Text("Unlock All",
                               style: TextStyle(color: Colors.white))
-                          : _notPaidUI(userData['uid'], context))
-            ]);
+                          : Text("Retrieve Purchases",
+                              style: TextStyle(color: Colors.white)),
+                      content: snapshot == null
+                          ? Text(
+                              "In app purchases are not currently available.")
+                          : (userData['isPaid'] == true)
+                              ? Text("You have unlocked all dates.",
+                                  style: TextStyle(color: Colors.white))
+                              : _notPaidUI(userData['uid'], context))
+                ]);
           });
     });
   }
@@ -297,7 +302,6 @@ class MainBloc extends Object with Validators {
               _isLoading.add(true);
               var prodDetails =
                   await _iap.queryProductDetails(Set.from(["unlock_all"]));
-              print(prodDetails.productDetails[0]);
               await _iap
                   .buyConsumable(
                       purchaseParam: PurchaseParam(
@@ -385,4 +389,31 @@ class MainBloc extends Object with Validators {
     });
   }
 }
+
 //Determine whether the next question will be MC or Open with RNG
+class SlideRightRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideRightRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionDuration: Duration(milliseconds: 100),
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+}
