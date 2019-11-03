@@ -15,8 +15,8 @@ class DateRow extends StatelessWidget {
   DateRow(this.context, this.uid, this.date, this.category);
 
   int _hasBeenChallenged(userData) {
-    if (userData['completedDates'] == null ||
-        userData['completedDates'] == []) {
+    if (userData['completed_dates'] == null ||
+        userData['completed_dates'] == []) {
       return -1;
     } else {
       return 0;
