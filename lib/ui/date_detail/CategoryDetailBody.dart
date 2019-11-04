@@ -50,12 +50,12 @@ class _CategoryDetailBody extends State<CategoryDetailBody> {
   _CategoryDetailBody(this.userProfile, this.category);
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: Firestore()
+        stream: Firestore.instance
             .collection('users')
             .document(userProfile['uid'])
             .snapshots(),
         builder: (context, userMap) {
-          if (userMap.hasData) {
+          if (userMap.data != null) {
             return Stack(children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,

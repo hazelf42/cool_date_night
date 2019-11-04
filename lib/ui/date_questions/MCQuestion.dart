@@ -29,12 +29,14 @@ class McQuestion extends StatelessWidget {
                   Icons.cancel,
                 ),
                 onPressed: () => {
-                      Navigator.popUntil(context, (Route<dynamic> route) {
-                        bool shouldPop = false;
-                        if (route.settings.name == HomePage.routeName) {
-                          shouldPop = true;
-                        }
-                        return shouldPop;
+                      Future.delayed(Duration.zero, () {
+                        Navigator.popUntil(context, (Route<dynamic> route) {
+                          bool shouldPop = false;
+                          if (route.settings.name == HomePage.routeName) {
+                            shouldPop = true;
+                          }
+                          return shouldPop;
+                        });
                       })
                     })
           ],

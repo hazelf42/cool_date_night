@@ -26,12 +26,9 @@ class OpenQuestion extends StatelessWidget {
                 Icons.cancel,
               ),
               onPressed: () {
-                try {
+                Future.delayed(Duration(milliseconds: 50), () {
                   Navigator.popUntil(context, ModalRoute.withName('/home'));
-                } on Exception catch (_) {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                }
+                });
               })
         ],
         backgroundColor: Theme.Colors.midnightBlue,
