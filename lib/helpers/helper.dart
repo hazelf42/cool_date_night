@@ -265,6 +265,16 @@ class MainBloc extends Object with Validators {
   final Stream purchaseUpdates =
       InAppPurchaseConnection.instance.purchaseUpdatedStream;
 
+  Future<PurchaseDetails> _hasPurchased(String productID) async {
+    QueryPurchaseDetailsResponse response =
+        await InAppPurchaseConnection.instance.queryPastPurchases();
+
+    var _purchases = response.pastPurchases;
+
+    return _purchases.firstWhere((purchase) => purchase.productID == productID,
+        orElse: () => null);
+  }
+
   Widget _notPaidUI(String uid, BuildContext context) {
     _isLoading.add(false);
     var _iap = InAppPurchaseConnection.instance;
@@ -279,7 +289,6 @@ class MainBloc extends Object with Validators {
                   _isLoading.add(true);
                   var prodDetails =
                       await _iap.queryProductDetails(Set.from(["unlock_all"]));
-                  print(prodDetails.productDetails[0]);
                   await _iap
                       .buyConsumable(
                           purchaseParam: PurchaseParam(
@@ -287,10 +296,7 @@ class MainBloc extends Object with Validators {
                       .then((purchase) async {
                     purchaseUpdates.listen((purchases) {
                       Navigator.of(context).pop();
-                      print(purchases);
-                      print(purchases.length);
-                      purchaseComplete(
-                          context: context, success: (purchases.length > 0));
+                      if (purchases) purchaseComplete(context: context);
                     });
                   });
                 })),
@@ -307,12 +313,11 @@ class MainBloc extends Object with Validators {
                       purchaseParam: PurchaseParam(
                           productDetails: prodDetails.productDetails[0]))
                   .then((purchase) async {
-                purchaseUpdates.listen((purchases) {
+                purchaseUpdates.listen((purchases) async {
                   Navigator.of(context).pop();
-                  print(purchases);
-                  print(purchases.length);
-                  purchaseComplete(
-                      context: context, success: (purchases.length > 0));
+                  if (await _hasPurchased("unlock_all") != null) {
+                    purchaseComplete(context: context);
+                  }
                 });
               });
             })
@@ -320,17 +325,15 @@ class MainBloc extends Object with Validators {
     );
   }
 
-  Future<Widget> purchaseComplete(
-      {@required BuildContext context, @required bool success}) async {
+  Future<Widget> purchaseComplete({@required BuildContext context}) async {
     return await showDialog(
         context: context,
         builder: (context) {
-          print("Alert");
           return AlertDialog(
             backgroundColor: Theme.Colors.midnightBlue,
             actions: <Widget>[
               FlatButton(
-                child: Text(success ? "LET'S GO!" : "OK",
+                child: Text("LET'S GO!",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
                 color: Colors.white.withOpacity(.30),
                 onPressed: () {
@@ -338,18 +341,11 @@ class MainBloc extends Object with Validators {
                 },
               )
             ],
-            title: success
-                ? Text("Welcome to Cool Date Night!",
-                    style: TextStyle(color: Colors.white))
-                : Text("An error occurred",
-                    style: TextStyle(color: Colors.white)),
-            content: success == false
-                ? Text(
-                    "An error occurred, please try again, or contact us via the Feedback button.",
-                    style: TextStyle(color: Colors.white))
-                : Text(
-                    "You've unlocked all our cool dates. Grab your date mate and let's get started!",
-                    style: TextStyle(color: Colors.white)),
+            title: Text("Welcome to Cool Date Night!",
+                style: TextStyle(color: Colors.white)),
+            content: Text(
+                "You've unlocked all our cool dates. Grab your date mate and let's get started!",
+                style: TextStyle(color: Colors.white)),
           );
         });
   }

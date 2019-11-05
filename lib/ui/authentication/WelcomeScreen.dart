@@ -38,17 +38,13 @@ class WelcomeScreen extends StatelessWidget {
                       Text("Welcome!", style: Theme.TextStyles.dateTitle),
 
                       prefix0.SizedBox(
-                          height: 10, width: double.infinity), // Expanded(
-                      //     flex: 1,
-                      //     child:
+                          height: 10, width: double.infinity),
                       SingleChildScrollView(
                           padding: EdgeInsets.all(10),
                           child: Text(_welcomeString,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 12),
-                              textAlign: prefix0.TextAlign.center))
-                      //)
-                      ,
+                              textAlign: prefix0.TextAlign.center)),
                       prefix0.SizedBox(height: 10, width: double.infinity),
                       prefix0.FlatButton(
                         color: Theme.Colors.mustard,
