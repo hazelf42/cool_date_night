@@ -132,7 +132,7 @@ PODS:
   - nanopb/encode (0.3.901)
   - path_provider (0.0.1):
     - Flutter
-  - "permission_handler (3.2.1+1)":
+  - permission_handler (3.2.2):
     - Flutter
   - Protobuf (3.9.0)
   - sqflite (0.0.1):
@@ -201,11 +201,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
-  cloud_firestore: d1c0e6903eb554e2882d5519baa950201f101d14
+  cloud_firestore: 0ac494d23db743f104b95d3291946afec187b74c
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
   firebase_auth: 00d6e1ab6d890cd6d3c624df61702e3a7072d1e3
-  firebase_core: b3b02d0b5e9d01aab5e50ba7cbcf84c73cb6883c
-  firebase_storage: 52033ea2e6ad58bfa852de92002598850d325c36
+  firebase_core: ae55ea92448ec8675d325da4db22cf3b4d58a54d
+  firebase_storage: 52b0c06e27af628b627be28d32b4b540f6b67cf7
   FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
   FirebaseAuth: a06ad63e9bf4c86165b54cceb1c14d4f4c38d419
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
@@ -225,7 +225,7 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
-  permission_handler: 6a1b2f94f866da8bd19fa67f3c8f4b9f38580efb
+  permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298

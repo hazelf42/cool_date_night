@@ -10,44 +10,11 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class CategoryDetailBody extends StatefulWidget {
+class CategoryDetailBody extends StatelessWidget {
   final Map userProfile;
   final Category category;
   CategoryDetailBody(this.userProfile, this.category);
 
-  _CategoryDetailBody createState() =>
-      _CategoryDetailBody(this.userProfile, this.category);
-}
-
-class _CategoryDetailBody extends State<CategoryDetailBody> {
-  Map userProfile;
-  final Category category;
-  StreamSubscription<List<PurchaseDetails>> _subscription;
-
-  @override
-  void initState() {
-    final Stream purchaseUpdates =
-        InAppPurchaseConnection.instance.purchaseUpdatedStream;
-    _subscription = purchaseUpdates.listen((purchases) {
-      print(purchases[0].productID);
-      if (purchases.length > 0) {
-        print(purchases.length);
-        Firestore.instance
-            .collection('users')
-            .document(userProfile['uid'])
-            .updateData({'isPaid': true});
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
-
-  _CategoryDetailBody(this.userProfile, this.category);
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: Firestore.instance

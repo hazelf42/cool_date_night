@@ -28,101 +28,110 @@ class _DrawerScreen extends State<DrawerScreen> {
         builder:
             (BuildContext context, AsyncSnapshot<UserData> firebaseUserData) {
           return Drawer(
-            child:
-            firebaseUserData.data != null ? 
-             ListView(
-              children: <Widget>[
-                Container(
-                    color: Theme.Colors.midnightBlue,
-                    padding: EdgeInsets.zero,
-                    child: StreamBuilder(
-                      stream: Firestore.instance
-                          .collection('users')
-                          .document(firebaseUserData.data.firebaseUser.uid)
-                          .snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        return snapshot.hasData
-                            ? Column(children: [
-                                Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Avatar(
-                                      imagePath: snapshot.data['photo'] ??
-                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                      radius: 100,
-                                    )),
-                                SizedBox(height: 10),
-                                Text(firebaseUserData.data.data['name'] ?? "",
-                                    style: Theme.TextStyles.dateTitle),
-                                SizedBox(height: 20)
-                              ])
-                            : prefix0.CircularProgressIndicator();
-                      },
-                    )),
-                Container(
-                  color: Theme.Colors.darkBlue,
-                  height: MediaQuery.of(context).size.height - 150,
-                  child: Column(
+            child: firebaseUserData.data != null
+                ? ListView(
                     children: <Widget>[
-                      MenuItem(
-                          iconData: Icons.photo_camera,
-                          string: "Change Profile Picture",
-                          onTap: () {
-                            _getImage(ImageSource.gallery,
+                      Container(
+                          color: Theme.Colors.midnightBlue,
+                          padding: EdgeInsets.zero,
+                          child: StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('users')
+                                .document(
                                     firebaseUserData.data.firebaseUser.uid)
-                                .then((imageUrl) async {
-                              var update = UserUpdateInfo();
-                              update.photoUrl = imageUrl.toString();
-                              await firebaseUserData.data.firebaseUser
-                                  .updateProfile((update))
-                                  .then((_) {
-                                Firestore.instance
-                                    .collection('users')
-                                    .document(
-                                        firebaseUserData.data.firebaseUser.uid)
-                                    .updateData(({'photo': imageUrl}));
-                              });
-                            });
-                          }),
-                      Divider(height: 1, color: prefix0.Colors.white30),
-                      MenuItem(
-                          iconData: Icons.person_add,
-                          string: "Search Datemates",
-                          onTap: (() {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PairView(
-                                        firebaseUserData
-                                            .data.firebaseUser.uid)));
-                          })),
-                      Divider(height: 1, color: prefix0.Colors.white30),
-                      MenuItem(
-                          iconData: Icons.shopping_cart,
-                          string: "Retrieve Purchases",
-                          onTap: (() async {
-                            MainBloc().retrievePurchasesDialog(
-                                context: context,
-                                userData: firebaseUserData.data.data);
-                          })),
-                      Divider(height: 1, color: prefix0.Colors.white30),
-                      MenuItem(
-                          iconData: Icons.feedback,
-                          string: "Feedback",
-                          onTap: () => launch("http://cooldatenight.com")),
-                      Divider(height: 1, color: prefix0.Colors.white30),
-                      MenuItem(
-                          iconData: Icons.exit_to_app,
-                          string: "Log out",
-                          onTap: () async {
-                            FirebaseAuth.instance.signOut();
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
-                          }),
+                                .snapshots(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              return snapshot.hasData
+                                  ? Column(children: [
+                                      Padding(
+                                          padding: EdgeInsets.all(15),
+                                          child: Avatar(
+                                            imagePath: snapshot.data['photo'] ??
+                                                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                            radius: 100,
+                                          )),
+                                      SizedBox(height: 10),
+                                      Text(
+                                          firebaseUserData.data.data['name'] ??
+                                              "",
+                                          style: Theme.TextStyles.dateTitle),
+                                      SizedBox(height: 20)
+                                    ])
+                                  : prefix0.CircularProgressIndicator();
+                            },
+                          )),
+                      Container(
+                        color: Theme.Colors.darkBlue,
+                        height: MediaQuery.of(context).size.height - 150,
+                        child: Column(
+                          children: <Widget>[
+                            MenuItem(
+                                iconData: Icons.photo_camera,
+                                string: "Change Profile Picture",
+                                onTap: () {
+                                  _getImage(
+                                          ImageSource.gallery,
+                                          firebaseUserData
+                                              .data.firebaseUser.uid)
+                                      .then((imageUrl) async {
+                                    var update = UserUpdateInfo();
+                                    update.photoUrl = imageUrl.toString();
+                                    await firebaseUserData.data.firebaseUser
+                                        .updateProfile((update))
+                                        .then((_) {
+                                      Firestore.instance
+                                          .collection('users')
+                                          .document(firebaseUserData
+                                              .data.firebaseUser.uid)
+                                          .updateData(({'photo': imageUrl}));
+                                    });
+                                  });
+                                }),
+                            Divider(height: 1, color: prefix0.Colors.white30),
+                            MenuItem(
+                                iconData: Icons.person_add,
+                                string: "Search Datemates",
+                                onTap: (() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PairView(
+                                              firebaseUserData
+                                                  .data.firebaseUser.uid)));
+                                })),
+                            Divider(height: 1, color: prefix0.Colors.white30),
+                            MenuItem(
+                                iconData: Icons.shopping_cart,
+                                string: "Retrieve Purchases",
+                                onTap: (() async {
+                                // MainBloc().retrievePurchasesDialog(
+                                //       context: context,
+                                //       userData: firebaseUserData.data.data);
+                                })),
+                            Divider(height: 1, color: prefix0.Colors.white30),
+                            MenuItem(
+                                iconData: Icons.feedback,
+                                string: "Feedback",
+                                onTap: () =>
+                                    launch("http://cooldatenight.com")),
+                            Divider(height: 1, color: prefix0.Colors.white30),
+                            MenuItem(
+                                iconData: Icons.exit_to_app,
+                                string: "Log out",
+                                onTap: () async {
+                                  FirebaseAuth.instance.signOut();
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              LoginPage()));
+                                }),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ],
-            ) : 
-            Container(child: prefix0.CircularProgressIndicator()),
+                  )
+                : Container(child: prefix0.CircularProgressIndicator()),
           );
         });
   }

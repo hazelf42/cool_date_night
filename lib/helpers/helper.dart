@@ -7,10 +7,7 @@ import 'package:cool_date_night/models/Date.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'validators.dart';
 
@@ -206,149 +203,75 @@ class MainBloc extends Object with Validators {
         });
   }
 
-  Stream<bool> get isLoading => _isLoading.stream;
+  // Stream<bool> get isLoading => _isLoading.stream;
 
-  Future<Widget> retrievePurchasesDialog(
-      {@required BuildContext context,
-      @required DocumentSnapshot userData}) async {
-    print("Fetching");
-    return await InAppPurchaseConnection.instance
-        .queryPastPurchases()
-        .then((snapshot) async {
-      print("snapshot" + snapshot.toString());
-      return await showDialog(
-          context: context,
-          builder: (context) {
-            return Wrap(
-                alignment: prefix0.WrapAlignment.center,
-                crossAxisAlignment: prefix0.WrapCrossAlignment.center,
-                children: [
-                  prefix0.SizedBox(
-                      height: prefix0.MediaQuery.of(context).size.height / 6,
-                      width: double.infinity),
-                  AlertDialog(
-                      contentPadding: MediaQuery.of(context).viewInsets +
-                          const EdgeInsets.symmetric(
-                              horizontal: 0.0, vertical: 24.0),
-                      backgroundColor: Theme.Colors.midnightBlue,
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text(
-                              userData['isPaid'] != true ? "Not Now" : "OK",
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white)),
-                          color: Colors.white.withOpacity(.30),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                      title: snapshot.error != null
-                          ? Text("Unlock All",
-                              style: TextStyle(color: Colors.white))
-                          : Text("Retrieve Purchases",
-                              style: TextStyle(color: Colors.white)),
-                      content: snapshot == null
-                          ? Text(
-                              "In app purchases are not currently available.")
-                          : (userData['isPaid'] == true)
-                              ? Text("You have unlocked all dates.",
-                                  style: TextStyle(color: Colors.white))
-                              : _notPaidUI(userData['uid'], context))
-                ]);
-          });
-    });
-  }
+  // Future<Widget> retrievePurchasesDialog(
+  //     {@required BuildContext context,
+  //     @required DocumentSnapshot userData}) async {
+  //   print("Fetching");
+  //   return await InAppPurchaseConnection.instance
+  //       .queryPastPurchases()
+  //       .then((snapshot) async {
+  //     print("snapshot" + snapshot.toString());
+  //     return await showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return Wrap(
+  //               alignment: prefix0.WrapAlignment.center,
+  //               crossAxisAlignment: prefix0.WrapCrossAlignment.center,
+  //               children: [
+  //                 prefix0.SizedBox(
+  //                     height: prefix0.MediaQuery.of(context).size.height / 6,
+  //                     width: double.infinity),
+  //                 AlertDialog(
+  //                     contentPadding: MediaQuery.of(context).viewInsets +
+  //                         const EdgeInsets.symmetric(
+  //                             horizontal: 0.0, vertical: 24.0),
+  //                     backgroundColor: Theme.Colors.midnightBlue,
+  //                     actions: <Widget>[
+  //                       FlatButton(
+  //                         child: Text(
+  //                             userData['isPaid'] != true ? "Not Now" : "OK",
+  //                             style:
+  //                                 TextStyle(fontSize: 18, color: Colors.white)),
+  //                         color: Colors.white.withOpacity(.30),
+  //                         onPressed: () {
+  //                           Navigator.of(context).pop();
+  //                         },
+  //                       )
+  //                     ],
+  //                     title: snapshot.error != null
+  //                         ? Text("Unlock All",
+  //                             style: TextStyle(color: Colors.white))
+  //                         : Text("Retrieve Purchases",
+  //                             style: TextStyle(color: Colors.white)),
+  //                     content: snapshot == null
+  //                         ? Text(
+  //                             "In app purchases are not currently available.")
+  //                         : (userData['isPaid'] == true)
+  //                             ? Text("You have unlocked all dates.",
+  //                                 style: TextStyle(color: Colors.white))
+  //                             : _notPaidUI(userData['uid'], context))
+  //               ]);
+  //         });
+  //   });
+  // }
 
-  final _isLoading = BehaviorSubject<bool>();
+  // final _isLoading = BehaviorSubject<bool>();
+  // final _purchases = BehaviorSubject<>()
 
-  final Stream purchaseUpdates =
-      InAppPurchaseConnection.instance.purchaseUpdatedStream;
+  // Future<PurchaseDetails> _hasPurchased(String productID) async {
+  //   QueryPurchaseDetailsResponse response =
+  //       await InAppPurchaseConnection.instance.queryPastPurchases();
 
-  Future<PurchaseDetails> _hasPurchased(String productID) async {
-    QueryPurchaseDetailsResponse response =
-        await InAppPurchaseConnection.instance.queryPastPurchases();
+  //   var _purchases = response.pastPurchases;
 
-    var _purchases = response.pastPurchases;
+  //   return _purchases.firstWhere((purchase) => purchase.productID == productID,
+  //       orElse: () => null);
+  // }
 
-    return _purchases.firstWhere((purchase) => purchase.productID == productID,
-        orElse: () => null);
-  }
+  
 
-  Widget _notPaidUI(String uid, BuildContext context) {
-    _isLoading.add(false);
-    var _iap = InAppPurchaseConnection.instance;
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 50),
-        Center(
-            child: IconButton(
-                icon: Icon(Icons.lock_open, color: Theme.Colors.mustard),
-                iconSize: prefix0.MediaQuery.of(context).size.width / 3,
-                onPressed: () async {
-                  _isLoading.add(true);
-                  var prodDetails =
-                      await _iap.queryProductDetails(Set.from(["unlock_all"]));
-                  await _iap
-                      .buyConsumable(
-                          purchaseParam: PurchaseParam(
-                              productDetails: prodDetails.productDetails[0]))
-                      .then((purchase) async {
-                    purchaseUpdates.listen((purchases) {
-                      Navigator.of(context).pop();
-                      if (purchases) purchaseComplete(context: context);
-                    });
-                  });
-                })),
-        RaisedButton(
-            elevation: 7.5,
-            color: Theme.Colors.mustard,
-            child: Text("Unlock all cool dates"),
-            onPressed: () async {
-              _isLoading.add(true);
-              var prodDetails =
-                  await _iap.queryProductDetails(Set.from(["unlock_all"]));
-              await _iap
-                  .buyConsumable(
-                      purchaseParam: PurchaseParam(
-                          productDetails: prodDetails.productDetails[0]))
-                  .then((purchase) async {
-                purchaseUpdates.listen((purchases) async {
-                  Navigator.of(context).pop();
-                  if (await _hasPurchased("unlock_all") != null) {
-                    purchaseComplete(context: context);
-                  }
-                });
-              });
-            })
-      ],
-    );
-  }
-
-  Future<Widget> purchaseComplete({@required BuildContext context}) async {
-    return await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Theme.Colors.midnightBlue,
-            actions: <Widget>[
-              FlatButton(
-                child: Text("LET'S GO!",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-                color: Colors.white.withOpacity(.30),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-            title: Text("Welcome to Cool Date Night!",
-                style: TextStyle(color: Colors.white)),
-            content: Text(
-                "You've unlocked all our cool dates. Grab your date mate and let's get started!",
-                style: TextStyle(color: Colors.white)),
-          );
-        });
-  }
 
   Future<List> randomizeDateQuestions(Date date) async {
     //Changed it to pseudorandom so that datemates don't end up with different question sets

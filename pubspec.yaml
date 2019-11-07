@@ -23,7 +23,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  fluro: ^1.5.0 
+  fluro: ^1.5.0
   cloud_firestore: ^0.12.7
   auto_size_text: ^2.0.1
   firebase_auth: ^0.11.1+10
@@ -37,17 +37,13 @@ dependencies:
   url_launcher: ^5.1.2
   font_awesome_flutter: ^8.5.0
   in_app_purchase: ^0.2.1
-fluro: ^1.4.0
-
-
-
+  flutter_inapp_purchase: ^2.0.4
 
 flutter_icons:
-  android: "launcher_icon" 
+  android: "launcher_icon"
   ios: true
   image_path: "assets/img/launcher_icon.png"
 
-    
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,31 +71,26 @@ flutter:
     - assets/img/launcher_icon.png
     - assets/img/cooldatenightmustard.png
   fonts:
-      - family: DKVisum
-        fonts:
-          - asset: assets/fonts/DK_Visum.ttf
-      - family: Optima
-        fonts:
-          - asset: assets/fonts/Optima_Medium.ttf
-            weight: 400
-          - asset: assets/fonts/Optima_Bold.ttf
-            weight: 700
-          - asset: assets/fonts/Optima_Normal.TTF
-            weight: 300
-
+    - family: DKVisum
+      fonts:
+        - asset: assets/fonts/DK_Visum.ttf
+    - family: Optima
+      fonts:
+        - asset: assets/fonts/Optima_Medium.ttf
+          weight: 400
+        - asset: assets/fonts/Optima_Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Optima_Normal.TTF
+          weight: 300
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-    
-
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -6,12 +6,10 @@ import 'package:flutter/material.dart' as prefix0;
 class ForgotPassword extends StatelessWidget {
   Future<void> resetPassword(String email) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-  }
-
-  String _email;
-  
+  }  
   @override
   Widget build(BuildContext context) {
+  String _email;
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.Colors.midnightBlue,),
         body: Container(

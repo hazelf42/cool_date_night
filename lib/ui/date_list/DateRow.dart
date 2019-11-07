@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/helpers/helper.dart';
 import 'package:cool_date_night/models/Date.dart' as Date;
+import 'package:cool_date_night/ui/home/Market.dart';
 import 'package:cool_date_night/ui/date_questions/MCQuestion.dart';
 import 'package:cool_date_night/ui/date_questions/OpenQuestion.dart';
 import 'package:flutter/material.dart';
@@ -55,15 +56,17 @@ class DateRow extends StatelessWidget {
             if (userData.data.data['isPaid'] == null ||
                 userData.data.data['isPaid'] == false &&
                     category.name != "Free Trial") {
-              MainBloc().retrievePurchasesDialog(
-                  userData: userData.data, context: context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MarketScreen(uid)));
             } else {
               await Firestore.instance
                   .collection('users')
                   .document(userData.data.data['date_mate'])
                   .get()
                   .then((partner) async {
-                await MainBloc().randomizeDateQuestions(date).then((questionList) {
+                await MainBloc()
+                    .randomizeDateQuestions(date)
+                    .then((questionList) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,15 +77,19 @@ class DateRow extends StatelessWidget {
                               ? OpenQuestion(
                                   questionList,
                                   uid,
-                                  partner.data == null ? null : partner.data['uid'],
+                                  partner.data == null
+                                      ? null
+                                      : partner.data['uid'],
                                   category,
                                   _hasBeenChallenged(userData.data),
                                   0)
-                              : //this should never happen, but just in case 
+                              : //this should never happen, but just in case
                               McQuestion(
                                   questionList,
                                   uid,
-                                  partner.data == null ? null : partner.data['uid'],
+                                  partner.data == null
+                                      ? null
+                                      : partner.data['uid'],
                                   category,
                                   _hasBeenChallenged(userData.data),
                                   0)));
