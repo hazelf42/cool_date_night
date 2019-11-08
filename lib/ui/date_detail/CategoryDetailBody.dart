@@ -8,7 +8,6 @@ import 'package:cool_date_night/ui/date_list/DateList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 
 class CategoryDetailBody extends StatelessWidget {
   final Map userProfile;

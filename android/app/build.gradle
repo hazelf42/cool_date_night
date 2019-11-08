@@ -46,8 +46,8 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        versionCode 12
-        versionName "12"
+        versionCode 14
+        versionName "14"
     }
 
         signingConfigs {
@@ -71,9 +71,12 @@ flutter {
 
 dependencies {
    // implementation 'com.google.firebase:firebase-core:17.0.0'
+       implementation 'com.android.billingclient:billing:1.2.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
 androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     apply plugin: 'com.google.gms.google-services'
+
 }
 

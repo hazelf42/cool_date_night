@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:flutter/services.dart';
 
 final String testID = 'gems_test';
 
@@ -16,37 +16,23 @@ class MarketScreen extends StatefulWidget {
 class _MarketScreen extends State<MarketScreen> {
   final String uid;
   _MarketScreen(this.uid);
-
-  /// Is the API available on the device
-  bool available = true;
-
-  /// The In App Purchase plugin
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
-
-  /// Past purchases
-  List<PurchaseDetails> _purchases = [];
-
-  /// Updates to purchases
-  StreamSubscription _subscription;
-
-  /// Consumable credits the user can buy
-  int credits = 0;
+  FlutterInappPurchase _iap = FlutterInappPurchase.instance;
+    StreamSubscription _purchaseUpdatedSubscription;
+    StreamSubscription _purchaseErrorSubscription;
+  String _platformVersion = 'Unknown';
+  List<IAPItem> _items = [];
+  List<PurchasedItem> _purchases = [];
 
   @override
   void initState() {
-    _verifyPurchase();
-    _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-          print('NEW PURCHASE');
-          print(data);
-          _purchases.addAll(data);
-          _verifyPurchase();
-        }));
-    super.initState();  
+    initPlatformState();
+
+    super.initState();
   }
 
   @override
-  void dispose() {
-    _subscription.cancel();
+  void dispose() async {
+    await FlutterInappPurchase.instance.endConnection;
     super.dispose();
   }
 
@@ -61,11 +47,8 @@ class _MarketScreen extends State<MarketScreen> {
         child: Column(
           children: [
             SizedBox(height: 100),
-            // UI if already purchased
-            // (_hasPurchased("unlock_all") != null)
-            // ? _purchaseComplete(context: context)
-            // :
-            _notPaidUI(uid, context)
+            _purchases.length == 0 ? 
+            _notPaidUI(uid, context) : _purchaseComplete(context: context)
           ],
         ),
       ),
@@ -74,10 +57,8 @@ class _MarketScreen extends State<MarketScreen> {
 
   // Private methods go here
 
-  Future<Widget> _purchaseComplete({@required BuildContext context}) async {
-    return await showDialog(
-        context: context,
-        builder: (context) {
+  Widget _purchaseComplete({@required BuildContext context}) {
+
           return AlertDialog(
             backgroundColor: Theme.Colors.midnightBlue,
             actions: <Widget>[
@@ -97,11 +78,9 @@ class _MarketScreen extends State<MarketScreen> {
                 "You've unlocked all our cool dates. Grab your date mate and let's get started!",
                 style: TextStyle(color: Colors.white)),
           );
-        });
   }
 
   Widget _notPaidUI(String uid, BuildContext context) {
-    var _iap = InAppPurchaseConnection.instance;
     return Column(
       children: <Widget>[
         SizedBox(height: 50),
@@ -110,68 +89,96 @@ class _MarketScreen extends State<MarketScreen> {
                 icon: Icon(Icons.lock_open, color: Theme.Colors.mustard),
                 iconSize: MediaQuery.of(context).size.width / 3,
                 onPressed: () {
-                  // _getPastPurchases().then((_) {
-                  _iap
-                      .queryProductDetails(Set.from(["unlock_all"]))
-                      .then((prodDetails) async {
-                    _buyProduct(prodDetails.productDetails[0]);
-                  });
-                  // });
+                  _requestPurchase(_items[0]);
                 })),
         RaisedButton(
             elevation: 7.5,
             color: Theme.Colors.mustard,
             child: Text("Unlock all cool dates"),
             onPressed: () {
-              _iap
-                  .queryProductDetails(Set.from(["unlock_all"]))
-                  .then((prodDetails) {
-                _buyProduct(prodDetails.productDetails[0]);
-              });
+              _requestPurchase(_items[0]);
             })
       ],
     );
   }
 
-//broken, i didnt even write this code
-  // Future<void> _getPastPurchases() async {
-  //   print("Querying past purchases");
-  //   QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+//anonymous methods
 
-  //   for (PurchaseDetails purchase in response.pastPurchases) {
-  //   }
-  //   print(response.pastPurchases);
-  //   setState(() {
-  //     _purchases = response.pastPurchases;
-  //   });
-  // }
-
-  /// Returns purchase of specific product ID
-  PurchaseDetails _hasPurchased(String productID) {
-    var returner = _purchases.firstWhere(
-        (purchase) => purchase.productID == productID,
-        orElse: () => null);
-    print(returner);
-    return returner;
-  }
-
-  /// Your own business logic to setup a consumable
-  void _verifyPurchase() async {
-    PurchaseDetails purchase = _hasPurchased("unlock_all");
-    print("Verifying...");
-    print(purchase.status);
-    if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      Firestore.instance
-          .collection("users")
-          .document(uid)
-          .updateData({"isPaid": true}).then((_) async {
-        await _purchaseComplete(context: context);
-      });
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await _iap.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
     }
+
+    // prepare
+    var result = await _iap.initConnection;
+    print('result: $result');
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+
+    // refresh items for android
+    try {
+      String msg = await _iap.consumeAllItems;
+      print('consumeAllItems: $msg');
+    } catch (err) {
+      print('consumeAllItems error: $err');
+    }
+
+    _purchaseUpdatedSubscription =
+        FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+          var items = _purchases;
+          items.add(productItem);
+          setState(() {
+            _purchases = items;
+          });
+    });
+
+    _purchaseErrorSubscription =
+        FlutterInappPurchase.purchaseError.listen((purchaseError) {
+      print('purchase-error: $purchaseError');
+    });
+    _getPurchaseHistory();
+    _getPurchases();
   }
 
-  void _buyProduct(ProductDetails prod) {
-    final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
-    _iap.buyNonConsumable(purchaseParam: purchaseParam).then((_) {});
+  void _requestPurchase(IAPItem item) {
+    _iap.requestPurchase(item.productId);
+  }
+
+  Future _getPurchases() async {
+    List<PurchasedItem> items =
+        await _iap.getAvailablePurchases();
+    for (var item in items) {
+      this._purchases.add(item);
+    }
+
+    setState(() {
+      this._items = [];
+      this._purchases = items;
+    });
+  }
+
+  Future _getPurchaseHistory() async {
+    List<PurchasedItem> items =
+        await _iap.getPurchaseHistory();
+    for (var item in items) {
+      print('${item.toString()}');
+      this._purchases.add(item);
+    }
+
+    setState(() {
+      this._items = [];
+      this._purchases = items;
+    });
   }
 }

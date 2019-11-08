@@ -193,20 +193,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+4"
-  in_app_purchase:
-    dependency: "direct main"
-    description:
-      name: in_app_purchase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1+4"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.0"
   matcher:
     dependency: transitive
     description:
