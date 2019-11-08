@@ -68,7 +68,6 @@ class _MarketScreen extends State<MarketScreen> {
                 color: Colors.white.withOpacity(.30),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
                 },
               )
             ],
@@ -89,7 +88,8 @@ class _MarketScreen extends State<MarketScreen> {
                 icon: Icon(Icons.lock_open, color: Theme.Colors.mustard),
                 iconSize: MediaQuery.of(context).size.width / 3,
                 onPressed: () {
-                  _requestPurchase(_items[0]);
+                  print(_items);
+              _requestPurchase(_items[0]);
                 })),
         RaisedButton(
             elevation: 7.5,
@@ -136,36 +136,50 @@ class _MarketScreen extends State<MarketScreen> {
 
     _purchaseUpdatedSubscription =
         FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-          var items = _purchases;
-          items.add(productItem);
-          setState(() {
-            _purchases = items;
-          });
+          // var items = _purchases;
+          // items.add(productItem);
+          // setState(() {
+          //   _purchases = items;
+          // });
     });
 
     _purchaseErrorSubscription =
         FlutterInappPurchase.purchaseError.listen((purchaseError) {
       print('purchase-error: $purchaseError');
     });
+    _getItems().then((_) {
+
     _getPurchaseHistory();
     _getPurchases();
+    });
   }
 
   void _requestPurchase(IAPItem item) {
     _iap.requestPurchase(item.productId);
   }
-
+ validateReceipt(purchased) async {
+    var receiptBody = {
+      'receipt-data': purchased.transactionReceipt,
+    };
+    var result = await _iap.validateReceiptIos(receiptBody: receiptBody, isTest: false);
+    print("Result $result");
+  }
   Future _getPurchases() async {
     List<PurchasedItem> items =
         await _iap.getAvailablePurchases();
     for (var item in items) {
-      this._purchases.add(item);
+      validateReceipt(item);
+      this._purchases.add(item);  
     }
-
+    print("Purchases: ${this._purchases}");
     setState(() {
-      this._items = [];
       this._purchases = items;
     });
+    if (this._purchases.length > 0) {
+      Firestore.instance.collection('users').document(uid).updateData(
+        {"isPaid": true}
+      );
+    }
   }
 
   Future _getPurchaseHistory() async {
@@ -177,8 +191,14 @@ class _MarketScreen extends State<MarketScreen> {
     }
 
     setState(() {
-      this._items = [];
       this._purchases = items;
     });
+  }
+    Future<void> _getItems () async {
+    List<IAPItem> items = await FlutterInappPurchase.instance.getProducts(["unlock_all"]);
+    print(items);
+    for (var item in items) {
+      this._items.add(item);
+    }
   }
 }
