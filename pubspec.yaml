@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^5.1.2
   font_awesome_flutter: ^8.5.0
   flutter_inapp_purchase: ^2.0.4
+  oauth2: ^1.4.0
 
 flutter_icons:
   android: "launcher_icon"
