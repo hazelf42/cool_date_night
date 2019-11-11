@@ -6,6 +6,7 @@ import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/helpers/helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 
@@ -25,12 +26,11 @@ class _MarketScreen extends State<MarketScreen> {
   String _platformVersion = 'Unknown';
   List<IAPItem> _items = [];
   List<PurchasedItem> _purchases = [];
-
+  bool hasTransactionId = false;
 
   @override
   void initState() {
     initPlatformState();
-
     super.initState();
   }
 
@@ -42,23 +42,26 @@ class _MarketScreen extends State<MarketScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Purchases on build" + _purchases.toString());
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.Colors.midnightBlue,
-      ),
-      backgroundColor: Theme.Colors.midnightBlue,
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 100),
-            (_purchases.length == 0 || _purchases[0].transactionId.toString() == "null")
-                ? _notPaidUI(uid, context)
-                : _purchaseComplete(context: context)
-          ],
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 1, 1, 43),
         ),
-      ),
-    );
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/img/darkblue.jpg"),
+                  fit: BoxFit.cover)),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 100),
+                (hasTransactionId == false)
+                    ? _notPaidUI(uid, context)
+                    : _purchaseComplete(context: context)
+              ],
+            ),
+          ),
+        ));
   }
 
   // Private methods go here
@@ -86,9 +89,16 @@ class _MarketScreen extends State<MarketScreen> {
   }
 
   Widget _notPaidUI(String uid, BuildContext context) {
-    return Column(
+    return Container(
+      decoration: prefix0.BoxDecoration(
+        boxShadow: [prefix0.BoxShadow(offset: Offset(5.0, 3.0), blurRadius: 10, spreadRadius: 0, color: Colors.black.withAlpha(230)) ],
+        
+      color: Theme.Colors.midnightBlue,
+      ),
+      margin: EdgeInsets.symmetric(vertical: 0, horizontal: 50),
+      padding: EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+      child: Column(
       children: <Widget>[
-        SizedBox(height: 50),
         Center(
             child: IconButton(
                 icon: Icon(Icons.lock_open, color: Theme.Colors.mustard),
@@ -103,15 +113,8 @@ class _MarketScreen extends State<MarketScreen> {
             onPressed: () {
               _requestPurchase(_items[0]);
             }),
-                    RaisedButton(
-            elevation: 7.5,
-            color: Theme.Colors.mustard,
-            child: Text("check purchases"),
-            onPressed: () {
-              _getPurchaseHistory();
-            })
       ],
-    );
+    ));
   }
 
 //anonymous methods
@@ -147,20 +150,31 @@ class _MarketScreen extends State<MarketScreen> {
 
     _purchaseUpdatedSubscription =
         FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-      // var items = _purchases;
-      // items.add(productItem);
-      // setState(() {
-      //   _purchases = items;
-      // });
+      if (productItem.transactionId != null) {
+        setState(() {
+          hasTransactionId = true;
+          validateReceipt(productItem);
+        });
+      }
     });
 
     _purchaseErrorSubscription =
         FlutterInappPurchase.purchaseError.listen((purchaseError) {
+      if (purchaseError.responseCode == 7) {
+        Firestore.instance
+            .collection('users')
+            .document(uid)
+            .updateData({"isPaid": true});
+      }
       print('purchase-error: $purchaseError');
     });
     _getItems().then((_) {
-      _getPurchaseHistory();
-      _getPurchases();
+      if (_items.length > 0) {
+        _getPurchaseHistory();
+        _getPurchases();
+      } else {
+        print("No purchases");
+      }
     });
   }
 
@@ -169,34 +183,38 @@ class _MarketScreen extends State<MarketScreen> {
   }
 
   validateReceipt(PurchasedItem purchased) async {
-      FirebaseUser currentUser = await MainBloc().getCurrentFirebaseUser();
-      var idToken= await currentUser.getIdToken();
+    print(purchased);
+    //TODO: Android receipt validation
     if (Platform.isIOS) {
       var receiptBody = {
         'receipt-data': purchased.transactionReceipt,
       };
       var result = await _iap.validateReceiptIos(
           receiptBody: receiptBody, isTest: false);
-      print(result);
-      return (result.statusCode == 0);
-    } else {
-      //TODO: Get access token
-      await _iap.validateReceiptAndroid(packageName: "com.cool.date.night", productId: "unlock_all",
-       productToken: purchased.purchaseToken,
-        accessToken: "???", isSubscription: false);
-    }
-  }
-  
-
-  Future _getPurchases() async {
-    List<PurchasedItem> items = await _iap.getAvailablePurchases();
-    for (var item in items) {
-      if (await validateReceipt(item) == true) {
-        this._purchases.add(item);
+      if (result.statusCode == 0 ||
+          purchased.transactionId.toString() != null) {
         Firestore.instance
             .collection('users')
             .document(uid)
             .updateData({"isPaid": true});
+      }
+    } else {
+      if (purchased.transactionId.toString() != "null") {
+        Firestore.instance
+            .collection('users')
+            .document(uid)
+            .updateData({"isPaid": true});  
+      }
+    }
+  }
+
+  Future _getPurchases() async {
+    List<PurchasedItem> items = await _iap.getAvailablePurchases();
+    for (var item in items) {
+      print(item);
+
+      if (hasTransactionId == true) {
+        this._purchases.add(item);
       }
     }
     setState(() {
@@ -207,9 +225,12 @@ class _MarketScreen extends State<MarketScreen> {
   Future _getPurchaseHistory() async {
     List<PurchasedItem> items = await _iap.getPurchaseHistory();
     for (var item in items) {
-
-      if (await validateReceipt(item) == true) {
+      if (hasTransactionId == true) {
+        print(item);
         this._purchases.add(item);
+        setState(() {
+          hasTransactionId=true;
+        });
         Firestore.instance
             .collection('users')
             .document(uid)
@@ -217,10 +238,6 @@ class _MarketScreen extends State<MarketScreen> {
       }
     }
     print("Purchases: ${this._purchases}");
-    setState(() {
-      this._purchases = items;
-    });
-
     setState(() {
       this._purchases = items;
     });
