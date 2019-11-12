@@ -1,4 +1,5 @@
 import 'package:cool_date_night/Theme.dart' as Theme;
+import 'package:cool_date_night/helpers/helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -44,11 +45,15 @@ class _LoginState extends State<LoginPage> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
       }).catchError((e) {
+        if (e.code == "ERROR_USER_NOT_FOUND") {
+              MainBloc().showSignupAgainDialog(context); 
+           }
         setState(() {
+           
           if (e is PlatformException) {
             _error = e.code == 'ERROR_NETWORK_REQUEST_FAILED'
                 ? "Login failed, please try again"
-                : "Incorrect password or email";
+                : (e.code == "ERROR_USER_NOT_FOUND" ? _error = "User not found." : "An error occurred. Errorcode ${e.code}"); 
           } else {
             _error = "A network error occurred.";
           }

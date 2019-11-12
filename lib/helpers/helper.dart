@@ -4,9 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_date_night/Theme.dart' as Theme;
 import 'package:cool_date_night/models/Date.dart';
+import 'package:cool_date_night/ui/authentication/SignupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 
 import 'validators.dart';
@@ -122,6 +124,41 @@ class MainBloc extends Object with Validators {
 
   void changeProfilePic() async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {});
+  }
+
+//Only shows up when someone tries to login with an email that does not exist
+  Future<Widget> showSignupAgainDialog(context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Theme.Colors.midnightBlue,
+            title: Text("We've Revamped!",
+                style: TextStyle(color: Theme.Colors.mustard)),
+            content: Container(
+                child: Text(
+              "Cool Date Night has been completely rebuilt from the ground up - including our accounts! If you've signed up for our previous version, please create a new account.",
+              style: TextStyle(color: Colors.white),
+            )),
+            actions: <Widget>[
+              prefix0.FlatButton(
+                  color: Theme.Colors.mustard,
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () => Navigator.of(context).push(
+                      prefix0.MaterialPageRoute(
+                          builder: (context) => Signup()))),
+              prefix0.FlatButton(
+                color: Colors.grey,
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Dismiss", 
+                    style: TextStyle(color: Colors.black),),
+              )
+            ],
+          );
+        });
   }
 
 //What it says on the tin
@@ -269,9 +306,6 @@ class MainBloc extends Object with Validators {
   //   return _purchases.firstWhere((purchase) => purchase.productID == productID,
   //       orElse: () => null);
   // }
-
-  
-
 
   Future<List> randomizeDateQuestions(Date date) async {
     //Changed it to pseudorandom so that datemates don't end up with different question sets
