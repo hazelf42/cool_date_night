@@ -53,9 +53,45 @@ class DateRow extends StatelessWidget {
         ),
         onTap: () async {
           await MainBloc().getCurrentFirebaseUserData().then((userData) async {
-            if (userData.data.data['isPaid'] == null ||
-                userData.data.data['isPaid'] == false &&
-                    category.name != "Free Trial") {
+            if (category.name == "Free Trial") {
+              await Firestore.instance
+                  .collection('users')
+                  .document(userData.data.data['date_mate'])
+                  .get()
+                  .then((partner) async {
+                await MainBloc()
+                    .randomizeDateQuestions(date)
+                    .then((questionList) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          //hasBeenChallenged determines if the user has been challenged ever, and this round
+                          //if they've never used cool date night, their value is -1.
+                          //Otherwise, 0
+                          builder: (context) => (questionList[0] is String)
+                              ? OpenQuestion(
+                                  questionList,
+                                  uid,
+                                  partner.data == null
+                                      ? null
+                                      : partner.data['uid'],
+                                  category,
+                                  _hasBeenChallenged(userData.data),
+                                  0)
+                              : //this should never happen, but just in case
+                              McQuestion(
+                                  questionList,
+                                  uid,
+                                  partner.data == null
+                                      ? null
+                                      : partner.data['uid'],
+                                  category,
+                                  _hasBeenChallenged(userData.data),
+                                  0)));
+                });
+              });
+            } else if (userData.data.data['isPaid'] == null ||
+                userData.data.data['isPaid'] == false) {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => MarketScreen(uid)));
             } else {
