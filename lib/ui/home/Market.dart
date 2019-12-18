@@ -67,7 +67,7 @@ class _MarketScreen extends State<MarketScreen> {
   // Private methods go here
 
   Widget _purchaseComplete({@required BuildContext context}) {
-    print("Purchase complete, $_purchases");
+
     return AlertDialog(
       backgroundColor: Theme.Colors.midnightBlue,
       actions: <Widget>[
@@ -153,6 +153,7 @@ class _MarketScreen extends State<MarketScreen> {
       if (productItem.transactionId != null) {
         setState(() {
           hasTransactionId = true;
+
           validateReceipt(productItem);
         });
       }
@@ -183,8 +184,7 @@ class _MarketScreen extends State<MarketScreen> {
   }
 
   validateReceipt(PurchasedItem purchased) async {
-    print(purchased);
-    //TODO: Android receipt validation
+
     if (Platform.isIOS) {
       var receiptBody = {
         'receipt-data': purchased.transactionReceipt,
@@ -198,8 +198,10 @@ class _MarketScreen extends State<MarketScreen> {
             .document(uid)
             .updateData({"isPaid": true});
       }
+      _iap.finishTransactionIOS(purchased.purchaseToken);
     } else {
       if (purchased.transactionId.toString() != "null") {
+        _iap.consumePurchaseAndroid(purchased.purchaseToken);
         Firestore.instance
             .collection('users')
             .document(uid)
