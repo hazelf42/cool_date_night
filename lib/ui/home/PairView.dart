@@ -166,6 +166,7 @@ class _PairViewState extends State<PairView> {
             itemCount: snapshot.data.documents.length,
             itemBuilder: (BuildContext context, int index) {
               if (snapshot.hasData) {
+                print("Email " + snapshot.data.documents[index].data['email']);
                 return Card(
                     color: Theme.Colors.midnightBlue,
                     child: FlatButton(

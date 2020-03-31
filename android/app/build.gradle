@@ -46,8 +46,8 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        versionCode 17
-        versionName "17"
+        versionCode 21
+        versionName "21"
     }
 
         signingConfigs {
@@ -79,4 +79,3 @@ androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     apply plugin: 'com.google.gms.google-services'
 
 }
-

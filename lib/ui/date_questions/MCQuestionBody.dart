@@ -53,7 +53,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
               partnerData.data != null
                   ? Container(
                       width: width,
-                      color: Theme.dateColors[category.name],
+                      color: Color(category.color),
                       child: Column(children: [
                         prefix0.SizedBox(height: 30),
                         Avatar(
@@ -66,7 +66,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                   : Container(
                       width: width,
                       height: 160,
-                      color: Theme.dateColors[category.name],
+                      color: Color(category.color),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -155,7 +155,7 @@ class _MCQuestionBody extends State<MCQuestionBody> {
                 child: Text("Next"),
                 color: _answerSelected == null
                     ? Colors.grey
-                    : Theme.dateColors[category.name],
+                    : Color(category.color),
                 onPressed: () async {
                   if (_answerSelected != null &&
                       challenged <= 0 &&

@@ -53,7 +53,7 @@ class DateRow extends StatelessWidget {
         ),
         onTap: () async {
           await MainBloc().getCurrentFirebaseUserData().then((userData) async {
-            if (category.name == "Free Trial") {
+            if (category.name == "Free Trial"|| category.name == "Lockdown Night") {
               await Firestore.instance
                   .collection('users')
                   .document(userData.data.data['date_mate'])

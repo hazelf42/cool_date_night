@@ -200,13 +200,11 @@ class _MarketScreen extends State<MarketScreen> {
       }
       _iap.finishTransactionIOS(purchased.purchaseToken);
     } else {
-      if (purchased.transactionId.toString() != "null") {
         _iap.consumePurchaseAndroid(purchased.purchaseToken);
         Firestore.instance
             .collection('users')
             .document(uid)
             .updateData({"isPaid": true});  
-      }
     }
   }
 

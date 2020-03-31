@@ -29,13 +29,15 @@ class Category {
   final String description;
   final String image;
   final String longDescription;
+  final int color;
 
-  const Category({this.id, this.name, this.description, this.image, this.longDescription});
+  const Category({this.id, this.name, this.description, this.image, this.longDescription, this.color});
 
    Category.fromSnapshot(DocumentSnapshot snapshot)
       : id = snapshot.documentID,
         name = snapshot['name'],
         description = snapshot['description'] ?? '',
         image = snapshot['image'] ?? '',
-        longDescription = snapshot['long_description'] ?? '';
+        longDescription = snapshot['long_description'] ?? '',
+        color = int.parse(snapshot['color'] ?? '');
 }

@@ -15,7 +15,7 @@ class DateList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection('dates')
+          .collection('dates') //TODO: Change to dates_with_questions
           .where('category', isEqualTo: category.name)
           .snapshots(),
       builder: (context, snapshot) {
@@ -31,7 +31,7 @@ Widget _dateList(BuildContext context, uid, List<DocumentSnapshot> snapshots,
     Category category) {
   snapshots.sort((a, b) => (a.data['num']).compareTo(b.data['num']));
   return Container(
-      color: Theme.dateColors[category.name],
+      color: Color(category.color),
       child: ConstrainedBox(
           constraints: prefix0.BoxConstraints(
               minHeight: prefix0.MediaQuery.of(context).size.height / 2),
