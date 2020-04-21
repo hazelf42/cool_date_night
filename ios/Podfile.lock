@@ -168,6 +168,8 @@ PODS:
     - Firebase/Core
     - Firebase/Firestore (~> 6.0)
     - Flutter
+  - cloud_firestore_web (0.1.0):
+    - Flutter
   - Firebase/Auth (6.20.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.5.0)
@@ -188,6 +190,8 @@ PODS:
     - Flutter
   - firebase_core (0.0.1):
     - Firebase/Core
+    - Flutter
+  - firebase_core_web (0.1.0):
     - Flutter
   - firebase_storage (0.0.1):
     - Firebase/Storage
@@ -243,6 +247,8 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
   - flutter_inapp_purchase (0.0.1):
+    - Flutter
+  - flutter_plugin_android_lifecycle (0.0.1):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -302,7 +308,9 @@ PODS:
   - nanopb/encode (0.3.9011)
   - path_provider (0.0.1):
     - Flutter
-  - permission_handler (3.2.2):
+  - path_provider_macos (0.0.1):
+    - Flutter
+  - permission_handler (3.3.0):
     - Flutter
   - PromisesObjC (1.2.8)
   - sqflite (0.0.1):
@@ -310,19 +318,29 @@ PODS:
     - FMDB (~> 2.7.2)
   - url_launcher (0.0.1):
     - Flutter
+  - url_launcher_macos (0.0.1):
+    - Flutter
+  - url_launcher_web (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_firestore_web (from `.symlinks/plugins/cloud_firestore_web/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_inapp_purchase (from `.symlinks/plugins/flutter_inapp_purchase/ios`)
+  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
+  - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
 
 SPEC REPOS:
   trunk:
@@ -353,35 +371,49 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_firestore_web:
+    :path: ".symlinks/plugins/cloud_firestore_web/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_core_web:
+    :path: ".symlinks/plugins/firebase_core_web/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   flutter_inapp_purchase:
     :path: ".symlinks/plugins/flutter_inapp_purchase/ios"
+  flutter_plugin_android_lifecycle:
+    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_macos:
+    :path: ".symlinks/plugins/path_provider_macos/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  url_launcher_macos:
+    :path: ".symlinks/plugins/url_launcher_macos/ios"
+  url_launcher_web:
+    :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
-  cloud_firestore: 0ac494d23db743f104b95d3291946afec187b74c
+  cloud_firestore: 56ea1a42d4a4b3c9cf22e0e0f73140b5d07376a8
+  cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
   Firebase: fe7f74012742ab403451dd283e6909b8f1fb348a
   firebase_auth: 00d6e1ab6d890cd6d3c624df61702e3a7072d1e3
-  firebase_core: ae55ea92448ec8675d325da4db22cf3b4d58a54d
-  firebase_storage: 52b0c06e27af628b627be28d32b4b540f6b67cf7
+  firebase_core: dc539d4bdc69894823e4a6e557034a9e48960f21
+  firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
+  firebase_storage: 5e931af5cdef32331676c659bdd1ebcaba9dc78a
   FirebaseAnalytics: 572e467f3d977825266e8ccd52674aa3e6f47eac
   FirebaseAuth: 648892fd0afeb27ef97c1d2e667329855f1004bc
   FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
@@ -393,6 +425,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: b43ee271294227e1a3225544b073f3b49b427f46
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_inapp_purchase: 5c6a1ac3f11b11d0c8c0321c0c41c1f05805e4c8
+  flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleAppMeasurement: c29d405ff76e18551b5d158eaba6753fda8c7542
   GoogleDataTransport: a857c6a002d201b524dd4bc2ed7e7355ed07e785
@@ -401,14 +434,17 @@ SPEC CHECKSUMS:
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
-  image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
+  image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
-  permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
+  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  permission_handler: 67637977b227d62d46bfbf524f335f8568de5a73
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
-  url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
+  url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
+  url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
 
 PODFILE CHECKSUM: f32fb4e7c14f8b3ca19a369d7be425dd9241af27
 

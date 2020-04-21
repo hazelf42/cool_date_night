@@ -4,7 +4,7 @@ import 'package:cool_date_night/ui/home/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  runApp(MyApp());
+  runApp(MyApp());  
 }
 
 class MyApp extends StatelessWidget {

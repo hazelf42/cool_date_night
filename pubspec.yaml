@@ -24,13 +24,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   fluro: ^1.5.0
-  cloud_firestore: ^0.12.7
+  cloud_firestore: ^0.13.5
   auto_size_text: ^2.0.1
   firebase_auth: ^0.11.1+10
   rxdart: ^0.22.0
   flutter_screenutil: ^0.5.3
   image_picker: ^0.6.0+3
-  firebase_storage: ^3.0.3
+  firebase_storage: ^3.1.3
   permission_handler: ^3.2.1+1
   cached_network_image: ^2.0.0
   photo_view: ^0.3.1
@@ -38,6 +38,7 @@ dependencies:
   font_awesome_flutter: ^8.5.0
   flutter_inapp_purchase: ^2.0.4
   oauth2: ^1.4.0
+  firebase_core: 0.4.4
 
 flutter_icons:
   android: "launcher_icon"

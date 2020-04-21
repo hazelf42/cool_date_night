@@ -33,7 +33,7 @@ class DateCompleteScreen extends StatelessWidget {
           return Scaffold(
               body: Container(
             width: prefix0.MediaQuery.of(context).size.width,
-            color: Color(category.color),
+            color: category.color,
             padding: EdgeInsets.symmetric(vertical: 75, horizontal: 50),
             child: Card(
               elevation: 5,
@@ -58,7 +58,7 @@ class DateCompleteScreen extends StatelessWidget {
                         style: Theme.TextStyles.bodyLight),
                     prefix0.SizedBox(height: height / 30),
                     prefix0.FlatButton(
-                      color: Color(category.color),
+                      color: category.color,
                       child:
                           Text("Done", style: TextStyle(color: Colors.black87)),
                       onPressed: () {

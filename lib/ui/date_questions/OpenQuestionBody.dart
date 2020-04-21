@@ -36,7 +36,7 @@ class OpenQuestionBody extends StatelessWidget {
                     ? Container(
                         width: double.infinity,
                         height: height / 2 - 60,
-                        color: Color(category.color),
+                        color: category.color,
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +60,7 @@ class OpenQuestionBody extends StatelessWidget {
                     : Container(
                         width: double.infinity,
                         height: height / 2 - 60,
-                        color: Color(category.color),
+                        color: category.color,
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +106,7 @@ class OpenQuestionBody extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(20.0)),
                             child: Text("Next"),
-                            color: Color(category.color),
+                            color: category.color,
                             onPressed: () {
                               if (questionList.length == (index + 1)) {
                                 Navigator.push(context, SlideRightRoute(

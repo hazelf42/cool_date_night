@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Date {
@@ -20,6 +22,7 @@ class Date {
         category = snapshot['category'] ?? 'Free Trial',
         openQuestions = List.from(snapshot['open_questions']),
         mcQuestions = List.from(snapshot['mc_questions']);
+
 }
 
 
@@ -29,7 +32,7 @@ class Category {
   final String description;
   final String image;
   final String longDescription;
-  final int color;
+  final Color color;
 
   const Category({this.id, this.name, this.description, this.image, this.longDescription, this.color});
 
@@ -39,5 +42,5 @@ class Category {
         description = snapshot['description'] ?? '',
         image = snapshot['image'] ?? '',
         longDescription = snapshot['long_description'] ?? '',
-        color = int.parse(snapshot['color'] ?? '');
+        color = Color(int.parse(snapshot['color']));
 }

@@ -29,9 +29,10 @@ class DateList extends StatelessWidget {
 
 Widget _dateList(BuildContext context, uid, List<DocumentSnapshot> snapshots,
     Category category) {
+
   snapshots.sort((a, b) => (a.data['num']).compareTo(b.data['num']));
   return Container(
-      color: Color(category.color),
+      color: category.color,
       child: ConstrainedBox(
           constraints: prefix0.BoxConstraints(
               minHeight: prefix0.MediaQuery.of(context).size.height / 2),
