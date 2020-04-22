@@ -88,7 +88,7 @@ class OpenQuestionBody extends StatelessWidget {
                 prefix0.ConstrainedBox(
                     constraints: prefix0.BoxConstraints(
                         maxHeight: height / 2 - 50,
-                        minHeight: height / 2 - 110),
+                        minHeight: height / 2 - 120),
                     child: Container(
                         padding: EdgeInsets.only(
                             left: 30, right: 20, top: 20, bottom: 10),
@@ -99,7 +99,7 @@ class OpenQuestionBody extends StatelessWidget {
                           maxLines: 10,
                         ))),
                 Container(
-                    margin: EdgeInsets.all(20),
+                    margin: EdgeInsets.only(bottom: 500),
                     child: ButtonTheme(
                         minWidth: 200,
                         child: FlatButton(
@@ -134,6 +134,7 @@ class OpenQuestionBody extends StatelessWidget {
                                             index + 1)));
                               }
                             }))),
+                            SizedBox(height: 500)
               ],
             ),
           )),

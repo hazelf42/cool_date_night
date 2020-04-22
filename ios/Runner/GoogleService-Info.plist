@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cool.date.night</string>
+	<string>com.cooldatenight.app</string>
 	<key>PROJECT_ID</key>
 	<string>cool-date-night</string>
 	<key>STORAGE_BUCKET</key>

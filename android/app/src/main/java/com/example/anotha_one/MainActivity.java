@@ -1,4 +1,4 @@
-package com.cool.date.night;
+package com.cooldatenight.app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

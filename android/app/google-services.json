@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:636976919744:android:f646a55d8be394c0",
         "android_client_info": {
-          "package_name": "com.cool.date.night"
+          "package_name": "com.cooldatenight.app"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "636976919744-3rk7b07o1q2hnffe4fn7sij9e7k602oh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.cool.date.night"
+                "bundle_id": "com.cooldatenight.app"
               }
             }
           ]
